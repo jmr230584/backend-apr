@@ -26,6 +26,10 @@ export class Voluntario {
     private email: string;
     /* telefone do Voluntário */
     private telefone: string;
+    static getSobrenome: any;
+    static getEndereco: any;
+    static getNome: any;
+    static getEmail: any;
 
     /**
      * Construtor da classe Voluntário
@@ -64,12 +68,12 @@ export class Voluntario {
         this.idVoluntario = idVoluntario;
     }
 
-    public setCpf(cpf: string): void {
-        this.cpf = this.cpf;
-    }
-
     public getCpf(): string {
         return this.cpf;
+    }
+
+    public setCpf(_cpf: string): void {
+        this.cpf = this.cpf;
     }
 
     public getNome(): string {
@@ -112,11 +116,11 @@ export class Voluntario {
         this.email = email;
     }
 
-    public gettelefone(): string {
+    public getTelefone(): string {
         return this.telefone;
     }
 
-    public settelefone(telefone: string): void {
+    public setTelefone(telefone: string): void {
         this.telefone = telefone;
     }
 
@@ -155,5 +159,47 @@ export class Voluntario {
         }
     }
 
+    /**
+     * Cadastra um novo voluntário no banco de dados.
+     * 
+     * Esta função recebe um objeto `Voluntario`, extrai as informações de nome,sobrenome, CPF, enreco, email e 
+     * telefone e realiza uma operação de inserção (INSERT) na tabela `voluntario` do banco de dados. Se o 
+     * cadastro for bem-sucedido, a função retorna `true`, caso contrário, retorna `false`.
+     * 
+     * @param {Voluntario} _voluntario - Objeto contendo os dados do voluntario a ser cadastrado.
+     * 
+     * @returns {Promise<boolean>} - Retorna `true` se o voluntario for cadastrado com sucesso, 
+     *                               ou `false` se ocorrer um erro ou falha na inserção.
+     * 
+     * @throws {Error} - Em caso de erro na consulta ao banco de dados, o erro é registrado no log.
+     */
+    static async cadastroVoluntario(_voluntario: Voluntario): Promise<boolean> {
+        try {
+            const queryInsertVoluntario = `INSERT INTO voluntario (cpf, nome, sobrenome, cpf, endero, email, telefone)
+                                        VALUES
+                                        ('${Voluntario.getCpf()}', '${Voluntario.getNome()}', '${Voluntario.getSobrenome()}', 
+                                        '${Voluntario.getEndereco()}''${Voluntario.getEmail()}''${Voluntario.getTelefone()}')
+                                        RETURNING id_cliente`;
+
+            const respostaBD = await database.query(queryInsertVoluntario);
+
+            if(respostaBD.rowCount != 0) {
+                console.log(`Voluntário cadastrado com sucesso. ID de voluntário: ${respostaBD.rows[0].id_voluntario}`);
+                return true;
+            }
+
+            return false;
+        } catch (error) {
+            console.log('Erro ao cadastrar o voluntário. Consulte os logs para mais detalhes.');
+            console.log(error);
+            return false;
+        }
     }
+    static getTelefone() {
+        throw new Error("Method not implemented.");
+    }
+    static getCpf() {
+        throw new Error("Method not implemented.");
+    }
+}
 
