@@ -119,7 +119,7 @@ export class Trabalho {
         }
     }
 
-        /**
+    /**
      * Realiza o cadastro de um trabalho no banco de dados.
      * 
      * Esta função recebe um objeto do tipo `Trabalho` e insere seus dados

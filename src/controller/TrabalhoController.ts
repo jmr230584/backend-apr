@@ -41,7 +41,6 @@ export class TrabalhoController extends Trabalho {
         }
     }
 
-
     /**
     * Método controller para cadastrar um novo trabalho.
     * 
