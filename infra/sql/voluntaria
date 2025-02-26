@@ -1,0 +1,27 @@
+{
+	"info": {
+		"_postman_id": "ffdfc9f0-3b10-4959-998c-0e714577dd7b",
+		"name": "voluntaria brasil",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38148768"
+	},
+
+    "item": [
+		{
+			"name": "rota principal",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "dado das pessoas",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
