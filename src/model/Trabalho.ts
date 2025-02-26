@@ -119,10 +119,53 @@ export class Trabalho {
         }
     }
 
-    /**
+        /**
      * Realiza o cadastro de um trabalho no banco de dados.
-     * @param trabalho Objeto do tipo Trabalho contendo os dados a serem cadastrados.
-     * @returns {Promise<boolean>} - Retorna true se o trabalho foi cadastrado com sucesso e false caso contrário.
+     * 
+     * Esta função recebe um objeto do tipo `Trabalho` e insere seus dados
+     * na tabela `trabalho` do banco de dados. O método retorna um valor booleano indicando se o cadastro 
+     * foi realizado com sucesso.
+     * 
+     * @param {Trabalho} trabalho - Objeto contendo os dados do trabalho que será cadastrado..
+     * @returns {Promise<boolean>} - Retorna `true` se o trabalho foi cadastrado com sucesso e `false` caso contrário.
+     *                               Em caso de erro durante o processo, a função trata o erro e retorna `false`.
+     * 
+     * @throws {Error} - Se ocorrer algum erro durante a execução do cadastro, uma mensagem de erro é exibida
+     *                   no console junto com os detalhes do erro.
      */
+    static async cadastroTrabalho(trabalho: Trabalho): Promise<boolean> {
+        try {
+            // query para fazer insert de um trabalho no banco de dados
+            const queryInsertTrabalho = `INSERT INTO trabalho (nomeTrabalho, ongResponsavel, localizacao,data_inicio, data_Termino)
+                                    VALUES
+                                    ('${trabalho.getNomeTrabalho()}', 
+                                    '${trabalho.getOngResponsavel()}', 
+                                    ${trabalho.getLocalizacao()}, 
+                                    '${trabalho.getDataInicio()}'),
+                                    '${trabalho.getDataTermino()});
+                                    RETURNING id_trabalho;`
+            
+            
+            // executa a query no banco e armazena a resposta
+            const respostaBD = await database.query(queryInsertTrabalho);
 
+            // verifica se a quantidade de linhas modificadas é diferente de 0
+            if (respostaBD.rowCount != 0) {
+                console.log(`Trabalho cadastrado com sucesso! ID do trabalho: ${respostaBD.rows[0].id_trabalho}`);
+                // true significa que o cadastro foi feito
+                return true;
+            }
+
+            // false significa que o cadastro NÃO foi feito.
+            return false;
+
+        } catch (error) {
+            // imprime outra mensagem junto com o erro
+            console.log('Erro ao cadastrar o trabalho. Verifique os logs para mais detalhes.');
+            // imprime o erro no console
+            console.log(error);
+            // retorno um valor falso
+            return false;
+        }
+    }
 }
