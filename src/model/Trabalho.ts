@@ -160,7 +160,8 @@ export class Trabalho {
             return false;
 
         } catch (error) {
-            // imprime outra mensagem junto com o erro
+            // imprime outra men
+            // sagem junto com o erro
             console.log('Erro ao cadastrar o trabalho. Verifique os logs para mais detalhes.');
             // imprime o erro no console
             console.log(error);
