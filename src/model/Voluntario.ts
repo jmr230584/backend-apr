@@ -7,42 +7,21 @@ const database = new DatabaseModel().pool;
  * Classe que representa o Voluntário.
  */
 export class Voluntario {
-
     /* Atributos */
-    /* Identificador do Voluntário */
     private idVoluntario: number = 0;
-
-    private cpf: string = "";
-
-    /* Nome do Voluntário */
+    private cpf: string;
     private nome: string;
-    /* Sobrenome do Voluntário */
     private sobrenome: string;
-    /* Data de nascimento do Voluntário */
     private dataNascimento: Date;
-    /* Endereço do Voluntário */
     private endereco: string;
-    /* Email do Voluntário */
     private email: string;
-    /* telefone do Voluntário */
     private telefone: string;
-    static getSobrenome: any;
-    static getEndereco: any;
-    static getNome: any;
-    static getEmail: any;
 
     /**
-     * Construtor da classe Voluntário
-     * @param cpf cpf do voluntário
-     * @param nome Nome do Voluntário
-     * @param sobrenome Sobrenome do Voluntário
-     * @param dataNascimento Data de nascimento do Voluntário
-     * @param endereco Endereço do Voluntário
-     * @param email Email do Voluntário
-     * @param telefone telefone do Voluntário
+     * Construtor da classe Voluntário.
      */
     constructor(
-        cpf : string,
+        cpf: string,
         nome: string,
         sobrenome: string,
         dataNascimento: Date,
@@ -72,8 +51,8 @@ export class Voluntario {
         return this.cpf;
     }
 
-    public setCpf(_cpf: string): void {
-        this.cpf = this.cpf;
+    public setCpf(cpf: string): void {
+        this.cpf = cpf;
     }
 
     public getNome(): string {
@@ -126,7 +105,6 @@ export class Voluntario {
 
     /**
      * Busca e retorna uma lista de voluntários do banco de dados.
-     * @returns Um array de objetos do tipo `Voluntario` em caso de sucesso ou `null` se ocorrer um erro.
      */
     static async listarVoluntarios(): Promise<Array<Voluntario> | null> {
         const listaDeVoluntarios: Array<Voluntario> = [];
@@ -147,59 +125,48 @@ export class Voluntario {
                 );
 
                 novoVoluntario.setIdVoluntario(linha.id_voluntario);
-                novoVoluntario.setCpf(linha.cpf);
-
                 listaDeVoluntarios.push(novoVoluntario);
             });
 
             return listaDeVoluntarios;
         } catch (error) {
-            console.log('Erro ao buscar lista de voluntários');
+            console.error('Erro ao buscar lista de voluntários:', error);
             return null;
         }
     }
 
     /**
      * Cadastra um novo voluntário no banco de dados.
-     * 
-     * Esta função recebe um objeto `Voluntario`, extrai as informações de nome,sobrenome, CPF, enreco, email e 
-     * telefone e realiza uma operação de inserção (INSERT) na tabela `voluntario` do banco de dados. Se o 
-     * cadastro for bem-sucedido, a função retorna `true`, caso contrário, retorna `false`.
-     * 
-     * @param {Voluntario} _voluntario - Objeto contendo os dados do voluntario a ser cadastrado.
-     * 
-     * @returns {Promise<boolean>} - Retorna `true` se o voluntario for cadastrado com sucesso, 
-     *                               ou `false` se ocorrer um erro ou falha na inserção.
-     * 
-     * @throws {Error} - Em caso de erro na consulta ao banco de dados, o erro é registrado no log.
      */
-    static async cadastroVoluntario(_voluntario: Voluntario): Promise<boolean> {
+    static async cadastroVoluntario(voluntario: Voluntario): Promise<boolean> {
         try {
-            const queryInsertVoluntario = `INSERT INTO voluntario (cpf, nome, sobrenome, cpf, endero, email, telefone)
-                                        VALUES
-                                        ('${Voluntario.getCpf()}', '${Voluntario.getNome()}', '${Voluntario.getSobrenome()}', 
-                                        '${Voluntario.getEndereco()}''${Voluntario.getEmail()}''${Voluntario.getTelefone()}')
-                                        RETURNING id_cliente`;
+            const queryInsertVoluntario = `
+                INSERT INTO voluntario (cpf, nome, sobrenome, data_nascimento, endereco, email, telefone)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                RETURNING id_voluntario;
+            `;
 
-            const respostaBD = await database.query(queryInsertVoluntario);
+            const valores = [
+                voluntario.getCpf(),
+                voluntario.getNome(),
+                voluntario.getSobrenome(),
+                voluntario.getDataNascimento(),
+                voluntario.getEndereco(),
+                voluntario.getEmail(),
+                voluntario.getTelefone()
+            ];
 
-            if(respostaBD.rowCount != 0) {
-                console.log(`Voluntário cadastrado com sucesso. ID de voluntário: ${respostaBD.rows[0].id_voluntario}`);
+            const respostaBD = await database.query(queryInsertVoluntario, valores);
+
+            if (respostaBD.rowCount !== 0) {
+                console.log(`Voluntário cadastrado com sucesso. ID: ${respostaBD.rows[0].id_voluntario}`);
                 return true;
             }
 
             return false;
         } catch (error) {
-            console.log('Erro ao cadastrar o voluntário. Consulte os logs para mais detalhes.');
-            console.log(error);
+            console.error('Erro ao cadastrar o voluntário:', error);
             return false;
         }
     }
-    static getTelefone() {
-        throw new Error("Method not implemented.");
-    }
-    static getCpf() {
-        throw new Error("Method not implemented.");
-    }
 }
-
