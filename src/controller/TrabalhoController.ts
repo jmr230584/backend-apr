@@ -3,8 +3,8 @@ import { Trabalho } from "../model/Trabalho";
 
 // Define a estrutura de dados esperada para um trabalho
 interface TrabalhoDTO {
-    nome_trabalho: string;
-    ong_responsavel: string;
+    nomeTrabalho: string;
+    ongResponsavel: string;
     localizacao: string;
     dataInicio: Date;
     dataTermino: Date;
@@ -40,8 +40,8 @@ export class TrabalhoController {
             const trabalhoRecebido: TrabalhoDTO = req.body;
 
             const novoTrabalho = new Trabalho(
-                trabalhoRecebido.nome_trabalho,
-                trabalhoRecebido.ong_responsavel,
+                trabalhoRecebido.nomeTrabalho,
+                trabalhoRecebido.ongResponsavel,
                 trabalhoRecebido.localizacao,
                 trabalhoRecebido.dataInicio = new Date(),
                 trabalhoRecebido.dataTermino = new Date()

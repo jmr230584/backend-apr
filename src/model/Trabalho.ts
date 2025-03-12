@@ -113,7 +113,7 @@ export class Trabalho {
     static async cadastroTrabalho(trabalho: Trabalho): Promise<boolean> {
         try {
             const queryInsertTrabalho = `
-                INSERT INTO trabalho (nomeTrabalho, ongResponsavel, localizacao, data_inicio, data_termino)
+                INSERT INTO trabalho (nome_trabalho, ong_responsavel, localizacao, data_inicio, data_termino)
                 VALUES ($1, $2, $3, $4, $5)
                 RETURNING id_trabalho;
             `;
