@@ -11,7 +11,7 @@ export class StatusTrabalho {
     static async listarStatus(): Promise<any[]> {
         try {
             // Query para buscar todos os status no banco de dados
-            const query = `SELECT * FROM status_trabalho`;
+            const query = `SELECT * FROM status`;
             const resultado = await database.query(query);
 
             // Retorna as linhas da consulta
