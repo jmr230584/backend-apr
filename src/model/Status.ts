@@ -21,4 +21,28 @@ export class StatusTrabalho {
             throw error; // Lança o erro para ser tratado no controlador
         }
     }
+
+    static async cadastroStatus(idTrabalho: number, idVoluntario:number, quantidadeVagas:number, duracao: string, statusTrabalho:string): Promise<boolean> {
+        try {
+            const queryInsertEmprestimo = `INSERT INTO emprestimo (id_trabalho, id_voluntario, quantidade_vagas, duracao, status_trabalho)
+                                        VALUES (${idTrabalho}, 
+                                                ${idVoluntario}, 
+                                               '${quantidadeVagas}', 
+                                               '${duracao},
+                                               '${statusTrabalho}'
+                                        RETURNING id_status;`;
+
+            const respostaBD = await database.query(queryInsertEmprestimo);
+            if(respostaBD.rowCount != 0) {
+                console.log(`Status de trabalho cadastrado com sucesso. ID status: ${respostaBD.rows[0].id_status}`);
+                return true;
+            }
+
+            return false;
+        } catch (error) {
+            console.log('Erro ao cadastrar o status. Consulte os logs para mais detalhes.');
+            console.log(error);
+            return false;
+        }
+    }
 }
