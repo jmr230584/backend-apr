@@ -89,8 +89,8 @@ export class Trabalho {
 
             respostaBD.rows.forEach((linha: any) => {
                 const novoTrabalho = new Trabalho(
-                    linha.nomeTrabalho,
-                    linha.ongResponsavel,
+                    linha.nome_trabalho,
+                    linha.ong_responsavel,
                     linha.localizacao,
                     linha.data_inicio,
                     linha.data_termino

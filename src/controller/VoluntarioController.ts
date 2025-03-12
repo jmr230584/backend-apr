@@ -45,7 +45,7 @@ export class VoluntarioController {
                 voluntarioRecebido.cpf,
                 voluntarioRecebido.nome,
                 voluntarioRecebido.sobrenome,
-                voluntarioRecebido.data_nascimento,
+                voluntarioRecebido.data_nascimento = new Date(),
                 voluntarioRecebido.endereco,
                 voluntarioRecebido.email,
                 voluntarioRecebido.telefone
