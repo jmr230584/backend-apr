@@ -16,3 +16,4 @@ server.use(router);
 
 // Exporta o servidor
 export { server };
+
