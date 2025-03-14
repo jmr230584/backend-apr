@@ -44,7 +44,11 @@ export class TrabalhoController {
                 trabalhoRecebido.ongResponsavel,
                 trabalhoRecebido.localizacao,
                 trabalhoRecebido.dataInicio = new Date(),
+<<<<<<< HEAD
                 trabalhoRecebido.dataTermino = new Date(),
+=======
+                trabalhoRecebido.dataTermino = new Date()
+>>>>>>> 36fad74dc4804dbbbbd1f8eddeaba0834c12c8ed
             );
 
             const resultado = await Trabalho.cadastroTrabalho(novoTrabalho);

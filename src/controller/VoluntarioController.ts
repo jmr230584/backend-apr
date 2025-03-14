@@ -6,7 +6,7 @@ interface VoluntarioDTO {
     cpf: string;
     nome: string;
     sobrenome: string;
-    dataNascimento: Date;
+    data_nascimento: Date;
     endereco: string;
     email: string;
     telefone: string;
@@ -45,7 +45,7 @@ export class VoluntarioController {
                 voluntarioRecebido.cpf,
                 voluntarioRecebido.nome,
                 voluntarioRecebido.sobrenome,
-                voluntarioRecebido.dataNascimento = new Date(),
+                voluntarioRecebido.data_nascimento = new Date(),
                 voluntarioRecebido.endereco,
                 voluntarioRecebido.email,
                 voluntarioRecebido.telefone

@@ -18,6 +18,7 @@ router.post("/voluntario/novo", VoluntarioController.novo);
 
 // Rotas para status
 router.get("/lista/status", StatusController.todos);
+router.post("/statusTrabalho/novo", StatusController.novo); 
 
 
 // Rotas para trabalhos

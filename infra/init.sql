@@ -3,7 +3,7 @@ id_voluntario SERIAL PRIMARY KEY,
 cpf VARCHAR(11) UNIQUE NOT NULL,
 nome VARCHAR(100) NOT NULL,
 sobrenome VARCHAR(100) NOT NULL,
-data_nascimento DATE NOT NULL,
+data_nascimento DATE ,
 endereco VARCHAR(200),
 email VARCHAR(100) UNIQUE NOT NULL,
 telefone VARCHAR(11) NOT NULL

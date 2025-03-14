@@ -89,8 +89,8 @@ export class Trabalho {
 
             respostaBD.rows.forEach((linha: any) => {
                 const novoTrabalho = new Trabalho(
-                    linha.nomeTrabalho,
-                    linha.ongResponsavel,
+                    linha.nome_trabalho,
+                    linha.ong_responsavel,
                     linha.localizacao,
                     linha.data_inicio,
                     linha.data_termino
@@ -113,7 +113,7 @@ export class Trabalho {
     static async cadastroTrabalho(trabalho: Trabalho): Promise<boolean> {
         try {
             const queryInsertTrabalho = `
-                INSERT INTO trabalho (nomeTrabalho, ongResponsavel, localizacao, data_inicio, data_termino)
+                INSERT INTO trabalho (nome_trabalho, ong_responsavel, localizacao, data_inicio, data_termino)
                 VALUES ($1, $2, $3, $4, $5)
                 RETURNING id_trabalho;
             `;
