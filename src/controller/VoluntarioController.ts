@@ -6,7 +6,7 @@ interface VoluntarioDTO {
     cpf: string;
     nome: string;
     sobrenome: string;
-    data_nascimento: Date;
+    dataNascimento: Date;
     endereco: string;
     email: string;
     telefone: string;
@@ -45,11 +45,12 @@ export class VoluntarioController {
                 voluntarioRecebido.cpf,
                 voluntarioRecebido.nome,
                 voluntarioRecebido.sobrenome,
-                voluntarioRecebido.data_nascimento,
+                voluntarioRecebido.dataNascimento = new Date(),
                 voluntarioRecebido.endereco,
                 voluntarioRecebido.email,
                 voluntarioRecebido.telefone
             );
+            console.log(novoVoluntario);
 
             const resultado = await Voluntario.cadastroVoluntario(novoVoluntario);
 

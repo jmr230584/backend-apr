@@ -15,8 +15,10 @@ router.get("/", (req, res) => {
 router.get("/lista/voluntarios", VoluntarioController.todos);
 router.post("/voluntario/novo", VoluntarioController.novo); 
 
+
 // Rotas para status
 router.get("/lista/status", StatusController.todos);
+
 
 // Rotas para trabalhos
 router.get("/lista/trabalho", TrabalhoController.todos);
