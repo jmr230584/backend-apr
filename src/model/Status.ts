@@ -24,15 +24,15 @@ export class StatusTrabalho {
 
     static async cadastroStatus(idTrabalho: number, idVoluntario:number, quantidadeVagas:number, duracao: string, statusTrabalho:string): Promise<boolean> {
         try {
-            const queryInsertEmprestimo = `INSERT INTO emprestimo (id_trabalho, id_voluntario, quantidade_vagas, duracao, status_trabalho)
+            const queryInsertStatus = `INSERT INTO status(id_trabalho,id_voluntario,quantidade_vagas,duracao,status_trabalho)
                                         VALUES (${idTrabalho}, 
                                                 ${idVoluntario}, 
-                                               '${quantidadeVagas}', 
-                                               '${duracao},
-                                               '${statusTrabalho}'
+                                               ${quantidadeVagas}, 
+                                               ${duracao},
+                                               ${statusTrabalho}'
                                         RETURNING id_status;`;
 
-            const respostaBD = await database.query(queryInsertEmprestimo);
+            const respostaBD = await database.query(queryInsertStatus);
             if(respostaBD.rowCount != 0) {
                 console.log(`Status de trabalho cadastrado com sucesso. ID status: ${respostaBD.rows[0].id_status}`);
                 return true;
