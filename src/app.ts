@@ -8,7 +8,7 @@ new DatabaseModel().testeConexao().then((resdb) => {
   if (resdb){
     server.listen(port, () => {
       console.clear();
-      console.log(`Endereço do servidor hhtp://localhost:${port}`);
+      console.log(`Endereço do servidor http://localhost:${port}`);
     });
   } else {
     console.log(`Erro ao conectar com o banco de dados.`);
