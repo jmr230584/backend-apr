@@ -1,19 +1,30 @@
+// Importa a classe DatabaseModel, que gerencia a conexão com o banco de dados
 import { DatabaseModel } from "./DatabaseModel";
 
-// Armazena o pool de conexões com o banco de dados
+// Inicializa o pool de conexões com o banco de dados
 const database = new DatabaseModel().pool;
 
 /**
- * Classe que representa o Trabalho voluntário.
+ * Classe que representa um Trabalho Voluntário.
+ * Esta classe modela os trabalhos voluntários cadastrados no sistema e fornece métodos para manipulação dos dados.
  */
 export class Trabalho {
-    private idTrabalho: number = 0;
-    private nomeTrabalho: string;
-    private ongResponsavel: string;
-    private localizacao: string;
-    private dataInicio: Date;
-    private dataTermino: Date;
+    // Atributos privados da classe, representando os dados do trabalho voluntário
+    private idTrabalho: number = 0; // ID do trabalho, inicializado como 0 até ser atribuído pelo banco de dados
+    private nomeTrabalho: string; // Nome do trabalho voluntário
+    private ongResponsavel: string; // Nome da ONG responsável pelo trabalho
+    private localizacao: string; // Local onde o trabalho será realizado
+    private dataInicio: Date; // Data de início do trabalho
+    private dataTermino: Date; // Data de término do trabalho
 
+    /**
+     * Construtor da classe Trabalho.
+     * @param nomeTrabalho - Nome do trabalho voluntário
+     * @param ongResponsavel - Nome da ONG responsável
+     * @param localizacao - Localização onde ocorrerá o trabalho
+     * @param dataInicio - Data de início do trabalho
+     * @param dataTermino - Data de término do trabalho
+     */
     constructor(
         nomeTrabalho: string,
         ongResponsavel: string,
@@ -28,96 +39,148 @@ export class Trabalho {
         this.dataTermino = dataTermino;
     }
 
-    /* Métodos get e set */
+    /* Métodos Getters e Setters */
+
+    /**
+     * Retorna o ID do trabalho.
+     */
     public getIdTrabalho(): number {
         return this.idTrabalho;
     }
 
+    /**
+     * Define o ID do trabalho.
+     * @param idTrabalho - Novo ID a ser atribuído ao trabalho.
+     */
     public setIdTrabalho(idTrabalho: number): void {
         this.idTrabalho = idTrabalho;
     }
 
+    /**
+     * Retorna o nome do trabalho voluntário.
+     */
     public getNomeTrabalho(): string {
         return this.nomeTrabalho;
     }
 
+    /**
+     * Define um novo nome para o trabalho voluntário.
+     * @param nomeTrabalho - Nome atualizado do trabalho.
+     */
     public setNomeTrabalho(nomeTrabalho: string): void {
         this.nomeTrabalho = nomeTrabalho;
     }
 
+    /**
+     * Retorna o nome da ONG responsável pelo trabalho.
+     */
     public getOngResponsavel(): string {
         return this.ongResponsavel;
     }
 
+    /**
+     * Define uma nova ONG responsável pelo trabalho.
+     * @param ongResponsavel - Nome atualizado da ONG.
+     */
     public setOngResponsavel(ongResponsavel: string): void {
         this.ongResponsavel = ongResponsavel;
     }
 
+    /**
+     * Retorna a localização onde o trabalho será realizado.
+     */
     public getLocalizacao(): string {
         return this.localizacao;
     }
 
+    /**
+     * Define uma nova localização para o trabalho voluntário.
+     * @param localizacao - Endereço ou cidade onde o trabalho será realizado.
+     */
     public setLocalizacao(localizacao: string): void {
         this.localizacao = localizacao;
     }
 
+    /**
+     * Retorna a data de início do trabalho.
+     */
     public getDataInicio(): Date {
         return this.dataInicio;
     }
 
+    /**
+     * Define uma nova data de início para o trabalho.
+     * @param dataInicio - Data de início atualizada.
+     */
     public setDataInicio(dataInicio: Date): void {
         this.dataInicio = dataInicio;
     }
 
+    /**
+     * Retorna a data de término do trabalho.
+     */
     public getDataTermino(): Date {
         return this.dataTermino;
     }
 
+    /**
+     * Define uma nova data de término para o trabalho.
+     * @param dataTermino - Data de término atualizada.
+     */
     public setDataTermino(dataTermino: Date): void {
         this.dataTermino = dataTermino;
     }
 
     /**
-     * Lista todos os trabalhos cadastrados.
+     * Método para listar todos os trabalhos cadastrados no banco de dados.
+     * @returns Retorna um array de objetos do tipo Trabalho ou null em caso de erro.
      */
     static async listagemTrabalhos(): Promise<Array<Trabalho> | null> {
         const listaDeTrabalhos: Array<Trabalho> = [];
 
         try {
+            // Query SQL para buscar todos os trabalhos cadastrados
             const querySelectTrabalho = 'SELECT * FROM trabalho';
             const respostaBD = await database.query(querySelectTrabalho);
 
+            // Itera sobre os resultados e cria objetos Trabalho para cada registro encontrado
             respostaBD.rows.forEach((linha: any) => {
                 const novoTrabalho = new Trabalho(
-                    linha.nome_trabalho,
-                    linha.ong_responsavel,
-                    linha.localizacao,
-                    linha.data_inicio,
-                    linha.data_termino
+                    linha.nome_trabalho,   // Nome do trabalho voluntário
+                    linha.ong_responsavel, // ONG responsável
+                    linha.localizacao,     // Local onde ocorrerá o trabalho
+                    linha.data_inicio,     // Data de início do trabalho
+                    linha.data_termino     // Data de término do trabalho
                 );
 
+                // Define o ID do trabalho usando o valor recuperado do banco
                 novoTrabalho.setIdTrabalho(linha.id_trabalho);
                 listaDeTrabalhos.push(novoTrabalho);
             });
 
             return listaDeTrabalhos;
         } catch (error) {
+            // Em caso de erro, exibe uma mensagem no console e retorna null
             console.error('Erro ao buscar lista de trabalhos:', error);
             return null;
         }
     }
 
     /**
-     * Cadastra um novo trabalho.
+     * Método para cadastrar um novo trabalho no banco de dados.
+     * @param trabalho - Objeto do tipo Trabalho contendo os dados do novo trabalho.
+     * @returns Retorna **true** se o cadastro foi bem-sucedido, **false** caso contrário.
      */
     static async cadastroTrabalho(trabalho: Trabalho): Promise<boolean> {
         try {
+            // Query SQL para inserir um novo trabalho no banco de dados
             const queryInsertTrabalho = `
                 INSERT INTO trabalho (nome_trabalho, ong_responsavel, localizacao, data_inicio, data_termino)
                 VALUES ($1, $2, $3, $4, $5)
                 RETURNING id_trabalho;
             `;
 
+            // Valores a serem inseridos, utilizando os getters do objeto Trabalho
             const valores = [
                 trabalho.getNomeTrabalho(),
                 trabalho.getOngResponsavel(),
@@ -126,8 +189,10 @@ export class Trabalho {
                 trabalho.getDataTermino()
             ];
 
+            // Executa a query de inserção no banco de dados
             const respostaBD = await database.query(queryInsertTrabalho, valores);
 
+            // Verifica se houve inserção e retorna true se bem-sucedida
             if (respostaBD.rowCount !== 0) {
                 console.log(`Trabalho cadastrado com sucesso. ID: ${respostaBD.rows[0].id_trabalho}`);
                 return true;
@@ -135,6 +200,7 @@ export class Trabalho {
 
             return false;
         } catch (error) {
+            // Em caso de erro, exibe mensagem no console e retorna false
             console.error('Erro ao cadastrar trabalho:', error);
             return false;
         }

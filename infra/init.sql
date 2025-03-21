@@ -18,13 +18,13 @@ data_inicio DATE NOT NULL,
 data_termino DATE NOT NULL
 );
 
-CREATE TABLE status (
+CREATE TABLE participacao (
 id_status SERIAL PRIMARY KEY,
 id_trabalho INT,
 id_voluntario INT,
 quantidade_vagas INT NOT NULL,
 duracao VARCHAR(50),
-status_trabalho VARCHAR(50),
+atividade_trabalho VARCHAR(50),
 FOREIGN KEY (id_trabalho) REFERENCES trabalho(id_trabalho),
 FOREIGN KEY (id_voluntario) REFERENCES voluntario(id_voluntario) 
 );
@@ -39,13 +39,13 @@ VALUES (12345678900, 'Neil Abram', 'Josten', '1987-03-31', 'Rua das Raposas, 103
 (11334673512, 'Elphaba', 'Erivo', '1999-03-27', 'Emerald City, 345', 'defying.gravity@gmail.com', 119876789),
 (11334664759, 'Marinette', 'Dupeng', '2003-07-09', 'La vie en rose, 231', 'dupeng.cheng@gmail.com', 119871236);
 
-INSERT INTO status(quantidade_vagas, duracao, status_trabalho)
+INSERT INTO participacao(id_trabalho,id_voluntario,quantidade_vagas, duracao, atividade_trabalho)
 VALUES 
-(102, '3 meses', 'Em andamento'),
-(26, '2 anos', 'Concluído'),
-(50, '4 meses', 'Cancelado'),
-(24, '5 semanas', 'Agendado'),
-(12, '6 meses', 'Em andamento');
+(1,5,102, '3 meses', 'Em andamento'),
+(5,3,26, '2 anos', 'Concluído'),
+(4,2,50, '4 meses', 'Cancelado'),
+(2,1,24, '5 semanas', 'Agendado'),
+(3,4,12, '6 meses', 'Em andamento');
 
 INSERT INTO trabalho (nome_trabalho, ong_responsavel, localizacao, data_inicio, data_termino) 
 VALUES 
