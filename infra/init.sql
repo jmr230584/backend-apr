@@ -19,7 +19,7 @@ data_termino DATE NOT NULL
 );
 
 CREATE TABLE participacao (
-id_status SERIAL PRIMARY KEY,
+id_participacao SERIAL PRIMARY KEY,
 id_trabalho INT,
 id_voluntario INT,
 quantidade_vagas INT NOT NULL,
