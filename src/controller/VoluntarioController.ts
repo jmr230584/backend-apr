@@ -80,4 +80,68 @@ export class VoluntarioController {
             return res.status(500).json({ mensagem: "Erro interno do servidor." });
         }
     }
+
+    /**
+     * Remove um voluntario.
+     * @param req Objeto de requisição HTTP com o ID do voluntario a ser removido.
+     * @param res Objeto de resposta HTTP.
+     * @returns Mensagem de sucesso ou erro em formato JSON.
+     */
+    static async remover(req: Request, res: Response): Promise<Response> {
+        try {
+            const idVoluntario = parseInt(req.query.idVoluntario as string);
+            const result = await Voluntario.removerVoluntario(idVoluntario);
+            
+            if (result) {
+                return res.status(200).json('Voluntário removido com sucesso');
+            } else {
+                return res.status(401).json('Erro ao deletar Voluntário');
+            }
+        } catch (error) {
+            console.log("Erro ao remover o Voluntário");
+            console.log(error);
+            return res.status(500).send("error");
+        }
+    }
+
+    
+    /**
+     * Atualiza as informações de um voluntário existente.
+     *
+     * @param req - Objeto de solicitação HTTP, contendo os dados do voluntário no corpo da solicitação e o ID do voluntário nos parâmetros.
+     * @param res - Objeto de resposta HTTP.
+     * @returns Uma promessa que resolve com uma resposta HTTP indicando o sucesso ou falha da operação.
+     *
+     * @throws Retorna uma resposta HTTP com status 400 e uma mensagem de erro se ocorrer um problema durante a atualização do voluntário.
+     */
+    static async atualizar(req: Request, res: Response): Promise<any> {
+        try {
+            const VoluntarioRecebido: VoluntarioDTO = req.body;
+
+            const idVoluntarioRecebido = parseInt(req.params.idVoluntario);
+
+            const VoluntarioAtualizado = new Voluntario(
+                VoluntarioRecebido.cpf,
+                VoluntarioRecebido.nome, 
+                VoluntarioRecebido.sobrenome, 
+                VoluntarioRecebido.data_nascimento,
+                VoluntarioRecebido.endereco,
+                VoluntarioRecebido.email,
+                VoluntarioRecebido.telefone);
+            
+            VoluntarioAtualizado.setIdVoluntario(idVoluntarioRecebido);
+
+            const respostaModelo = await Voluntario.atualizarVoluntario(VoluntarioAtualizado);
+
+            if(respostaModelo) {
+                return res.status(200).json({ mensagem: "Voluntário atualizado com sucesso!" });
+            } else {
+                return res.status(400).json({ mensagem: "Não foi possível atualizar o voluntário. Entre em contato com o administrador do sistema." });
+            }
+        } catch (error) {
+            console.log(`Erro ao remover o aluno. ${error}`);
+
+            return res.status(400).json({ mensagem: "Não foi possível atualizar o voluntário. Entre em contato com o administrador do sistema." });
+        }
+    }
 }
