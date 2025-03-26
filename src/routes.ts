@@ -18,6 +18,7 @@ router.get("/", (req, res) => {
 router.get("/lista/voluntarios", VoluntarioController.todos); // Rota para listar todos os voluntários
 router.post("/voluntario/novo", VoluntarioController.novo); // Rota para cadastrar um novo voluntário
 
+
 // Rotas para participações
 router.get("/lista/participacao", ParticipacaoController.todos); // Rota para listar todas as participações
 router.post("/participacao/novo", ParticipacaoController.novo); // Rota para cadastrar uma nova participação
