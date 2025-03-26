@@ -253,4 +253,71 @@ export class Voluntario {
             return false; // Retorna false em caso de erro
         }
     }
+
+
+    /**
+     * Remove um voluntário do banco de dados com base no ID fornecido.
+     *
+     * @param idVoluntario - O ID do voluntário a ser removido.
+     * @returns Uma Promise que resolve para `true` se o voluntário foi removido com sucesso, ou `false` caso contrário.
+     *
+     * @throws Lança um erro se ocorrer um problema durante a execução da consulta.
+     */
+    static async removerVoluntario(idVoluntario: number): Promise<boolean> {
+        try {
+            const queryDeleteVoluntario = `DELETE FROM voluntario WHERE id_voluntario = ${idVoluntario}`;
+
+            // Executa a query no banco de dados
+            const respostaBD = await database.query(queryDeleteVoluntario);
+
+            // Verifica se o delete foi bem-sucedido
+            if(respostaBD.rowCount != 0) {
+               console.log(`Voluntário removido com sucesso. ID removido: ${idVoluntario}`);
+               return true; // Retorna true em caso de sucesso
+            }
+
+           return false; // Retorna false em caso de falha
+        }  catch (error) {
+            console.log('Erro ao remover o voluntário. Consulte os logs para mais detalhes.');
+            console.log(error);
+            return false; // Retorna false em caso de erro
+        }
+    }
+
+    /**
+     * Atualiza as informações de um voluntário no banco de dados.
+     *
+     * @param voluntario - O objeto voluntário contendo as informações atualizadas.
+     * @returns Uma Promise que resolve para `true` se o voluntário foi atualizado com sucesso, ou `false` caso contrário.
+     *
+     * @throws Lança um erro se ocorrer um problema durante a atualização do voluntário.
+     */
+    static async atualizarVoluntario(voluntario: Voluntario): Promise<boolean> {
+        try {
+            const queryUpdateVoluntario = `UPDATE voluntario SET 
+                                            cpf = '${voluntario.getCpf()}',
+                                            nome = '${voluntario.getNome()}', 
+                                            sobrenome = '${voluntario.getSobrenome()}',
+                                            data_nascimento = '${voluntario.getDataNascimento()}',
+                                            endereco = '${voluntario.getEndereco()}',
+                                            email = '${voluntario.getEmail()}'
+                                            telefone = '${voluntario.getTelefone()}',           
+                                            WHERE id_voluntario = ${voluntario.getIdVoluntario()};`;
+
+            // Executa a query no banco de dados
+            const respostaBD = await database.query(queryUpdateVoluntario);
+            
+            // Verifica se o delete foi bem-sucedido
+            if(respostaBD.rowCount != 0) {
+                console.log(`Voluntário atualizado com sucesso. ID: ${voluntario.getIdVoluntario()}`);
+                return true; // Retorna true em caso de sucesso
+            }
+
+            return false; // Retorna false em caso de falha
+        } catch (error) {
+            console.log('Erro ao remover o voluntário. Consulte os logs para mais detalhes.');
+            console.log(error);
+            return false; // Retorna false em caso de erro
+        }
+    }
 }
