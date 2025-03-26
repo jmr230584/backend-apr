@@ -73,4 +73,6 @@ export class TrabalhoController {
             return res.status(500).json({ mensagem: "Erro interno do servidor." });
         }
     }
+
+    
 }
