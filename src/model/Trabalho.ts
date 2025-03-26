@@ -205,4 +205,83 @@ export class Trabalho {
             return false;
         }
     }
+     /**
+     * Remove um trabaho do banco de dados
+     * @param id_trabalho ID do trabalho a ser removido
+     * @returns Boolean indicando se a remoção foi bem-sucedida
+    */
+     static async removerTrabalho(id_trabalho: number): Promise<Boolean> {
+        // variável de controle da execução da query
+        let queryResult = false;
+
+        try {
+            // Cria a consulta para rmeover empréstimo do banco de dados
+            const queryDeleteParticipacaoTrabalho = `UPDATE participacao
+                                                    SET status_participacao_registro = FALSE 
+                                                    WHERE id_trabalho=${id_trabalho}`;
+                                                    
+            // executa a query para remover participação
+            await database.query(queryDeleteParticipacaoTrabalho
+            );
+
+            // Construção da query SQL para deletar o trabalho.
+            const queryDeleteTrabalho = `UPDATE trabalho
+                                        SET status_trabalho = FALSE 
+                                        WHERE id_trabalho=${id_trabalho};`;
+
+            // Executa a query de exclusão e verifica se a operação foi bem-sucedida.
+            await database.query(queryDeleteTrabalho)
+                .then((result) => {
+                    if (result.rowCount != 0) {
+                        queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
+                    }
+                });
+
+            // retorna o valor da variável de controle
+            return queryResult;
+
+        // captura qualquer erro que possa acontecer
+        } catch (error) {
+            // Exibe detalhes do erro no console
+            console.log(`Erro na consulta: ${error}`);
+            // retorna o valor fa variável de controle
+            return queryResult;
+        }
+    }
+
+    /**
+     * Atualiza os dados de um trabalho no banco de dados.
+     * @param trabalho Objeto do tipo trabalho com os novos dados
+     * @returns true caso sucesso, false caso erro
+     */
+    static async atualizarCadastrotrabalho(Trabalho: Trabalho): Promise<Boolean> {
+        let queryResult = false; // Variável para armazenar o resultado da operação.
+        try {
+            // Construção da query SQL para atualizar os dados do trabalho no banco de dados.
+            const queryAtualizarTrabalho = `UPDATE trabalho SET 
+                                           nome_trabalho = '${Trabalho.nomeTrabalho.toUpperCase()}',
+                                           ong_responsavel = '${Trabalho.ongResponsavel.toUpperCase()}', 
+                                           localizacao = '${Trabalho.localizacao.toUpperCase()}', 
+                                           data_inicio = '${Trabalho.dataInicio.toISOString().split('T')[0]}', 
+                                           data_termino = '${Trabalho.dataTermino.toISOString().split('T')[0]}' 
+                                           WHERE id_trabalho = ${Trabalho.idTrabalho}`;
+
+            // Executa a query de atualização e verifica se a operação foi bem-sucedida.
+            await database.query(queryAtualizarTrabalho)
+                .then((result) => {
+                    if (result.rowCount != 0) {
+                        queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
+                    }
+                });
+
+            // Retorna o resultado da operação para quem chamou a função.
+            return queryResult;
+        // captura qualquer erro que possa acontecer
+        } catch (error) {
+            // exibe detalhes do erro no console
+            console.log(`Erro na consulta: ${error}`);
+            // retorna o valor da variável de controle
+            return queryResult;
+        }
+    }
 }
