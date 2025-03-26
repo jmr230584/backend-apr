@@ -87,7 +87,7 @@ export class VoluntarioController {
      * @param res Objeto de resposta HTTP.
      * @returns Mensagem de sucesso ou erro em formato JSON.
      */
-    static async remover(req: Request, res: Response): Promise<Response> {
+    static async remover(req: Request, res: Response): Promise<any> {
         try {
             const idVoluntario = parseInt(req.query.idVoluntario as string);
             const result = await Voluntario.removerVoluntario(idVoluntario);

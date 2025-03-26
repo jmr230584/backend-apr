@@ -203,7 +203,7 @@ export class ParticipacaoTrabalho {
      * @returns true se atualizou com sucesso, false caso contrário
      */
     static async atualizarParticipacao(idParticipacao: number, idTrabalho: number, idVoluntario: number, 
-        quantidadeVagas: number, duracao: string, atividadeTrabalho: string): Promise<boolean> {
+        quantidadeVagas: number, duracao: string, atividadeTrabalho: string): Promise<any> {
         try {
             const queryUpdateParticipacao = `UPDATE Participacao SET 
                                               id_trabalho = '${idTrabalho}',
@@ -230,7 +230,7 @@ export class ParticipacaoTrabalho {
     /**
      * Remove uma participação
      */
-    static async removerParticipacao(idParticipacao: number): Promise<boolean> {
+    static async removerParticipacao(idParticipacao: number): Promise<any> {
         try {
             const query = `DELETE FROM Participacao WHERE id_participacao = ${idParticipacao}`;
             const resultado = await database.query(query, [idParticipacao]);

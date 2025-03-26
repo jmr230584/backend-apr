@@ -79,7 +79,7 @@ export class TrabalhoController {
      * @param res Objeto de resposta HTTP.
      * @returns Mensagem de sucesso ou erro em formato JSON.
      */
-      static async remover(req: Request, res: Response): Promise<Response> {
+      static async remover(req: Request, res: Response): Promise<any> {
         try {
             const idTrabalho= parseInt(req.query.idTrabalho as string);
             const result = await Trabalho.removerTrabalho(idTrabalho);
@@ -103,7 +103,7 @@ export class TrabalhoController {
      * @param res Objeto de resposta do Express
      * @returns Retorna uma resposta HTTP indicando sucesso ou falha na atualização
      */
-    static async atualizar(req: Request, res: Response): Promise<Response> {
+    static async atualizar(req: Request, res: Response): Promise<any> {
         try {
             const dadosRecebidos: TrabalhoDTO = req.body;
             
