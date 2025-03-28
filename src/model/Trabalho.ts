@@ -206,7 +206,7 @@ export class Trabalho {
         }
     }
      /**
-     * Remove um trabaho do banco de dados
+     * Remove um trabalho do banco de dados
      * @param id_trabalho ID do trabalho a ser removido
      * @returns Boolean indicando se a remoção foi bem-sucedida
     */
