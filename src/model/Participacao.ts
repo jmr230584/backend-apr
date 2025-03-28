@@ -279,19 +279,29 @@ export class ParticipacaoTrabalho {
     /**
      * Remove uma participação
      */
-    static async removerParticipacao(idParticipacao: number): Promise<any> {
+    static async removerParticipacao(idParticipacao: number): Promise<boolean> {
+        let queryResult = false;
+        
         try {
-            const query = `DELETE FROM Participacao WHERE id_participacao = ${idParticipacao}`;
-            const resultado = await database.query(query, [idParticipacao]);
+            // Query para "ocultar" a participação, definindo status como FALSE
+            const queryUpdateParticipacao = `UPDATE participacao 
+                                              SET status_participacao_voluntario = FALSE
+                                              WHERE id_participacao = ${idParticipacao};`;
             
+            // Executa a query para "remover" a participação sem deletá-la
+            const resultado = await database.query(queryUpdateParticipacao, [idParticipacao]);
+            
+            // Verifica se a operação foi bem-sucedida
             if (resultado.rowCount && resultado.rowCount > 0) {
-                console.log(`Participação removida com sucesso: ID: ${idParticipacao}`);
-                return true;
+                console.log(`Participação ocultada com sucesso: ID: ${idParticipacao}`);
+                queryResult = true;
             }
-            return false;
+            
+            return queryResult;
         } catch (error) {
-            console.error("Erro ao remover participação:", error);
-            throw error;
+            console.error("Erro ao ocultar participação:", error);
+            return queryResult;
         }
     }
-}
+    }
+

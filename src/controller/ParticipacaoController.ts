@@ -78,9 +78,9 @@ export class ParticipacaoController {
     static async remover(req: Request, res: Response): Promise<any> {
         try {
             const idParticipacao = parseInt(req.query.idParticipacao as string);
-            const removido = await ParticipacaoTrabalho.removerParticipacao(idParticipacao);
+            const result = await ParticipacaoTrabalho.removerParticipacao(idParticipacao);
             
-            if (removido) {
+            if (result) {
                 return res.status(200).json({ mensagem: "Participação removida com sucesso!" });
             } else {
                 return res.status(400).json({ mensagem: "Erro ao remover participação." });
