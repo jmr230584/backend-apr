@@ -130,15 +130,15 @@ export class ParticipacaoTrabalho {
 
           // Itera sobre as linhas retornadas
           respostaBD.rows.forEach((linha: any) => {
-             // Monta o objeto de empréstimo com os dados do aluno e do livro
-              const emprestimo = {
+             // Monta o objeto de participação com os dados do voluntário e do trabalho
+              const ParticipacaoTrabalho = {
                   idParticipacao: linha.id_participacao,
                   idVoluntario: linha.id_voluntaio,
                   idTrabalho: linha.id_trabalho,
                   quantidadeVagas: linha.quantidade_vagas,
                   duracao: linha.duracao,
                   atividadeTrabalho: linha.atividade_trabalho,
-                  statusEmprestimoRegistro: linha.status_emprestimo_registro,
+                  statusParticipacaoVoluntario: linha.status_participacao_voluntario,
                   Voluntario: {
                     cpf: linha.cpf,
                     nome: linha.nome,
