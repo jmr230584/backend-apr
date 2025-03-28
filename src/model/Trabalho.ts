@@ -216,8 +216,8 @@ export class Trabalho {
 
         try {
             // Cria a consulta para rmeover empréstimo do banco de dados
-            const queryDeleteParticipacaoTrabalho = `UPDATE participacao
-                                                    SET status_participacao_registro = FALSE 
+            const queryDeleteParticipacaoTrabalho = `UPDATE trabalho
+                                                    SET status_trabalho_registro = FALSE 
                                                     WHERE id_trabalho=${id_trabalho}`;
                                                     
             // executa a query para remover participação
