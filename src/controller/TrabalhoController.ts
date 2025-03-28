@@ -74,7 +74,7 @@ export class TrabalhoController {
         }
     }
       /**
-     * Remove um trabalho.
+     * Remove um voluntario.
      * @param req Objeto de requisição HTTP com o ID do voluntario a ser removido.
      * @param res Objeto de resposta HTTP.
      * @returns Mensagem de sucesso ou erro em formato JSON.
