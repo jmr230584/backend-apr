@@ -10,7 +10,7 @@ import { TrabalhoController } from "./controller/TrabalhoController";
 const router = Router();
 
 // Rota principal que retorna uma mensagem de boas-vindas
-router.get("/", (req, res) => {
+router.get("/", (_req, res) => {
     res.json({ mensagem: "Bem-vindo ao sistema de voluntariado!" });
 });
 
@@ -34,3 +34,4 @@ router.put("/remover/trabalho", TrabalhoController.remover); // Rota para exclui
 router.put("/atualizar/trabalho", TrabalhoController.atualizar); // Rota para atualizar um trabalho
 // Exporta as rotas para serem usadas no servidor
 export { router };
+

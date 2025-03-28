@@ -87,7 +87,7 @@ export class VoluntarioController {
      * @param res Objeto de resposta HTTP.
      * @returns Mensagem de sucesso ou erro em formato JSON.
      */
-    static async remover(req: Request, res: Response): Promise<Response> {
+    static async remover(req: Request, res: Response): Promise<any> {
         try {
            const idVoluntario = parseInt(req.query.idVoluntario as string);
            const result = await Voluntario.removerVoluntario(idVoluntario);
@@ -96,7 +96,7 @@ export class VoluntarioController {
              return res.status(200).json('Voluntário removido com sucesso');
             } else {
                 return res.status(401).json('Erro ao deletar Voluntário');
-            } 
+            }
 
         } catch (error) {
             console.log("Erro ao remover o Voluntário");
@@ -146,3 +146,5 @@ export class VoluntarioController {
         }
     }
 }
+
+export default VoluntarioController;
