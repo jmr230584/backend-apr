@@ -1,4 +1,6 @@
 import { DatabaseModel } from "./DatabaseModel";
+import { Trabalho } from "./Trabalho";
+import { Voluntario } from "./Voluntario";
 
 // Pool de conexões com o banco de dados
 const database = new DatabaseModel().pool;
@@ -51,7 +53,7 @@ export class ParticipacaoTrabalho {
     }
 
 
-    public setIdParticipacao(idParticipacao:number):void {
+    public setIdParticipacao(_idParticipacao:number):void {
          this.idParticipacao
     }
 
@@ -97,28 +99,75 @@ export class ParticipacaoTrabalho {
 
     // Métodos estáticos para operações no banco de dados
 
-    /**
-     * Lista todas as participações cadastradas
-     * @returns Array de participações
+   /**
+     * Retorna uma lista com todos os participação cadastrados no banco de dados
+     * 
+     * @returns Lista com todos os participação cadastrados no banco de dados
      */
-    static async listarParticipacoes(): Promise<ParticipacaoTrabalho[]> {
+    static async listarParticipacao(): Promise<Array<any> | null> {
+        // Criando lista vazia para armazenar os participação
+        let listaDeParticipacao: Array<any> = [];
+
         try {
-            const query = `SELECT * FROM Participacao`;
-            const resultado = await database.query(query);
-            
-            return resultado.rows.map(row => new ParticipacaoTrabalho(
-                row.id_trabalho,
-                row.id_voluntario,
-                row.quantidade_vagas,
-                row.duracao,
-                row.atividade_trabalho,
-                row.id_participacao
-            ));
+          // Query para consulta no banco de dados
+            const querySelectParticipação = `
+              SELECT e.id_participacao, e.id_voluntario, e.id_trabalho,
+                     e.quantidade_vagas, e.duracao, e.atividade_trabalho,
+                     a.cpf, a.nome, a.sobrenome, a.telefone, 
+                     l.nome_trabalho, l.ong_responsavel, l.localizacao
+              FROM participacao e
+              JOIN voluntario a ON e.id_voluntario = a.id_voluntaio
+              JOIN trabalho l ON e.id_trabalho = l.id_trabalho;
+              WHERE e.status_participacao_voluntario = TRUE;`;
+
+          // Executa a query no banco de dados
+           const respostaBD = await database.query(querySelectParticipação);
+
+          // Verifica se há resultados
+          if (respostaBD.rows.length === 0) {
+            return null;
+          }
+
+          // Itera sobre as linhas retornadas
+          respostaBD.rows.forEach((linha: any) => {
+             // Monta o objeto de empréstimo com os dados do aluno e do livro
+              const emprestimo = {
+                  idParticipacao: linha.id_participacao,
+                  idVoluntario: linha.id_voluntaio,
+                  idTrabalho: linha.id_trabalho,
+                  quantidadeVagas: linha.quantidade_vagas,
+                  duracao: linha.duracao,
+                  atividadeTrabalho: linha.atividade_trabalho,
+                  statusEmprestimoRegistro: linha.status_emprestimo_registro,
+                  Voluntario: {
+                    cpf: linha.cpf,
+                    nome: linha.nome,
+                    sobrenome: linha.sobrenome,
+                    telefone: linha.telefone
+                  },
+                  Trabalho: {
+                    nomeTrabalho: linha.nomeTrabalho,
+                    ongResponsavel: linha.ongResponsavel,
+                    localizacao: linha.localizacao
+                  }
+                };
+
+                // Adiciona o objeto à lista de participação
+                listaDeParticipacao.push(ParticipacaoTrabalho);
+            });
+
+            // retorna a lista de participação
+            return listaDeParticipacao;
+
+            // captura qualquer erro que possa acontecer
         } catch (error) {
-            console.error("Erro ao listar participações:", error);
-            throw error;
+          // exibe o erro detalhado no console
+            console.log(`Erro ao acessar o modelo: ${error}`);
+          // retorna um valor nulo
+            return null;
         }
-    }
+    } 
+
 
     /**
      * Busca uma participação por ID

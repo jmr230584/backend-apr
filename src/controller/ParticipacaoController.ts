@@ -13,7 +13,7 @@ export class ParticipacaoController {
     
     static async todos(req: Request, res: Response): Promise<any> {
         try {
-            const participacoes = await ParticipacaoTrabalho.listarParticipacoes();
+            const participacoes = await ParticipacaoTrabalho.listarParticipacao();
             return res.status(200).json(participacoes);
         } catch (error) {
             console.error("Erro ao listar participações:", error);
