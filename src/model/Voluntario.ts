@@ -16,6 +16,8 @@ export class Voluntario {
     private endereco: string; // Armazena o endereço do voluntário
     private email: string; // Armazena o email do voluntário
     private telefone: string; // Armazena o telefone do voluntário
+    private statusVoluntario: boolean = true; //controla o status do voluntário
+
 
     /**
      * Construtor da classe Voluntário.
@@ -176,6 +178,25 @@ export class Voluntario {
     }
 
     /**
+     * Retorna a status voluntário no sistema
+     * 
+     * @returns Status Voluntário no sistema
+     */
+    public getStatusVoluntario(): boolean {
+        return this.statusVoluntario;
+    }
+
+    /**
+     * Atribui um valor ao status do voluntário
+     * 
+     * @param _statusVoluntario : valor a ser atribuido ao status voluntário
+     */
+    public setStatusVoluntario(_statusVoluntario: boolean) {
+        this.statusVoluntario = _statusVoluntario;
+    }
+
+
+    /**
      * Busca e retorna uma lista de voluntários do banco de dados.
      * @returns Lista de voluntários ou null em caso de erro
      */
@@ -256,33 +277,48 @@ export class Voluntario {
 
 
     /**
-     * Remove um voluntário do banco de dados com base no ID fornecido.
-     *
-     * @param idVoluntario - O ID do voluntário a ser removido.
-     * @returns Uma Promise que resolve para `true` se o voluntário foi removido com sucesso, ou `false` caso contrário.
-     *
-     * @throws Lança um erro se ocorrer um problema durante a execução da consulta.
-     */
-    static async removerVoluntario(idVoluntario: number): Promise<boolean> {
+     * Remove um voluntário do banco de dados
+     * @param idVoluntario ID do voluntário a ser removido
+     * @returns Boolean indicando se a remoção foi bem-sucedida
+    */
+    static async removerVoluntario(id_voluntario: number): Promise<Boolean> {
+        // variável para controle de resultado da consulta (query)
+        let queryResult = false;
+    
         try {
-            const queryDeleteVoluntario = `DELETE FROM voluntario WHERE id_voluntario = ${idVoluntario}`;
+            // Cria a consulta (query) para remover o voluntario
+            const queryDeleteParticipacaoVoluntario = `UPDATE participacao 
+                                                       SET status_participacao_voluntario = FALSE
+                                                       WHERE id_voluntario=${id_voluntario};`;
 
-            // Executa a query no banco de dados
-            const respostaBD = await database.query(queryDeleteVoluntario);
+            // remove a participação associada ao voluntario
+            await database.query(queryDeleteParticipacaoVoluntario);
 
-            // Verifica se o delete foi bem-sucedido
-            if(respostaBD.rowCount != 0) {
-               console.log(`Voluntário removido com sucesso. ID removido: ${idVoluntario}`);
-               return true; // Retorna true em caso de sucesso
-            }
+            // Construção da query SQL para deletar o volutario.
+            const queryDeleteVoluntario = `UPDATE voluntario 
+                                        SET status_voluntario = FALSE
+                                        WHERE id_voluntario=${id_voluntario};`;
+    
+            // Executa a query de exclusão e verifica se a operação foi bem-sucedida.
+            await database.query(queryDeleteVoluntario)
+            .then((result) => {
+                if (result.rowCount != 0) {
+                    queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
+                }
+            });
+    
+            // retorna o resultado da query
+            return queryResult;
 
-           return false; // Retorna false em caso de falha
-        }  catch (error) {
-            console.log('Erro ao remover o voluntário. Consulte os logs para mais detalhes.');
-            console.log(error);
-            return false; // Retorna false em caso de erro
+        // captura qualquer erro que aconteça
+        } catch (error) {
+            // Em caso de erro na consulta, exibe o erro no console e retorna false.
+            console.log(`Erro na consulta: ${error}`);
+            // retorna false
+            return queryResult;
         }
     }
+
 
     /**
      * Atualiza as informações de um voluntário no banco de dados.

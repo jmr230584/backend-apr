@@ -17,8 +17,8 @@ router.get("/", (req, res) => {
 // Rotas para voluntários
 router.get("/lista/voluntarios", VoluntarioController.todos); // Rota para listar todos os voluntários
 router.post("/voluntario/novo", VoluntarioController.novo); // Rota para cadastrar um novo voluntário
-router.put("remover/voluntario", VoluntarioController.remover); // Rota para exluir um voluntário
-router.put("atualizar/voluntario", VoluntarioController.atualizar); // Rota para atualizar um novo voluntário
+router.put("/remover/voluntario", VoluntarioController.remover); // Rota para exluir um voluntário
+router.put("/atualizar/voluntario", VoluntarioController.atualizar); // Rota para atualizar um novo voluntário
 
 
 // Rotas para participações
