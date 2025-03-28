@@ -53,8 +53,13 @@ export class TrabalhoController {
                 trabalhoRecebido.nomeTrabalho,
                 trabalhoRecebido.ongResponsavel,
                 trabalhoRecebido.localizacao,
+<<<<<<< HEAD
+                trabalhoRecebido.dataInicio = new Date(),
+                trabalhoRecebido.dataTermino = new Date()
+=======
                 trabalhoRecebido.dataInicio = new Date(),  // Define a data de início como a data atual
                 trabalhoRecebido.dataTermino = new Date(), // Define a data de término como a data atual
+>>>>>>> 21856ebe57ba1c9364cf27a053ef5231142e3bd5
             );
 
             // Chama o método cadastroTrabalho() da classe Trabalho para salvar o novo trabalho no banco de dados
