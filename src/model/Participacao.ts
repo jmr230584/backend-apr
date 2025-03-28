@@ -111,14 +111,7 @@ export class ParticipacaoTrabalho {
         try {
           // Query para consulta no banco de dados
             const querySelectParticipação = `
-              SELECT e.id_participacao, e.id_voluntario, e.id_trabalho,
-                     e.quantidade_vagas, e.duracao, e.atividade_trabalho,
-                     a.cpf, a.nome, a.sobrenome, a.telefone, 
-                     l.nome_trabalho, l.ong_responsavel, l.localizacao
-              FROM participacao e
-              JOIN voluntario a ON e.id_voluntario = a.id_voluntaio
-              JOIN trabalho l ON e.id_trabalho = l.id_trabalho;
-              WHERE e.status_participacao_voluntario = TRUE;`;
+              SELECT * FROM participacao`;
 
           // Executa a query no banco de dados
            const respostaBD = await database.query(querySelectParticipação);
@@ -174,9 +167,9 @@ export class ParticipacaoTrabalho {
      * @param id ID da participação
      * @returns Participação encontrada ou null
      */
-    static async buscarPorId(id: number): Promise<ParticipacaoTrabalho | null> {
+    static async listar(id: number): Promise<ParticipacaoTrabalho | null> {
         try {
-            const query = `SELECT * FROM Participacao WHERE id_participacao = $1`;
+            const query = `SELECT * FROM Participacao`;
             const resultado = await database.query(query, [id]);
             
             if (resultado.rows.length === 0) {
