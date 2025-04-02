@@ -274,27 +274,32 @@ export class ParticipacaoTrabalho {
      */
     static async removerParticipacao(idParticipacao: number): Promise<boolean> {
         let queryResult = false;
-        
+    
         try {
-            // Query para "ocultar" a participação, definindo status como FALSE
+            console.log("ID recebido:", idParticipacao);
+    
+            // Query com placeholder correto
             const queryUpdateParticipacao = `UPDATE participacao 
-                                             SET status_participacao_voluntario = FALSE
-                                             WHERE id_participacao = $1;`;
-            
+                                              SET status_participacao_voluntario = FALSE
+                                              WHERE id_participacao = $1;`;
+    
+            console.log("Query a ser executada:", queryUpdateParticipacao);
+            console.log("Parâmetros:", [idParticipacao]);
+    
             // Executa a query para "remover" a participação sem deletá-la
             const resultado = await database.query(queryUpdateParticipacao, [idParticipacao]);
-            
+    
             // Verifica se a operação foi bem-sucedida
             if (resultado.rowCount && resultado.rowCount > 0) {
                 console.log(`Participação ocultada com sucesso: ID: ${idParticipacao}`);
                 queryResult = true;
             }
-            
+    
             return queryResult;
         } catch (error) {
             console.error("Erro ao ocultar participação:", error);
             return queryResult;
         }
-    }
+    }    
 }
 
