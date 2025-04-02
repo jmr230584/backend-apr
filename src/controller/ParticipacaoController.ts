@@ -11,9 +11,9 @@ interface ParticipacaoDTO {
 
 export class ParticipacaoController {
     
-    static async todos(req: Request, res: Response): Promise<any> {
+    static async todos(_req: Request, res: Response): Promise<any> {
         try {
-            const participacoes = await ParticipacaoTrabalho.listarParticipacoes();
+            const participacoes = await ParticipacaoTrabalho.listarParticipacao();
             return res.status(200).json(participacoes);
         } catch (error) {
             console.error("Erro ao listar participações:", error);
@@ -52,7 +52,7 @@ export class ParticipacaoController {
     /**
      * Método para atualizar uma participação existente.
      */
-    static async atualizar(req: Request, res: Response): Promise<Response> {
+    static async atualizar(req: Request, res: Response): Promise<any> {
         try {
             const idParticipacao = parseInt(req.query.idParticipacao as string);
             const { idTrabalho, idVoluntario, quantidadeVagas, duracao, atividadeTrabalho } = req.body;
@@ -75,12 +75,12 @@ export class ParticipacaoController {
     /**
      * Método para remover uma participação pelo ID.
      */
-    static async remover(req: Request, res: Response): Promise<Response> {
+    static async remover(req: Request, res: Response): Promise<any> {
         try {
             const idParticipacao = parseInt(req.query.idParticipacao as string);
-            const removido = await ParticipacaoTrabalho.removerParticipacao(idParticipacao);
+            const result = await ParticipacaoTrabalho.removerParticipacao(idParticipacao);
             
-            if (removido) {
+            if (result) {
                 return res.status(200).json({ mensagem: "Participação removida com sucesso!" });
             } else {
                 return res.status(400).json({ mensagem: "Erro ao remover participação." });

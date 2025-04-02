@@ -81,7 +81,7 @@ export class VoluntarioController {
         }
     }
 
-    /**
+   /**
      * Remove um voluntario.
      * @param req Objeto de requisição HTTP com o ID do voluntario a ser removido.
      * @param res Objeto de resposta HTTP.
@@ -89,14 +89,15 @@ export class VoluntarioController {
      */
     static async remover(req: Request, res: Response): Promise<any> {
         try {
-            const idVoluntario = parseInt(req.query.idVoluntario as string);
-            const result = await Voluntario.removerVoluntario(idVoluntario);
-            
-            if (result) {
-                return res.status(200).json('Voluntário removido com sucesso');
+           const idVoluntario = parseInt(req.query.idVoluntario as string);
+           const result = await Voluntario.removerVoluntario(idVoluntario);
+        
+           if (result) {
+             return res.status(200).json('Voluntário removido com sucesso');
             } else {
                 return res.status(401).json('Erro ao deletar Voluntário');
             }
+
         } catch (error) {
             console.log("Erro ao remover o Voluntário");
             console.log(error);
@@ -145,3 +146,5 @@ export class VoluntarioController {
         }
     }
 }
+
+export default VoluntarioController;

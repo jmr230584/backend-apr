@@ -31,6 +31,15 @@ FOREIGN KEY (id_voluntario) REFERENCES voluntario(id_voluntario)
 
 
 SELECT * FROM voluntario;
+SELECT * FROM participacao;
+SELECT * FROM trabalho;
+
+-- alterações das tabelas no banco
+ALTER TABLE voluntario ADD COLUMN status_voluntario BOOLEAN DEFAULT TRUE;
+ALTER TABLE trabalho ADD COLUMN status_trabalho BOOLEAN DEFAULT TRUE;
+ALTER TABLE participacao ADD COLUMN status_trabalho BOOLEAN DEFAULT TRUE;
+ALTER TABLE participacao ADD COLUMN status_participacao_voluntario BOOLEAN DEFAULT TRUE;
+ALTER TABLE trabalho ADD COLUMN status_trabalho_registro BOOLEAN DEFAULT TRUE;
 
 INSERT INTO voluntario(cpf, nome, sobrenome, data_nascimento, endereco, email, telefone)
 VALUES (12345678900, 'Neil Abram', 'Josten', '1987-03-31', 'Rua das Raposas, 103', 'NAJ.fox@gmail.com', 11987654321),
