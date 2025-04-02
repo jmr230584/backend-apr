@@ -278,8 +278,8 @@ export class ParticipacaoTrabalho {
         try {
             // Query para "ocultar" a participação, definindo status como FALSE
             const queryUpdateParticipacao = `UPDATE participacao 
-                                              SET status_participacao_voluntario = FALSE
-                                              WHERE id_participacao = ${idParticipacao};`;
+                                             SET status_participacao_voluntario = FALSE
+                                             WHERE id_participacao = $1;`;
             
             // Executa a query para "remover" a participação sem deletá-la
             const resultado = await database.query(queryUpdateParticipacao, [idParticipacao]);
@@ -296,5 +296,5 @@ export class ParticipacaoTrabalho {
             return queryResult;
         }
     }
-    }
+}
 
