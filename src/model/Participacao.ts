@@ -126,7 +126,7 @@ export class ParticipacaoTrabalho {
              // Monta o objeto de participação com os dados do voluntário e do trabalho
               const ParticipacaoTrabalho = {
                   idParticipacao: linha.id_participacao,
-                  idVoluntario: linha.id_voluntaio,
+                  idVoluntario: linha.id_voluntario,
                   idTrabalho: linha.id_trabalho,
                   quantidadeVagas: linha.quantidade_vagas,
                   duracao: linha.duracao,
