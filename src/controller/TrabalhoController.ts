@@ -96,39 +96,43 @@ export class TrabalhoController {
         }
     }
     
-    /**
-     * Método para atualizar o cadastro de um trabalho.
+        /**
+     * Método para atualizar o cadastro de um Trabalho.
      * 
-     * @param req Objeto de requisição do Express, contendo os dados atualizados do voluntario
+     * @param req Objeto de requisição do Express, contendo os dados atualizados do trabalho
      * @param res Objeto de resposta do Express
      * @returns Retorna uma resposta HTTP indicando sucesso ou falha na atualização
      */
-    static async atualizar(req: Request, res: Response): Promise<any> {
-        try {
-            const dadosRecebidos: TrabalhoDTO = req.body;
-            
-            // Cria uma nova instância de trabalho com os dados atualizados
-            const trabalho = new Trabalho(
+        static async atualizar(req: Request, res: Response): Promise<Response> {
+            try {
+                // Desestruturando objeto recebido pelo front-end
+                const dadosRecebidos: TrabalhoDTO = req.body;
+                
+                // Instanciando objeto trabalho
+                const trabalho = new Trabalho(
                 dadosRecebidos.nomeTrabalho,
-                dadosRecebidos.ongResponsavel, 
+                dadosRecebidos.ongResponsavel,
                 dadosRecebidos.localizacao,
-                dadosRecebidos.dataInicio,
-                dadosRecebidos.dataTermino);
-
-            // Define o ID do trabalho, que deve ser passado na query string
-            trabalho.setIdTrabalho(parseInt(req.query.idTrabalho as string));
-
-            // Chama o método para atualizar o cadastro do trabalho no banco de dados
-            if (await Trabalho.atualizarCadastrotrabalho(trabalho)) {
-                return res.status(200).json({ mensagem: "Cadastro atualizado com sucesso!" });
-            } else {
-                return res.status(400).json('Não foi possível atualizar o trabalho no banco de dados');
+                dadosRecebidos.dataInicio = new Date(),
+                dadosRecebidos.dataTermino = new Date()
+            );
+    
+                // Define o ID do trabalho, que deve ser passado na query string
+                trabalho.setIdTrabalho(parseInt(req.query.idTrabalho as string));
+    
+                // Chama o método para atualizar o cadastro do trabalho no banco de dados
+                if (await trabalho.atualizarTrabalho (trabalho)) {
+                    return res.status(200).json({ mensagem: "Cadastro atualizado com sucesso!" });
+                } else {
+                    return res.status(400).json('Não foi possível atualizar o trabalho no banco de dados');
+                }
+            } catch (error) {
+                // Caso ocorra algum erro, este é registrado nos logs do servidor
+                console.error(`Erro no modelo: ${error}`);
+                // Retorna uma resposta com uma mensagem de erro
+                return res.json({ mensagem: "Erro ao atualizar trabalho." });
             }
-        } catch (error) {
-            // Caso ocorra algum erro, este é registrado nos logs do servidor
-            console.error(`Erro no modelo: ${error}`);
-            // Retorna uma resposta com uma mensagem de erro
-            return res.json({ mensagem: "Erro ao atualizar o." });
         }
     }
-}
+    
+    export default TrabalhoController;

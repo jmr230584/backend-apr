@@ -16,6 +16,7 @@ export class Trabalho {
     private localizacao: string; // Local onde o trabalho será realizado
     private dataInicio: Date; // Data de início do trabalho
     private dataTermino: Date; // Data de término do trabalho
+    atualizarTrabalho: any;
 
     /**
      * Construtor da classe Trabalho.
