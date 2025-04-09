@@ -336,11 +336,12 @@ export class Voluntario {
                                             sobrenome = '${voluntario.getSobrenome()}',
                                             data_nascimento = '${voluntario.getDataNascimento()}',
                                             endereco = '${voluntario.getEndereco()}',
-                                            email = '${voluntario.getEmail()}'
-                                            telefone = '${voluntario.getTelefone()}',           
+                                            email = '${voluntario.getEmail()}',
+                                            telefone = '${voluntario.getTelefone()}'           
                                             WHERE id_voluntario = ${voluntario.getIdVoluntario()};`;
 
             // Executa a query no banco de dados
+            console.log(queryUpdateVoluntario);
             const respostaBD = await database.query(queryUpdateVoluntario);
             
             // Verifica se o delete foi bem-sucedido

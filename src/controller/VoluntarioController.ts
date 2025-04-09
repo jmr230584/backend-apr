@@ -6,6 +6,7 @@ import { Voluntario } from "../model/Voluntario";
 
 // Define uma interface (DTO - Data Transfer Object) para padronizar os dados esperados ao cadastrar um voluntário
 interface VoluntarioDTO {
+    idVoluntario: number;
     cpf: string;               // CPF do voluntário (identificação única)
     nome: string;              // Nome do voluntário
     sobrenome: string;         // Sobrenome do voluntário
@@ -119,7 +120,7 @@ export class VoluntarioController {
         try {
             const VoluntarioRecebido: VoluntarioDTO = req.body;
 
-            const idVoluntarioRecebido = parseInt(req.params.idVoluntario);
+            //const idVoluntarioRecebido = parseInt(req.params.idVoluntario as string);
 
             const VoluntarioAtualizado = new Voluntario(
                 VoluntarioRecebido.cpf,
@@ -130,9 +131,11 @@ export class VoluntarioController {
                 VoluntarioRecebido.email,
                 VoluntarioRecebido.telefone);
             
-            VoluntarioAtualizado.setIdVoluntario(idVoluntarioRecebido);
+            VoluntarioAtualizado.setIdVoluntario(parseInt(req.params.idVoluntario as string));
 
             const respostaModelo = await Voluntario.atualizarVoluntario(VoluntarioAtualizado);
+
+            console.log(VoluntarioAtualizado);
 
             if(respostaModelo) {
                 return res.status(200).json({ mensagem: "Voluntário atualizado com sucesso!" });
