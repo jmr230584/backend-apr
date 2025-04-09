@@ -129,7 +129,8 @@ export class VoluntarioController {
                 VoluntarioRecebido.data_nascimento,
                 VoluntarioRecebido.endereco,
                 VoluntarioRecebido.email,
-                VoluntarioRecebido.telefone);
+                VoluntarioRecebido.telefone
+            );
             
             VoluntarioAtualizado.setIdVoluntario(parseInt(req.params.idVoluntario as string));
 

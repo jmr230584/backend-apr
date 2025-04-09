@@ -103,7 +103,7 @@ export class TrabalhoController {
      * @param res Objeto de resposta do Express
      * @returns Retorna uma resposta HTTP indicando sucesso ou falha na atualização
      */
-        static async atualizar(req: Request, res: Response): Promise<Response> {
+        static async atualizar(req: Request, res: Response): Promise<any> {
             try {
                 // Desestruturando objeto recebido pelo front-end
                 const dadosRecebidos: TrabalhoDTO = req.body;
