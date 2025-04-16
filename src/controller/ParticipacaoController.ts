@@ -58,7 +58,7 @@ export class ParticipacaoController {
             const { idTrabalho, idVoluntario, quantidadeVagas, duracao, atividadeTrabalho } = req.body;
 
             const atualizado = await ParticipacaoTrabalho.atualizarParticipacao(
-                idParticipacao, idTrabalho, idVoluntario, quantidadeVagas, duracao, atividadeTrabalho
+                idTrabalho, idVoluntario, quantidadeVagas, duracao, atividadeTrabalho
             );
 
             if (atualizado) {
