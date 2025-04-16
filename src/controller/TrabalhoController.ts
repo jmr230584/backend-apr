@@ -74,8 +74,8 @@ export class TrabalhoController {
         }
     }
       /**
-     * Remove um voluntario.
-     * @param req Objeto de requisição HTTP com o ID do voluntario a ser removido.
+     * Remove um trabalho.
+     * @param req Objeto de requisição HTTP com o ID do trabalho a ser removido.
      * @param res Objeto de resposta HTTP.
      * @returns Mensagem de sucesso ou erro em formato JSON.
      */
@@ -96,43 +96,48 @@ export class TrabalhoController {
         }
     }
     
-        /**
-     * Método para atualizar o cadastro de um Trabalho.
-     * 
-     * @param req Objeto de requisição do Express, contendo os dados atualizados do trabalho
-     * @param res Objeto de resposta do Express
-     * @returns Retorna uma resposta HTTP indicando sucesso ou falha na atualização
+     /**
+     * Atualiza as informações de um trabalho existente.
+     *
+     * @param req - Objeto de solicitação HTTP, contendo os dados do voluntário no corpo da solicitação e o ID do trabalho nos parâmetros.
+     * @param res - Objeto de resposta HTTP.
+     * @returns Uma promessa que resolve com uma resposta HTTP indicando o sucesso ou falha da operação.
+     *
+     * @throws Retorna uma resposta HTTP com status 400 e uma mensagem de erro se ocorrer um problema durante a atualização do trabalho.
      */
-    static async atualizar(req: Request, res: Response): Promise<Response> {
+     static async atualizar(req: Request, res: Response): Promise<any> {
         try {
-            const dadosRecebidos: TrabalhoDTO = req.body;
-                
-            // Cria uma nova instância de trabalho com os dados atualizados
-            const trabalho = new Trabalho(
-                dadosRecebidos.nomeTrabalho,
-                dadosRecebidos.ongResponsavel,
-                dadosRecebidos.localizacao,
-                new Date(dadosRecebidos.dataInicio),
-                new Date(dadosRecebidos.dataTermino)
-              );
-              
-    
-                // Define o ID do trabalho, que deve ser passado na query string
-            trabalho.setIdTrabalho(parseInt(req.query.idTrabalho as string));
-    
-                // Chama o método para atualizar o cadastro do trabalho no banco de dados
-            if (await Trabalho.atualizarTrabalho(trabalho)) {
-                return res.status(200).json({ mensagem: "Cadastro atualizado com sucesso!" });
+            const TrabalhoRecebido: TrabalhoDTO = req.body;
+
+            const idTrabalhoRecebido = parseInt(req.params.idTrabalho as string);
+            console.log(idTrabalhoRecebido);
+
+            const TrabalhoAtualizado = new Trabalho(
+                TrabalhoRecebido.nomeTrabalho,
+                TrabalhoRecebido.ongResponsavel,
+                TrabalhoRecebido.localizacao,
+                TrabalhoRecebido.dataInicio,
+                TrabalhoRecebido.dataTermino
+            );
+
+            
+            
+            TrabalhoAtualizado.setIdTrabalho(idTrabalhoRecebido);
+
+            const respostaModelo = await Trabalho.atualizarTrabalho(TrabalhoAtualizado);
+
+            console.log(TrabalhoAtualizado);
+
+            if(respostaModelo) {
+                return res.status(200).json({ mensagem: "Trabalho atualizado com sucesso!" });
             } else {
-                return res.status(400).json('Não foi possível atualizar o trabalho no banco de dados');
+                return res.status(400).json({ mensagem: "Não foi possível atualizar o trabalho. Entre em contato com o administrador do sistema." });
             }
         } catch (error) {
-            // Caso ocorra algum erro, este é registrado nos logs do servidor
-            console.error(`Erro no modelo: ${error}`);
-            // Retorna uma resposta com uma mensagem de erro
-            return res.json({ mensagem: "Erro ao atualizar trabalho." });
-        }
-    }    
-}
+            console.log(`Erro ao remover o trabalho ${error}`);
 
+            return res.status(400).json({ mensagem: "Não foi possível atualizar o trabalho. Entre em contato com o administrador do sistema." });
+        }
+    }
+}
 export default TrabalhoController;

@@ -284,37 +284,37 @@ export class Trabalho {
     }
 
     /**
-     * Atualiza os dados de um trabalho no banco de dados.
-     * @param trabalho Objeto do tipo trabalho com os novos dados
-     * @returns true caso sucesso, false caso erro
+     * Atualiza as informações de um trabalho no banco de dados.
+     *
+     * @param trabalho- O objeto trabalho contendo as informações atualizadas.
+     * @returns Uma Promise que resolve para `true` se o trabalho foi atualizado com sucesso, ou `false` caso contrário.
+     *
+     * @throws Lança um erro se ocorrer um problema durante a atualização do trabalho.
      */
     static async atualizarTrabalho(Trabalho: Trabalho): Promise<Boolean> {
         let queryResult = false; // Variável para armazenar o resultado da operação.
         try {
-            // Construção da query SQL para atualizar os dados do trabalho no banco de dados.
+            // Construção da query SQL para atualizar os dados do voluntário no banco de dados.
             const queryAtualizarTrabalho = `UPDATE trabalho SET 
-                                           nome_trabalho = '${Trabalho.nomeTrabalho.toUpperCase()}',
+                                               nome_trabalho = '${Trabalho.nomeTrabalho.toUpperCase()}',
                                            ong_responsavel = '${Trabalho.ongResponsavel.toUpperCase()}', 
                                            localizacao = '${Trabalho.localizacao.toUpperCase()}', 
                                            data_inicio = '${Trabalho.dataInicio.toISOString().split('T')[0]}', 
                                            data_termino = '${Trabalho.dataTermino.toISOString().split('T')[0]}' 
                                            WHERE id_trabalho = ${Trabalho.idTrabalho}`;
-
             // Executa a query de atualização e verifica se a operação foi bem-sucedida.
             await database.query(queryAtualizarTrabalho)
-                .then((result) => {
-                    if (result.rowCount != 0) {
-                        queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
-                    }
-                });
+            .then((result) => {
+                if (result.rowCount != 0) {
+                    queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
+                }
+            });
 
             // Retorna o resultado da operação para quem chamou a função.
             return queryResult;
-        // captura qualquer erro que possa acontecer
         } catch (error) {
-            // exibe detalhes do erro no console
+            // Em caso de erro na consulta, exibe o erro no console e retorna false.
             console.log(`Erro na consulta: ${error}`);
-            // retorna o valor da variável de controle
             return queryResult;
         }
     }
