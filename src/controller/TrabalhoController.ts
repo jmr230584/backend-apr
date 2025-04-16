@@ -121,7 +121,6 @@ export class TrabalhoController {
             );
 
             
-            
             TrabalhoAtualizado.setIdTrabalho(idTrabalhoRecebido);
 
             const respostaModelo = await Trabalho.atualizarTrabalho(TrabalhoAtualizado);

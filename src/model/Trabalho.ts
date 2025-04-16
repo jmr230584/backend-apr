@@ -296,12 +296,13 @@ export class Trabalho {
         try {
             // Construção da query SQL para atualizar os dados do voluntário no banco de dados.
             const queryAtualizarTrabalho = `UPDATE trabalho SET 
-                                               nome_trabalho = '${Trabalho.nomeTrabalho.toUpperCase()}',
-                                           ong_responsavel = '${Trabalho.ongResponsavel.toUpperCase()}', 
-                                           localizacao = '${Trabalho.localizacao.toUpperCase()}', 
-                                           data_inicio = '${Trabalho.dataInicio.toISOString().split('T')[0]}', 
-                                           data_termino = '${Trabalho.dataTermino.toISOString().split('T')[0]}' 
-                                           WHERE id_trabalho = ${Trabalho.idTrabalho}`;
+                                                status_trabalho = '${Trabalho.getStatusTrabalho()}',
+                                                nome_trabalho = '${Trabalho.getNomeTrabalho().toUpperCase()}',
+                                                ong_responsavel = '${Trabalho.getOngResponsavel().toUpperCase()}',
+                                                localizacao = '${Trabalho.getLocalizacao().toUpperCase()}',
+                                                data_inicio = '${Trabalho.getDataInicio()}',
+                                                data_termino = '${Trabalho.getDataTermino()}'
+                              WHERE id_trabalho = ${Trabalho.idTrabalho}`;
             // Executa a query de atualização e verifica se a operação foi bem-sucedida.
             await database.query(queryAtualizarTrabalho)
             .then((result) => {
