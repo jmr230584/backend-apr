@@ -201,36 +201,45 @@ export class Voluntario {
      * @returns Lista de voluntários ou null em caso de erro
      */
     static async listarVoluntarios(): Promise<Array<Voluntario> | null> {
-        const listaDeVoluntarios: Array<Voluntario> = []; // Lista para armazenar os voluntários
+        // Criando lista vazia para armazenar os voluntários
+        let listaDeVoluntarios: Array<Voluntario> = [];
 
         try {
-            const querySelectVoluntarios = `SELECT * FROM voluntario`; // Query para selecionar todos os voluntários
-            const respostaBD = await database.query(querySelectVoluntarios); // Executa a query no banco de dados
+            // Query para consulta no banco de dados
+            const querySelectVoluntario = `SELECT * FROM voluntario WHERE status_voluntario = TRUE;`;
 
-            // Itera sobre as linhas retornadas pelo banco de dados
-            respostaBD.rows.forEach((linha: any) => {
-                // Cria um novo objeto Voluntario com os dados da linha
-                const novoVoluntario = new Voluntario(
-                    linha.cpf,
-                    linha.nome,
-                    linha.sobrenome,
-                    linha.data_nascimento,
-                    linha.endereco,
-                    linha.email,
-                    linha.telefone
+            // executa a query no banco de dados
+            const respostaBD = await database.query(querySelectVoluntario);    
+
+            // percorre cada resultado retornado pelo banco de dados
+            // voluntário é o apelido que demos para cada linha retornada do banco de dados
+            respostaBD.rows.forEach((voluntario: any) => {
+                
+                // criando objeto voluntário
+                let novoVoluntario = new Voluntario(
+                    voluntario.cpf,
+                    voluntario.nome,
+                    voluntario.sobrenome,
+                    voluntario.data_nascimento,
+                    voluntario.endereco,
+                    voluntario.email,
+                    voluntario.telefone
+
                 );
+                // adicionando o ID ao objeto
+                novoVoluntario.setIdVoluntario(voluntario.id_voluntario);
+                novoVoluntario.setCpf(voluntario.cpf);
+                novoVoluntario.setStatusVoluntario(voluntario.status_voluntario)
 
-                // Define o ID do voluntário
-                novoVoluntario.setIdVoluntario(linha.id_voluntario);
-
-                // Adiciona o voluntário à lista
+                // adicionando a pessoa na lista
                 listaDeVoluntarios.push(novoVoluntario);
             });
 
-            return listaDeVoluntarios; // Retorna a lista de voluntários
+            // retornado a lista de pessoas para quem chamou a função
+            return listaDeVoluntarios;
         } catch (error) {
-            console.error('Erro ao buscar lista de voluntários:', error); // Loga o erro no console
-            return null; // Retorna null em caso de erro
+            console.log(`Erro ao acessar o modelo: ${error}`);
+            return null;
         }
     }
 
@@ -328,33 +337,34 @@ export class Voluntario {
      *
      * @throws Lança um erro se ocorrer um problema durante a atualização do voluntário.
      */
-    static async atualizarVoluntario(voluntario: Voluntario): Promise<boolean> {
+    static async atualizarVoluntario(voluntario: Voluntario): Promise<Boolean> {
+        let queryResult = false; // Variável para armazenar o resultado da operação.
         try {
-            const queryUpdateVoluntario = `UPDATE voluntario SET 
-                                            cpf = '${voluntario.getCpf()}',
-                                            nome = '${voluntario.getNome()}', 
-                                            sobrenome = '${voluntario.getSobrenome()}',
-                                            data_nascimento = '${voluntario.getDataNascimento()}',
-                                            endereco = '${voluntario.getEndereco()}',
-                                            email = '${voluntario.getEmail()}',
-                                            telefone = '${voluntario.getTelefone()}'           
-                                            WHERE id_voluntario = ${voluntario.getIdVoluntario()};`;
+            // Construção da query SQL para atualizar os dados do voluntário no banco de dados.
+            const queryAtualizarVoluntario = `UPDATE voluntario SET 
+                                                cpf = '${voluntario.getCpf().toUpperCase()}',
+                                                nome = '${voluntario.getNome().toUpperCase()}', 
+                                                sobrenome = '${voluntario.getSobrenome().toUpperCase()}',
+                                                data_nascimento = '${voluntario.getDataNascimento()}', 
+                                                endereco = '${voluntario.getEndereco().toUpperCase()}',
+                                                telefone = '${voluntario.getTelefone()}', 
+                                                email = '${voluntario.getEmail().toLowerCase()}'                                            
+                                              WHERE id_voluntario = ${voluntario.idVoluntario}`;
 
-            // Executa a query no banco de dados
-            console.log(queryUpdateVoluntario);
-            const respostaBD = await database.query(queryUpdateVoluntario);
-            
-            // Verifica se o delete foi bem-sucedido
-            if(respostaBD.rowCount != 0) {
-                console.log(`Voluntário atualizado com sucesso. ID: ${voluntario.getIdVoluntario()}`);
-                return true; // Retorna true em caso de sucesso
-            }
+            // Executa a query de atualização e verifica se a operação foi bem-sucedida.
+            await database.query(queryAtualizarVoluntario)
+            .then((result) => {
+                if (result.rowCount != 0) {
+                    queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
+                }
+            });
 
-            return false; // Retorna false em caso de falha
+            // Retorna o resultado da operação para quem chamou a função.
+            return queryResult;
         } catch (error) {
-            console.log('Erro ao remover o voluntário. Consulte os logs para mais detalhes.');
-            console.log(error);
-            return false; // Retorna false em caso de erro
+            // Em caso de erro na consulta, exibe o erro no console e retorna false.
+            console.log(`Erro na consulta: ${error}`);
+            return queryResult;
         }
     }
 }

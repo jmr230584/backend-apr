@@ -3,7 +3,7 @@ id_voluntario SERIAL PRIMARY KEY,
 cpf VARCHAR(11) UNIQUE NOT NULL,
 nome VARCHAR(100) NOT NULL,
 sobrenome VARCHAR(100) NOT NULL,
-data_nascimento DATE ,
+data_nascimento DATE NOT NULL,
 endereco VARCHAR(200),
 email VARCHAR(100) UNIQUE NOT NULL,
 telefone VARCHAR(11) NOT NULL
@@ -63,3 +63,37 @@ VALUES
 ('Unidade Hospitalar Móvel', 'Mãos que curam', 'Belo Horizonte -BH', '2025-03-21', '2025-11-19'),
 ('Saneamento Basico em Comunidades', 'H2Somos', 'Rio grande do Sul- RS', '2025-03-16', '2025-11-28'),
 ('Reflorestamento Urbano', 'Verde para o Futuro', 'Curitiba - PR', '2025-05-10', '2025-11-15'); 
+
+-- SQL DE REQUSITO NÃO FUNCIONAL
+-- Criação da tabela muralTrabalhos
+CREATE TABLE muralTrabalhos (
+    id SERIAL PRIMARY KEY,
+    nome_trabalho VARCHAR(100) NOT NULL,
+    ong_responsavel VARCHAR(100) NOT NULL,
+    total_voluntarios INTEGER CHECK (total_voluntarios >= 0),
+    data_encerramento DATE
+);
+
+-- Inserção de 20 registros
+INSERT INTO muralTrabalhos (nome_trabalho, ong_responsavel, total_voluntarios, data_encerramento)
+VALUES 
+('Mutirão da Limpeza', 'Verde Esperança', 25, '2024-05-10'),
+('Apoio a Idosos', 'Cuidar é Amar', 15, '2024-06-20'),
+('Campanha do Agasalho', 'Solidarize-se', 30, '2024-07-15'),
+('Educação para Todos', 'Ensina Brasil', 40, '2024-08-25'),
+('Doação de Alimentos', 'Mesa Cheia', 50, '2024-09-10'),
+('Plantio de Árvores', 'Verde Esperança', 20, '2024-10-05'),
+('Criança Feliz', 'Sorriso Solidário', 35, '2024-11-12'),
+('Recicla Aí', 'Planeta Limpo', 18, '2024-12-01'),
+('Saúde na Comunidade', 'Cuidar é Amar', 22, '2024-08-18'),
+('Oficinas Culturais', 'Arte para Todos', 28, '2024-12-15');
+('Ação Jovem 2011', 'Juventude Ativa', 12, '2011-09-15'),
+('Construindo Esperança', 'Mãos Unidas', 20, '2013-06-10'),
+('Projeto Sementes', 'Verde Vivo', 18, '2014-11-22'),
+('Natal Solidário', 'Anjos do Bem', 35, '2015-12-18'),
+('Oficina de Talentos', 'Arte Livre', 10, '2016-04-05'),
+('Saúde em Foco', 'Vida Plena', 22, '2017-08-27'),
+('Luz na Infância', 'Sorriso de Criança', 30, '2019-03-12'),
+('Inverno Quente', 'Acolher é Viver', 40, '2020-07-30'),
+('Voluntários do Bem', 'Rede Solidária', 28, '2022-10-19'),
+('Educar para Transformar', 'Mente Aberta', 50, '2024-01-25'); 

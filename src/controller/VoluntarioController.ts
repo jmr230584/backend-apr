@@ -10,7 +10,7 @@ interface VoluntarioDTO {
     cpf: string;               // CPF do voluntário (identificação única)
     nome: string;              // Nome do voluntário
     sobrenome: string;         // Sobrenome do voluntário
-    data_nascimento: Date;     // Data de nascimento do voluntário
+    dataNascimento: Date;     // Data de nascimento do voluntário
     endereco: string;          // Endereço do voluntário
     email: string;             // E-mail para contato
     telefone: string;          // Telefone de contato
@@ -56,11 +56,12 @@ export class VoluntarioController {
                 voluntarioRecebido.cpf,                 // CPF do voluntário
                 voluntarioRecebido.nome,                // Nome
                 voluntarioRecebido.sobrenome,           // Sobrenome
-                voluntarioRecebido.data_nascimento = new Date(), // Define a data de nascimento como a data atual
+                voluntarioRecebido.dataNascimento = new Date(), // Define a data de nascimento como a data atual
                 voluntarioRecebido.endereco,            // Endereço
                 voluntarioRecebido.email,               // E-mail de contato
                 voluntarioRecebido.telefone             // Telefone de contato
             );
+
 
             // Exibe no console os dados do novo voluntário para fins de depuração
             console.log(novoVoluntario);
@@ -120,19 +121,22 @@ export class VoluntarioController {
         try {
             const VoluntarioRecebido: VoluntarioDTO = req.body;
 
-            //const idVoluntarioRecebido = parseInt(req.params.idVoluntario as string);
+            const idVoluntarioRecebido = parseInt(req.params.idVoluntario as string);
+            console.log(idVoluntarioRecebido);
 
             const VoluntarioAtualizado = new Voluntario(
                 VoluntarioRecebido.cpf,
                 VoluntarioRecebido.nome, 
                 VoluntarioRecebido.sobrenome, 
-                VoluntarioRecebido.data_nascimento,
+                VoluntarioRecebido.dataNascimento,
                 VoluntarioRecebido.endereco,
                 VoluntarioRecebido.email,
                 VoluntarioRecebido.telefone
             );
+
             
-            VoluntarioAtualizado.setIdVoluntario(parseInt(req.params.idVoluntario as string));
+            
+            VoluntarioAtualizado.setIdVoluntario(idVoluntarioRecebido);
 
             const respostaModelo = await Voluntario.atualizarVoluntario(VoluntarioAtualizado);
 

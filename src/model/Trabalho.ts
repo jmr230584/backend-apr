@@ -16,7 +16,7 @@ export class Trabalho {
     private localizacao: string; // Local onde o trabalho será realizado
     private dataInicio: Date; // Data de início do trabalho
     private dataTermino: Date; // Data de término do trabalho
-    atualizarTrabalho: any;
+    private statusTrabalho: boolean = true; //controla o status do trabalho
 
     /**
      * Construtor da classe Trabalho.
@@ -117,52 +117,85 @@ export class Trabalho {
         this.dataInicio = dataInicio;
     }
 
+
     /**
-     * Retorna a data de término do trabalho.
+     * Retorna a data de termino do trabalho.
      */
     public getDataTermino(): Date {
         return this.dataTermino;
     }
 
     /**
-     * Define uma nova data de término para o trabalho.
-     * @param dataTermino - Data de término atualizada.
+     * Define uma nova data de termino para o trabalho.
+     * @param dataTermino - Data de início atualizada.
      */
     public setDataTermino(dataTermino: Date): void {
         this.dataTermino = dataTermino;
     }
 
+
+    /**
+     * Retorna a status trabalho no sistema
+     * 
+     * @returns Status trabalho no sistema
+     */
+    public getStatusTrabalho(): boolean {
+        return this.statusTrabalho;
+    }
+
+    /**
+     * Atribui um valor ao status do trabalho
+     * 
+     * @param _statusTrabalho : valor a ser atribuido ao status trabalho
+     */
+    public setStatusTrabalho(_statusTrabalho: boolean) {
+        this.statusTrabalho = _statusTrabalho;
+    }
+
+
+    
     /**
      * Método para listar todos os trabalhos cadastrados no banco de dados.
      * @returns Retorna um array de objetos do tipo Trabalho ou null em caso de erro.
      */
-    static async listagemTrabalhos(): Promise<Array<Trabalho> | null> {
-        const listaDeTrabalhos: Array<Trabalho> = [];
+    static async listarTrabalho(): Promise<Array<Trabalho> | null> {
+        // Criando lista vazia para armazenar os trabalhos
+        let listaDeTrabalhos: Array<Trabalho> = [];
 
         try {
-            // Query SQL para buscar todos os trabalhos cadastrados
-            const querySelectTrabalho = 'SELECT * FROM trabalho';
+            // Query para consulta no banco de dados
+            const querySelectTrabalho = `SELECT * FROM Trabalho WHERE status_trabalho = TRUE;`;
+
+            // executa a query no banco de dados
             const respostaBD = await database.query(querySelectTrabalho);
 
-            // Itera sobre os resultados e cria objetos Trabalho para cada registro encontrado
-            respostaBD.rows.forEach((linha: any) => {
-                const novoTrabalho = new Trabalho(
-                    linha.nome_trabalho,   // Nome do trabalho voluntário
-                    linha.ong_responsavel, // ONG responsável
-                    linha.localizacao,     // Local onde ocorrerá o trabalho
-                    linha.data_inicio,     // Data de início do trabalho
-                    linha.data_termino     // Data de término do trabalho
+            // percorre cada resultado retornado pelo banco de dados
+            // trabalho é o apelido que demos para cada linha retornada do banco de dados
+            respostaBD.rows.forEach((trabalho) => {
+                // criando objeto trabalho
+                let novoTrabalho = new Trabalho(
+                    trabalho.nomeTrabalho,
+                    trabalho.ongResponsavel,
+                    trabalho.localizacao,
+                    trabalho.dataInicio,
+                    trabalho.dataTermino
                 );
+                // adicionando o ID ao objeto
+                novoTrabalho.setIdTrabalho(trabalho.id_trabalho);
+                novoTrabalho.setStatusTrabalho(trabalho.status_trabalho);
 
-                // Define o ID do trabalho usando o valor recuperado do banco
-                novoTrabalho.setIdTrabalho(linha.id_trabalho);
+                // adicionando um trabalho na lista
                 listaDeTrabalhos.push(novoTrabalho);
             });
 
+            // retornado a lista de trabalhos para quem chamou a função
             return listaDeTrabalhos;
+        
+        // captura qualquer erro que aconteça
         } catch (error) {
-            // Em caso de erro, exibe uma mensagem no console e retorna null
-            console.error('Erro ao buscar lista de trabalhos:', error);
+            // exibe detalhes do erro no console
+            console.log(`Erro ao acessar o modelo: ${error}`);
+            // retorna um valor nulo
             return null;
         }
     }
@@ -255,7 +288,7 @@ export class Trabalho {
      * @param trabalho Objeto do tipo trabalho com os novos dados
      * @returns true caso sucesso, false caso erro
      */
-    static async atualizarCadastrotrabalho(Trabalho: Trabalho): Promise<Boolean> {
+    static async atualizarTrabalho(Trabalho: Trabalho): Promise<Boolean> {
         let queryResult = false; // Variável para armazenar o resultado da operação.
         try {
             // Construção da query SQL para atualizar os dados do trabalho no banco de dados.
