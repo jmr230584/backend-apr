@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ParticipacaoTrabalho } from "../model/Participacao";
+import { ParticipacaoTrabalho, Participacao} from '../model/Participacao';
 
 interface ParticipacaoDTO {
     idTrabalho: number;
@@ -49,28 +49,41 @@ export class ParticipacaoController {
         }
     }
     
-    /**
-     * Método para atualizar uma participação existente.
-     */
-    static async atualizar(req: Request, res: Response): Promise<any> {
-        try {
-            const idParticipacao = parseInt(req.query.idParticipacao as string);
-            const { idTrabalho, idVoluntario, quantidadeVagas, duracao, atividadeTrabalho } = req.body;
+ /**
+      * Atualiza as informações de uma participação existente.
+      *
+      * @param req - Objeto de solicitação HTTP, contendo os dados do voluntário no corpo da solicitação e o ID da participação nos parâmetros.
+      * @param res - Objeto de resposta HTTP.
+      * @returns Uma promessa que resolve com uma resposta HTTP indicando o sucesso ou falha da operação.
+      *
+      * @throws Retorna uma resposta HTTP com status 400 e uma mensagem de erro se ocorrer um problema durante a atualização da participação.
+      */
+ static async atualizar(req: Request, res: Response): Promise<any> {
+    try {
+        const ParticipacaoRecebido: ParticipacaoDTO = req.body;
+        const idParticipacaoRecebido = parseInt(req.params.idParticipacao as string);
 
-            const atualizado = await ParticipacaoTrabalho.atualizarParticipacao(
-                idTrabalho, idVoluntario, quantidadeVagas, duracao, atividadeTrabalho
-            );
+        const ParticipacaoAtualizado = new ParticipacaoTrabalho(
+            idParticipacaoRecebido, 
+            ParticipacaoRecebido.idTrabalho,
+            ParticipacaoRecebido.idVoluntario,
+            ParticipacaoRecebido.quantidadeVagas,
+            ParticipacaoRecebido.duracao,
+            ParticipacaoRecebido.atividadeTrabalho
+        );
 
-            if (atualizado) {
-                return res.status(200).json({ mensagem: "Participação atualizada com sucesso!" });
-            } else {
-                return res.status(400).json({ mensagem: "Erro ao atualizar participação." });
-            }
-        } catch (error) {
-            console.error("Erro ao atualizar participação:", error);
-            return res.status(500).json({ mensagem: "Erro interno do servidor." });
+        const respostaModelo = await ParticipacaoTrabalho.atualizarParticipacao(ParticipacaoAtualizado);
+
+        if(respostaModelo) {
+            return res.status(200).json({ mensagem: "Participação atualizada com sucesso!" });
+        } else {
+            return res.status(400).json({ mensagem: "Não foi possível atualizar a participação." });
         }
+    } catch (error) {
+        console.error(`Erro ao atualizar a participação: ${error}`);
+        return res.status(500).json({ mensagem: "Erro interno ao atualizar participação." });
     }
+}
 
     /**
      * Método para remover uma participação pelo ID.
@@ -91,3 +104,5 @@ export class ParticipacaoController {
         }
     }
 }
+
+export default ParticipacaoController;

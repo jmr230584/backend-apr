@@ -1,20 +1,29 @@
 import { DatabaseModel } from "./DatabaseModel";
 import { Trabalho } from "./Trabalho";
-import { Voluntario } from "./Voluntario";
+import { Voluntario } from "./Voluntario"
 
 // Pool de conexões com o banco de dados
 const database = new DatabaseModel().pool;
 
+// Exporta a interface (opcional, se você quiser usá-la no controller)
+export interface Participacao {
+    idParticipacao: number;
+    idTrabalho: number;
+    idVoluntario: number;
+    quantidadeVagas: number;
+    duracao: string;
+    atividadeTrabalho: string;
+}
 /**
  * Classe que representa uma Participação em Trabalho
  */
 export class ParticipacaoTrabalho {
-    private idParticipacao :number = 0 ;
-    private idTrabalho: number;
-    private idVoluntario: number;
-    private quantidadeVagas: number;
-    private duracao: string;
-    private atividadeTrabalho: string;
+    public idTrabalho: number;
+    public idVoluntario: number;
+    public quantidadeVagas: number;
+    public duracao: string;
+    public atividadeTrabalho: string
+    idParticipacao: number;
 
     /**
      * Construtor da classe
@@ -234,49 +243,41 @@ export class ParticipacaoTrabalho {
         }
     }
   /**
- * Atualiza as informações de uma participação no banco de dados.
- *
- * @param participacao - O objeto participação contendo as informações atualizadas.
- * @returns Uma Promise que resolve para `true` se a participação foi atualizada com sucesso, ou `false` caso contrário.
- *
- * @throws Lança um erro se ocorrer um problema durante a atualização da participação.
- */
-static async atualizarParticipacao(participacao: {
-    idParticipacao: number;
-    idTrabalho: number;
-    idVoluntario: number;
-    quantidadeVagas: number;
-    duracao: string;
-    atividadeTrabalho: string;
-  }, idVoluntario?: any, quantidadeVagas?: any, duracao?: any, atividadeTrabalho?: any): Promise<Boolean> {
-  let queryResult = false; // Variável para armazenar o resultado da operação.
-  try {
-    // Construção da query SQL para atualizar os dados da participação no banco de dados.
-    const queryAtualizarParticipacao = `UPDATE participacao SET 
-                                            id_trabalho = ${participacao.idTrabalho},
-                                            id_voluntario = ${participacao.idVoluntario},
-                                            quantidade_vagas = ${participacao.quantidadeVagas},
-                                            duracao = '${participacao.duracao}',
-                                            atividade_trabalho = '${participacao.atividadeTrabalho}'
-                                          WHERE id_participacao = ${participacao.idParticipacao}`;
-
-    // Executa a query de atualização e verifica se a operação foi bem-sucedida.
-    await database.query(queryAtualizarParticipacao)
-      .then((result) => {
-        if (result.rowCount != 0) {
-          queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
-        }
-      });
-
-    // Retorna o resultado da operação para quem chamou a função.
-    return queryResult;
-  } catch (error) {
-    // Em caso de erro na consulta, exibe o erro no console e retorna false.
-    console.log(`Erro na consulta: ${error}`);
-    return queryResult;
-  }
-}
-
+      * Atualiza as informações de uma participação no banco de dados.
+      *
+      * @param participacao- O objeto participação contendo as informações atualizadas.
+      * @returns Uma Promise que resolve para `true` se a participação foi atualizada com sucesso, ou `false` caso contrário.
+      *
+      * @throws Lança um erro se ocorrer um problema durante a atualização do participação.
+      */
+  static async atualizarParticipacao(Participacao: ParticipacaoTrabalho): Promise<boolean> {{
+         let queryResult = false; // Variável para armazenar o resultado da operação.
+         try {
+             // Construção da query SQL para atualizar os dados do voluntário no banco de dados.
+             const queryAtualizarParticpacao = `UPDATE participacao SET 
+                                                      id_trabalho = ${Participacao.idTrabalho},
+                                                      id_voluntario = ${Participacao.idVoluntario},
+                                                      quantidade_vagas = ${Participacao.quantidadeVagas},
+                                                      duracao = '${Participacao.duracao}',
+                                                      atividade_trabalho = '${Participacao.atividadeTrabalho}'
+                                               WHERE id_participacao = ${Participacao.idParticipacao}`;
+             // Executa a query de atualização e verifica se a operação foi bem-sucedida.
+             await database.query(queryAtualizarParticpacao)
+             .then((result) => {
+                 if (result.rowCount != 0) {
+                     queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
+                 }
+             });
+ 
+             // Retorna o resultado da operação para quem chamou a função.
+             return queryResult;
+         } catch (error) {
+             // Em caso de erro na consulta, exibe o erro no console e retorna false.
+             console.log(`Erro na consulta: ${error}`);
+             return queryResult;
+         }
+     }
+    }
 
     /**
      * Remove uma participação
@@ -290,7 +291,8 @@ static async atualizarParticipacao(participacao: {
             // Query com placeholder correto
             const queryUpdateParticipacao = `UPDATE participacao 
                                               SET status_participacao_voluntario = FALSE
-                                              WHERE id_participacao = $1;`;
+                                              WHERE id_participacao  = $1',
+  [id]`;
     
             console.log("Query a ser executada:", queryUpdateParticipacao);
             console.log("Parâmetros:", [idParticipacao]);
