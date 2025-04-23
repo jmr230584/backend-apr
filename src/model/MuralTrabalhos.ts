@@ -270,37 +270,37 @@ export class MuralTrabalhos {
 
 
     /**
-     * Atualiza as informações de um Mural trabalho no banco de dados.
-     *
-     * @param muralTrabalhos - O objeto trabalho contendo as informações atualizadas.
-     * @returns Uma Promise que resolve para `true` se o trabalho foi atualizado com sucesso, ou `false` caso contrário.
-     *
-     * @throws Lança um erro se ocorrer um problema durante a atualização do trabalho.
+     * Atualiza os dados de um trabalho no banco de dados.
+     * @param muraltrabalho Objeto do tipo muralTrabalho com os novos dados
+     * @returns true caso sucesso, false caso erro
      */
-    static async atualizarTrabalhoMural(MuralTrabalhos: MuralTrabalhos): Promise<Boolean> {
+    static async atualizarMuralTrabalho(muraltrabalho: MuralTrabalhos): Promise<Boolean> {
         let queryResult = false; // Variável para armazenar o resultado da operação.
         try {
-            // Construção da query SQL para atualizar os dados do voluntário no banco de dados.
-            const queryAtualizarTrabalhoMural =`UPDATE muralTrabalhos SET 
-                                                  status_mural_trabalho = '${MuralTrabalhos.getStatusMuralTrabalho()}',
-                                                  nome_trabalho = '${MuralTrabalhos.getNomeTrabalho().toUpperCase()}',
-                                                  ong_responsavel = '${MuralTrabalhos.getOngResponsavel().toUpperCase()}',
-                                                  total_voluntarios = '${MuralTrabalhos.getTotalVoluntarios()}',
-                                                  data_encerramento = '${MuralTrabalhos.getDataEncerramento()}'
-                                                WHERE id_mural_trabalhos = ${MuralTrabalhos.idMuralTrabalhos}`;
+            // Construção da query SQL para atualizar os dados do mural no banco de dados.
+            const queryAtualizarMural = `UPDATE muralTrabalhos SET 
+                                            status_mural_trabalho = '${muraltrabalho.getStatusMuralTrabalho()}', 
+                                            nome_trabalho = '${muraltrabalho.getNomeTrabalho().toUpperCase()}',
+                                            ong_responsavel = '${muraltrabalho.getOngResponsavel().toUpperCase()}', 
+                                            total_voluntarios = '${muraltrabalho.getTotalVoluntarios()}',
+                                            data_encerramento = '${muraltrabalho.getDataEncerramento()}'                                          
+                                        WHERE id_mural_trabalhos = ${muraltrabalho.idMuralTrabalhos}`;
+
             // Executa a query de atualização e verifica se a operação foi bem-sucedida.
-            await database.query(queryAtualizarTrabalhoMural)
-            .then((result) => {
-                if (result.rowCount != 0) {
-                    queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
-                }
-            });
+            await database.query(queryAtualizarMural)
+                .then((result) => {
+                    if (result.rowCount != 0) {
+                        queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
+                    }
+                });
 
             // Retorna o resultado da operação para quem chamou a função.
             return queryResult;
+        // captura qualquer erro que possa acontecer
         } catch (error) {
-            // Em caso de erro na consulta, exibe o erro no console e retorna false.
+            // exibe detalhes do erro no console
             console.log(`Erro na consulta: ${error}`);
+            // retorna o valor da variável de controle
             return queryResult;
         }
     }

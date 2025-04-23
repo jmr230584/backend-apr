@@ -11,6 +11,7 @@ interface MuralTrabalhosDTO {
     ongResponsavel: string;              // ong responsável do trabalho
     totalVoluntarios: number;         //  total de voluntários no trabalho
     dataEncerramento: Date;     // Data de encerramento do trabalho
+
 }
 
 /**
@@ -96,48 +97,43 @@ export class MuralTrabalhosController {
         }
     }
     
-
-
-     /**
-     * Atualiza as informações de um trabalho existente.
-     *
-     * @param req - Objeto de solicitação HTTP, contendo os dados do voluntário no corpo da solicitação e o ID do trabalho nos parâmetros.
-     * @param res - Objeto de resposta HTTP.
-     * @returns Uma promessa que resolve com uma resposta HTTP indicando o sucesso ou falha da operação.
-     *
-     * @throws Retorna uma resposta HTTP com status 400 e uma mensagem de erro se ocorrer um problema durante a atualização do trabalho.
+        /**
+     * Método para atualizar o cadastro de um trabalho no mural.
+     * 
+     * @param req Objeto de requisição do Express, contendo os dados atualizados do aluno
+     * @param res Objeto de resposta do Express
+     * @returns Retorna uma resposta HTTP indicando sucesso ou falha na atualização
      */
-     static async atualizar(req: Request, res: Response): Promise<any> {
-        try {
-            const TrabalhoRecebido: MuralTrabalhosDTO = req.body;
+   static async atualizar(req: Request, res: Response): Promise<any> {
+        try{
+            const muralRecebido: MuralTrabalhosDTO = req.body;
 
-            const idTrabalhoRecebido = parseInt(req.params.idTrabalho as string);
-            console.log(idTrabalhoRecebido);
+            const idDadosRecebidos = parseInt(req.params.idMuralTrabalhos as string);
 
-            const TrabalhoAtualizado = new MuralTrabalhos(
-                TrabalhoRecebido.nomeTrabalho,
-                TrabalhoRecebido.ongResponsavel,
-                TrabalhoRecebido.totalVoluntarios,
-                TrabalhoRecebido.dataEncerramento
+            const muralAtualizado = new MuralTrabalhos (
+                muralRecebido.nomeTrabalho,
+                muralRecebido.ongResponsavel,
+                muralRecebido.totalVoluntarios,
+                muralRecebido.dataEncerramento
             );
 
-            
-            TrabalhoAtualizado.setIdMuralTrabalhos(idTrabalhoRecebido);
+            muralAtualizado.setIdMuralTrabalhos(idDadosRecebidos);
 
-            const respostaModelo = await MuralTrabalhos.atualizarTrabalhoMural(TrabalhoAtualizado);
-
-            console.log(TrabalhoAtualizado);
+            const respostaModelo = await MuralTrabalhos.atualizarMuralTrabalho(muralAtualizado);
 
             if(respostaModelo) {
-                return res.status(200).json({ mensagem: "Mural de Trabalhos foi atualizado com sucesso!" });
-            } else {
-                return res.status(400).json({ mensagem: "Não foi possível atualizar o trabalho. Entre em contato com o administrador do sistema." });
+                return res.status(200).json({mensagem: "O mural foi atualizado com sucesso!"})
+            } else{
+                return res.status(400).json({ mensagem: "Não foi possível atualizar o mural. Entre em contato com o administrador do sistema." });
             }
-        } catch (error) {
-            console.log(`Erro ao remover o trabalho ${error}`);
 
-            return res.status(400).json({ mensagem: "Não foi possível atualizar o trabalho. Entre em contato com o administrador do sistema." });
+        }catch (error) {
+            console.log(`Error ao atualizar um trabalho do mural. ${error}`);
+
+            return res.status(400).json({ mensagem: "Não foi possível atualizar o mural. Entre em contato com o administrador do sistema." });
         }
     }
 }
+
 export default MuralTrabalhosController;
+
