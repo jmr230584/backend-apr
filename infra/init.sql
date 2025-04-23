@@ -86,7 +86,7 @@ VALUES
 ('Criança Feliz', 'Sorriso Solidário', 35, '2024-11-12'),
 ('Recicla Aí', 'Planeta Limpo', 18, '2024-12-01'),
 ('Saúde na Comunidade', 'Cuidar é Amar', 22, '2024-08-18'),
-('Oficinas Culturais', 'Arte para Todos', 28, '2024-12-15');
+('Oficinas Culturais', 'Arte para Todos', 28, '2024-12-15'),
 ('Ação Jovem 2011', 'Juventude Ativa', 12, '2011-09-15'),
 ('Construindo Esperança', 'Mãos Unidas', 20, '2013-06-10'),
 ('Projeto Sementes', 'Verde Vivo', 18, '2014-11-22'),

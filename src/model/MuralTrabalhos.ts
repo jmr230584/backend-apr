@@ -148,7 +148,7 @@ export class MuralTrabalhos {
 
         try {
             // Query para consulta no banco de dados
-            const querySelectMuralTrabalhos = `SELECT * FROM muralTrabalhos WHERE status_mural_trabalho`;
+            const querySelectMuralTrabalhos = `SELECT * FROM muralTrabalhos WHERE status_mural_trabalho = TRUE`;
 
             // executa a query no banco de dados
             const respostaBD = await database.query(querySelectMuralTrabalhos);
@@ -158,13 +158,15 @@ export class MuralTrabalhos {
             respostaBD.rows.forEach((muralTrabalhos) => {
                 // criando objeto trabalho
                 let novoTrabalho = new MuralTrabalhos(
-                    muralTrabalhos.nomeTrabalho,
-                    muralTrabalhos.ongResponsavel,
-                    muralTrabalhos.totalVoluntarios,
-                    muralTrabalhos.dataEncerramento
+                    muralTrabalhos.nome_trabalho,
+                    muralTrabalhos.ong_responsavel,
+                    muralTrabalhos.total_voluntarios,
+                    muralTrabalhos.data_encerramento
                 );
                 // adicionando o ID ao objeto
                 novoTrabalho.setIdMuralTrabalhos(muralTrabalhos.id_mural_trabalhos);
+                novoTrabalho.setStatusMuralTrabalho(muralTrabalhos.status_mural_trabalho); // se tiver isso no objeto
+
 
                 // adicionando um trabalho na lista
                 listaDeTrabalhosMural.push(novoTrabalho);
