@@ -67,7 +67,7 @@ VALUES
 -- SQL DE REQUSITO NÃO FUNCIONAL
 -- Criação da tabela muralTrabalhos
 CREATE TABLE muralTrabalhos (
-    id SERIAL PRIMARY KEY,
+    id_mural_trabalhos SERIAL PRIMARY KEY,
     nome_trabalho VARCHAR(100) NOT NULL,
     ong_responsavel VARCHAR(100) NOT NULL,
     total_voluntarios INTEGER CHECK (total_voluntarios >= 0),
@@ -97,3 +97,7 @@ VALUES
 ('Inverno Quente', 'Acolher é Viver', 40, '2020-07-30'),
 ('Voluntários do Bem', 'Rede Solidária', 28, '2022-10-19'),
 ('Educar para Transformar', 'Mente Aberta', 50, '2024-01-25'); 
+
+
+-- alterações na tabela muralTrabalhos
+ALTER TABLE muralTrabalhos ADD COLUMN status_mural_trabalho BOOLEAN DEFAULT TRUE;
