@@ -193,7 +193,7 @@ export class MuralTrabalhos {
         try {
             // Query SQL para inserir um novo trabalho no banco de dados
             const queryInsertTrabalhosMural = `
-                INSERT INTO trabalho (nome_trabalho, ong_responsavel, total_voluntarios, data_encerramento)
+                INSERT INTO muralTrabalhos (nome_trabalho, ong_responsavel, total_voluntarios, data_encerramento)
                 VALUES ($1, $2, $3, $4)
                 RETURNING id_mural_trabalhos;
             `;
@@ -223,28 +223,31 @@ export class MuralTrabalhos {
         }
     }
 
-     /**
-     * Remove um trabalho do banco de dados
-     * @param id_mural_trabalhos ID do trabalho a ser removido
+    /**
+     * Remove um trabalho no mural do banco de dados
+     * @param idMuralTrabalhos ID do trabalho do mural a ser removido
      * @returns Boolean indicando se a remoção foi bem-sucedida
     */
-     static async removerTrabalhoMural(id_mural_trabalhos: number): Promise<Boolean> {
+    static async removerTrabalhoMural(id_mural_trabalhos: number): Promise<Boolean> {
         // variável de controle da execução da query
         let queryResult = false;
 
         try {
-            // Cria a consulta para remover trabalho do banco de dados
-            const queryDeleteTrabalhoMural = `UPDATE muralTrabalhos
-                                                     WHERE id_mural_trabalhos=${id_mural_trabalhos}`;
-                                                    
-            // executa a query para remover participação
+            /// Cria a consulta (query) para remover o trabalho do mural
+            const queryDeleteTrabalhoMural = `UPDATE muralTrabalhos 
+                                                SET status_mural_trabalho = FALSE
+                                                WHERE id_mural_trabalhos=${id_mural_trabalhos};`;
+
+
+            // executa a query para remover trabalho
             await database.query(queryDeleteTrabalhoMural);
 
-            // Construção da query SQL para deletar o trabalho.
-            const queryDeleteTrabalhos = `UPDATE muralTrabalhos
-                                           SET status_mural_trabalho
-                                          WHERE id_mural_trabalhos=${id_mural_trabalhos};`;
 
+           // Construção da query SQL para deletar o trabalho do mural.
+            const queryDeleteTrabalhos = `UPDATE muralTrabalhos 
+                                        SET status_mural_trabalho = FALSE
+                                        WHERE id_mural_trabalhos=${id_mural_trabalhos};`;
+    
             // Executa a query de exclusão e verifica se a operação foi bem-sucedida.
             await database.query(queryDeleteTrabalhos)
                 .then((result) => {
@@ -260,10 +263,11 @@ export class MuralTrabalhos {
         } catch (error) {
             // Exibe detalhes do erro no console
             console.log(`Erro na consulta: ${error}`);
-            // retorna o valor fa variável de controle
+            // retorna o valor da variável de controle
             return queryResult;
         }
     }
+
 
     /**
      * Atualiza as informações de um Mural trabalho no banco de dados.

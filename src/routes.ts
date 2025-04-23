@@ -43,4 +43,3 @@ router.put("/atualizar/muraltrabalho/:idMuralTrabalhos", MuralTrabalhosControlle
 
 // Exporta as rotas para serem usadas no servidor
 export { router };
-

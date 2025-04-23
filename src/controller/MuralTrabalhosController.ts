@@ -74,20 +74,20 @@ export class MuralTrabalhosController {
     }
 
       /**
-     * Remove um trabalho do mural.
+     * Remove um trabalho.
      * @param req Objeto de requisição HTTP com o ID do trabalho a ser removido.
      * @param res Objeto de resposta HTTP.
      * @returns Mensagem de sucesso ou erro em formato JSON.
      */
-      static async remover(req: Request, res: Response): Promise<any> {
+    static async remover(req: Request, res: Response): Promise<any> {
         try {
-            const idMuralTrabalhos = parseInt(req.query.idTrabalho as string);
+            const idMuralTrabalhos= parseInt(req.query.idMuralTrabalhos as string);
             const result = await MuralTrabalhos.removerTrabalhoMural(idMuralTrabalhos);
             
             if (result) {
-                return res.status(200).json('Trabalho removido do mural com sucesso');
+                return res.status(200).json('Trabalho removido com sucesso do mural');
             } else {
-                return res.status(401).json('Erro ao deletar trabalho do mural');
+                return res.status(401).json('Erro ao deletar trabalho');
             }
         } catch (error) {
             console.log("Erro ao remover o trabalho");
@@ -95,6 +95,8 @@ export class MuralTrabalhosController {
             return res.status(500).send("error");
         }
     }
+    
+
 
      /**
      * Atualiza as informações de um trabalho existente.
@@ -129,12 +131,12 @@ export class MuralTrabalhosController {
             if(respostaModelo) {
                 return res.status(200).json({ mensagem: "Mural de Trabalhos foi atualizado com sucesso!" });
             } else {
-                return res.status(400).json({ mensagem: "Não foi possível atualizar o mursl. Entre em contato com o administrador do sistema." });
+                return res.status(400).json({ mensagem: "Não foi possível atualizar o trabalho. Entre em contato com o administrador do sistema." });
             }
         } catch (error) {
             console.log(`Erro ao remover o trabalho ${error}`);
 
-            return res.status(400).json({ mensagem: "Não foi possível atualizar o mural. Entre em contato com o administrador do sistema." });
+            return res.status(400).json({ mensagem: "Não foi possível atualizar o trabalho. Entre em contato com o administrador do sistema." });
         }
     }
 }
