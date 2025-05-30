@@ -6,6 +6,7 @@ import { VoluntarioController } from "./controller/VoluntarioController";
 import { ParticipacaoController } from "./controller/ParticipacaoController";
 import { TrabalhoController } from "./controller/TrabalhoController";
 import { MuralTrabalhosController } from "./controller/MuralTrabalhosController";
+import UsuarioController from "./controller/UsuarioController";
 
 // Cria um roteador para gerenciar as rotas
 const router = Router();
@@ -39,6 +40,8 @@ router.get("/lista/trabalhos", MuralTrabalhosController.todos); // Rota para lis
 router.post("/trabalhoMural/novo", MuralTrabalhosController.novo); // Rota para cadastrar um novo trabalho no mural
 router.put("/remover/trabalhoMural", MuralTrabalhosController.remover); // Rota para excluir um trabalho
 router.put("/atualizar/muraltrabalho/:idMuralTrabalhos", MuralTrabalhosController.atualizar); // Rota para atualizar o mural de trabalhos finalizados
+
+// Rotas do Usuário
 
 
 // Exporta as rotas para serem usadas no servidor
