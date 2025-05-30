@@ -29,10 +29,42 @@ FOREIGN KEY (id_trabalho) REFERENCES trabalho(id_trabalho),
 FOREIGN KEY (id_voluntario) REFERENCES voluntario(id_voluntario) 
 );
 
+-- CREATE USUARIOS
+CREATE TABLE  Usuario (
+    id_usuario SERIAL PRIMARY KEY,
+    uuid UUID DEFAULT gen_random_uuid() NOT NULL,
+    nome VARCHAR(70) NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(50) UNIQUE NOT NULL,
+    senha VARCHAR(50) NOT NULL
+);
+
+-- Criar a função gerar_senha_padrao apenas se não existir
+CREATE OR REPLACE FUNCTION gerar_senha_padrao()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.senha := NEW.username || '1234';
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Criar a trigger trigger_gerar_senha apenas se não existir
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'trigger_gerar_senha') THEN
+        CREATE TRIGGER trigger_gerar_senha
+        BEFORE INSERT ON Usuario
+        FOR EACH ROW
+        EXECUTE FUNCTION gerar_senha_padrao();
+    END IF;
+END $$;
+
 
 SELECT * FROM voluntario;
 SELECT * FROM participacao;
 SELECT * FROM trabalho;
+SELECT * FROM Usuario
+
 
 -- alterações das tabelas no banco
 ALTER TABLE voluntario ADD COLUMN status_voluntario BOOLEAN DEFAULT TRUE;
@@ -40,6 +72,14 @@ ALTER TABLE trabalho ADD COLUMN status_trabalho BOOLEAN DEFAULT TRUE;
 ALTER TABLE participacao ADD COLUMN status_trabalho BOOLEAN DEFAULT TRUE;
 ALTER TABLE participacao ADD COLUMN status_participacao_voluntario BOOLEAN DEFAULT TRUE;
 ALTER TABLE trabalho ADD COLUMN status_trabalho_registro BOOLEAN DEFAULT TRUE;
+
+-- Inserção de 3 novos usuários
+INSERT INTO usuario (nome, username, email) 
+VALUES
+('Allison Reynolds', 'ally.reynolds', 'ally.fox7@email.com'),
+('Bryan Seth Gordon', 'gordon.seth', 'bryan.gordon06@email.com'),
+('Aaron Michael Minyard', 'aaron.minyard', 'aaron.michael05@email.com');
+
 
 INSERT INTO voluntario(cpf, nome, sobrenome, data_nascimento, endereco, email, telefone)
 VALUES (12345678900, 'Neil Abram', 'Josten', '1987-03-31', 'Rua das Raposas, 103', 'NAJ.fox@gmail.com', 11987654321),
@@ -101,13 +141,3 @@ VALUES
 
 -- alterações na tabela muralTrabalhos
 ALTER TABLE muralTrabalhos ADD COLUMN status_mural_trabalho BOOLEAN DEFAULT TRUE;
-
--- CREATE USUARIOS
-CREATE TABLE  Usuario (
-    id_usuario SERIAL PRIMARY KEY,
-    uuid UUID DEFAULT gen_random_uuid() NOT NULL,
-    nome VARCHAR(70) NOT NULL,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(50) UNIQUE NOT NULL,
-    senha VARCHAR(50) NOT NULL
-);
