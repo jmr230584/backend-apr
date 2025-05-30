@@ -184,4 +184,43 @@ export class Usuario {
             return null;
         }
     }
+
+    /**
+     * Cadastra um usuário no banco de dados
+     * 
+     * @param usuario Usuário a ser cadastrado 
+     * @returns o UUID do usuário cadastrado
+     */
+    static async cadastroUsuario(usuario: Usuario): Promise<string | null> {
+        try {
+            // Define a query SQL para inserir um novo usuário com nome, username, email e senha
+            // A cláusula RETURNING uuid retorna o identificador gerado automaticamente pelo banco
+            const query = `
+          INSERT INTO usuario (nome, username, email, senha)
+          VALUES ($1, $2, $3, $4)
+          RETURNING uuid
+        `;
+
+            // Define os valores que serão usados na query (evita SQL Injection)
+            const valores = [usuario.nome, usuario.username, usuario.email, usuario.senha];
+
+            // Executa a query no banco de dados e aguarda a resposta
+            const resultado = await database.query(query, valores);
+
+            // Obtém o uuid gerado pelo banco de dados a partir do resultado da query
+            const uuid = resultado.rows[0].uuid;
+
+            // Atribui o uuid ao objeto do usuário, caso precise ser usado depois
+            usuario.uuidUsuario = uuid;
+
+            // Retorna o uuid como confirmação do cadastro
+            return uuid;
+        } catch (error) {
+            // Em caso de erro, exibe no console para ajudar na identificação do problema
+            console.error('Erro ao salvar usuário:', error);
+
+            // Retorna null para indicar que o cadastro não foi concluído
+            return null;
+        }
+    }
 }

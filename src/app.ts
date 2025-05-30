@@ -5,7 +5,7 @@ import { server } from './server';
 import { DatabaseModel } from './model/DatabaseModel';
 
 // Define a porta em que o servidor irá rodar
-const port: number = 3333;
+const port: number = 3332;
 
 // Testa a conexão com o banco de dados antes de iniciar o servidor
 new DatabaseModel().testeConexao().then((resdb) => {
