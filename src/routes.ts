@@ -52,3 +52,4 @@ router.post('/login', Auth.validacaoUsuario); // Rota de validação de usuário
 
 // Exporta as rotas para serem usadas no servidor
 export { router };
+

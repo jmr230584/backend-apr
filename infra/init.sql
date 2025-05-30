@@ -101,3 +101,13 @@ VALUES
 
 -- alterações na tabela muralTrabalhos
 ALTER TABLE muralTrabalhos ADD COLUMN status_mural_trabalho BOOLEAN DEFAULT TRUE;
+
+-- CREATE USUARIOS
+CREATE TABLE  Usuario (
+    id_usuario SERIAL PRIMARY KEY,
+    uuid UUID DEFAULT gen_random_uuid() NOT NULL,
+    nome VARCHAR(70) NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(50) UNIQUE NOT NULL,
+    senha VARCHAR(50) NOT NULL
+);
