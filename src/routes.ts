@@ -8,6 +8,7 @@ import { TrabalhoController } from "./controller/TrabalhoController";
 import { MuralTrabalhosController } from "./controller/MuralTrabalhosController";
 import UsuarioController from "./controller/UsuarioController";
 import { Auth } from "./util/Auth";
+import upload from "./config/multerConfig";
 
 // Cria um roteador para gerenciar as rotas
 const router = Router();
@@ -44,12 +45,10 @@ router.put("/atualizar/muraltrabalho/:idMuralTrabalhos", MuralTrabalhosControlle
 
 // Rotas do Usuário
 router.get("/lista/usuario", UsuarioController.todos); // Rota para listar todos os usuarios
-router.post("/usuario/novo", UsuarioController.cadastrar); // Rota para cadastrar um novo usuario
+router.post("/usuario/novo", UsuarioController.cadastrar,  upload.single('imagemPerfil')); // Rota para cadastrar um novo usuario
 
 // Rota de login
 router.post('/login', Auth.validacaoUsuario); // Rota de validação de usuário para login
 
-
 // Exporta as rotas para serem usadas no servidor
 export { router };
-

@@ -223,4 +223,17 @@ export class Usuario {
             return null;
         }
     }
+
+    /**
+     * Atualiza o caminho da imagem de perfil no cadastro do usuário
+     * @param uuid UUID do usuário, que representará o nome da imagem
+     * @param nomeArquivo O nome do arquivo a ser salvo
+     */
+    static async atualizarImagemPerfil(uuid: string, nomeArquivo: string): Promise<void> {
+        // Define a query SQL que atualiza o campo imagem_perfil do usuário com o nome do arquivo
+        const query = `UPDATE usuario SET imagem_perfil = $1 WHERE uuid = $2`;
+
+        // Executa a query passando o nome do arquivo e o uuid do usuário como parâmetros
+        await database.query(query, [nomeArquivo, uuid]);
+    }
 }

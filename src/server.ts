@@ -7,6 +7,8 @@ import cors from "cors";
 // Importa as rotas definidas no arquivo './routes'
 import { router } from "./routes";
 
+import path from 'path';
+
 // Cria o servidor express
 const server = express();
 
@@ -18,6 +20,8 @@ server.use(express.json());
 
 // Configura as rotas no servidor
 server.use(router);
+
+server.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));  // Serve os arquivos da pasta uploads
 
 // Exporta o servidor para ser utilizado em outros arquivos
 export { server };

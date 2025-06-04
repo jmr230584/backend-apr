@@ -17,23 +17,9 @@ interface UsuarioDTO {
 /**
  * Controlador responsável pelas operações relacionadas aos usuários.
  */
-class UsuarioController extends Usuario {    
-    /**
-     * Lista todos os usuários.
-     * @param req Objeto de requisição HTTP.
-     * @param res Objeto de resposta HTTP.
-     * @returns Lista de usuários em formato JSON.
-     */
-    static async todos(req: Request, res: Response) {
-        try {
-            const listaDeUsuarios = await Usuario.listarUsuarios();
-
-            res.status(200).json(listaDeUsuarios);
-        } catch (error) {
-            console.log(`Erro ao acessar método herdado: ${error}`);
-
-            res.status(400).json("Erro ao recuperar as informações do usuário");
-        }
+class UsuarioController extends Usuario {
+    static todos(LISTAR_USUARIOS: string, todos: any) {
+        throw new Error("Method not implemented.");
     }
 
     /**
@@ -66,7 +52,19 @@ class UsuarioController extends Usuario {
             if (!uuid) {
                 return res.status(500).json({ erro: 'Erro ao cadastrar usuário' });
             }
-            
+
+            // Se uma imagem de perfil foi enviada, renomeia e atualiza o nome no banco
+            if (req.file) {
+                const ext = path.extname(req.file.originalname); // Pega a extensão original do arquivo
+                const novoNome = `${uuid}${ext}`; // Define o novo nome do arquivo como o UUID do usuário
+                const antigoPath = req.file.path; // Caminho temporário do upload
+                const novoPath = path.resolve(req.file.destination, novoNome); // Caminho de destino final
+
+                fs.renameSync(antigoPath, novoPath); // Renomeia o arquivo no sistema de arquivos
+
+                await Usuario.atualizarImagemPerfil(uuid, novoNome); // Atualiza o nome do arquivo no banco de dados
+            }
+
             // Retorna sucesso
             return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso' });
         } catch (error) {
