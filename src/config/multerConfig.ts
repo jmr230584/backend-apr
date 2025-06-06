@@ -25,6 +25,36 @@ const storage = multer.diskStorage({
 });
 
 // Cria o middleware de upload com a configuração de armazenamento definida
-const upload = multer({ storage });
+export const upload = multer ({ storage} );
 
-export default upload; // Exporta o middleware para ser usado nas rotas
+//Define a configuração de armazenameno dos arquivos
+const storageCapa = multer.diskStorage({
+   // Define o diretório onde os arquivos enviados serão salvos
+   destination: (req, file, cb) => {
+    cb(null, path.resolve(__dirname, '..', '..', 'uploads/cover')); // Caminho absoluto até a pasta "uploads"
+  },
+
+//Define o nome do arquivo que será salvo 
+filename: (req, file, cb) => {
+  const ext = path.extname(file.originalname); // Extrai a extensão original do arquivo
+
+  //Tenta obter o UUID do usuário da requisição
+  const email = (req.body?.email);
+  const senha = (req.body?.senha);
+
+  const sanitize = (texto: string) => texto
+  .replace(/[^a-zA-Z0-9-_ ]/g, '') // remove caracteres especiais (exceto espaço, hífen e underscore)
+  .replace(/ /g, "_");             // troca espaços por underscores
+
+  const emailSanitizado = sanitize(email);
+  const senhaSanitizado = sanitize(senha);
+
+  //Cria o nome final do arquivo: uuid-hash-nomeOriginal.ext
+  const filename = `${emailSanitizado}-${senhaSanitizado}-${file.originalname}`;
+
+  cb(null, filename); // Retorna o nome para o multer salvar
+}
+});
+
+// Cria o middleware de upload com a configuração de armazenamento definida
+export const uploadCapa = multer({ storage: storageCapa });

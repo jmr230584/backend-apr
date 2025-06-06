@@ -187,7 +187,8 @@ export class Usuario {
 
     /**
      * Cadastra um usuário no banco de dados
-     * 
+     * @param req Objeto de requisição HTTP contendo os dados do usuário e, opcionalmente, o arquivo de imagem.
+     * @param res Objeto de resposta HTTP.
      * @param usuario Usuário a ser cadastrado 
      * @returns o UUID do usuário cadastrado
      */
