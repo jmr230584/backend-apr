@@ -18,8 +18,22 @@ interface UsuarioDTO {
  * Controlador responsável pelas operações relacionadas aos usuários.
  */
 class UsuarioController extends Usuario {
-    static todos(LISTAR_USUARIOS: string, todos: any) {
-        throw new Error("Method not implemented.");
+    /**
+     * Lista todos os usuários.
+     * @param req Objeto de requisição HTTP.
+     * @param res Objeto de resposta HTTP.
+     * @returns Lista de usuários em formato JSON.
+     */
+    static async todos(req: Request, res: Response) {
+        try {
+            const listaDeUsuarios = await Usuario.listarUsuarios();
+
+            res.status(200).json(listaDeUsuarios);
+        } catch (error) {
+            console.log(`Erro ao acessar método herdado: ${error}`);
+
+            res.status(400).json("Erro ao recuperar as informações do usuário");
+        }
     }
 
     /**
