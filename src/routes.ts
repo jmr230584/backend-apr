@@ -45,7 +45,7 @@ router.put("/atualizar/muraltrabalho/:idMuralTrabalhos", MuralTrabalhosControlle
 
 // Rotas do Usuário
 router.get("/lista/usuario", UsuarioController.todos); // Rota para listar todos os usuários cadastrados
-router.post("/usuario/novo", UsuarioController.cadastrar, upload.single('imagemPerfil')); // Rota para cadastrar um novo usuario
+router.post("/usuario/novo", upload.single('imagemPerfil'), UsuarioController.cadastrar, ); // Rota para cadastrar um novo usuario
 
 // Rota de login
 router.post('/login', Auth.validacaoUsuario); // Rota de validação de usuário para login
