@@ -44,6 +44,7 @@ router.put("/remover/trabalhoMural", MuralTrabalhosController.remover); // Rota 
 router.put("/atualizar/muraltrabalho/:idMuralTrabalhos", MuralTrabalhosController.atualizar); // Rota para atualizar o mural de trabalhos finalizados
 
 // Rotas do Usuário
+router.get("/lista/usuario", UsuarioController.todos); // Rota para listar todos os usuários cadastrados
 router.post("/usuario/novo", UsuarioController.cadastrar, upload.single('imagemPerfil')); // Rota para cadastrar um novo usuario
 
 // Rota de login

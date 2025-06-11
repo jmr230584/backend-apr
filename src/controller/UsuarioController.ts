@@ -3,6 +3,8 @@ import { Request, Response } from "express"; // Request e Response do express
 import fs from 'fs'; // Importa o módulo fs para manipulação de arquivos (file system)
 import path from 'path';  // Importa o módulo path para lidar com caminhos de arquivos e diretórios
 import { upload } from "../config/multerConfig";
+import file from 'multer';
+
 
 /**
  * Interface UsuarioDTO
@@ -26,7 +28,7 @@ class UsuarioController extends Usuario {
      * @param res Objeto de resposta HTTP.
      * @returns Mensagem de sucesso ou erro em formato  JSON.
      */
-    static async todos(req: Request, res: Response) {
+    static async todos(req: Request, res: Response): Promise<any> {
         try {
             //Chama o método estatico do modelo para obter a lista de usuários
             const listaDeUsuarios = await Usuario.listarUsuarios();
