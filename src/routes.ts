@@ -1,6 +1,7 @@
 // Importa o módulo Router do Express para criar rotas
 import { Router } from "express";
-
+//Importa o multer para carregar dados ao servidor
+import multer from "multer";
 // Importa os controladores para manipular as requisições relacionadas a voluntários, participações e trabalhos
 import { VoluntarioController } from "./controller/VoluntarioController";
 import { ParticipacaoController } from "./controller/ParticipacaoController";
@@ -8,10 +9,12 @@ import { TrabalhoController } from "./controller/TrabalhoController";
 import { MuralTrabalhosController } from "./controller/MuralTrabalhosController";
 import UsuarioController from "./controller/UsuarioController";
 import { Auth } from "./util/Auth";
-import {upload} from "./config/multerConfig";
 
 // Cria um roteador para gerenciar as rotas
 const router = Router();
+
+// Salvar os arquivos na pasta uploads
+const upload = multer({ dest: 'uploads/' }); 
 
 // Rota principal que retorna uma mensagem de boas-vindas
 router.get("/", (_req, res) => {
@@ -20,7 +23,7 @@ router.get("/", (_req, res) => {
 
 // Rotas para voluntários
 router.get("/lista/voluntarios", VoluntarioController.todos); // Rota para listar todos os voluntários
-router.post("/voluntario/novo", VoluntarioController.novo); // Rota para cadastrar um novo voluntário
+router.post("/voluntario/novo", upload.single('fotoPerfil'), VoluntarioController.novo); // Rota para cadastrar um novo voluntário
 router.put("/remover/voluntario", VoluntarioController.remover); // Rota para exluir um voluntário
 router.put("/atualizar/voluntario/:idVoluntario", VoluntarioController.atualizar); // Rota para atualizar um novo voluntário
 

@@ -42,46 +42,56 @@ export class VoluntarioController {
             return res.status(500).json({ mensagem: "Erro interno do servidor." });
         }
     }
-
     /**
-     * Método assíncrono para cadastrar um novo voluntário.
-     */
-    static async novo(req: Request, res: Response): Promise<any> {
-        try {
-            // Obtém os dados do corpo da requisição e os armazena em um objeto do tipo VoluntarioDTO
-            const voluntarioRecebido: VoluntarioDTO = req.body;
+ * Método assíncrono para cadastrar um novo voluntário.
+ */
+static async novo(req: Request, res: Response): Promise<any> {
+    console.log("Recebido no backend:", req.body);
+    console.log("Arquivo recebido:", req.file); // para debug do arquivo enviado
 
-            // Cria uma nova instância da classe Voluntario com os dados recebidos
-            const novoVoluntario = new Voluntario(
-                voluntarioRecebido.cpf,                 // CPF do voluntário
-                voluntarioRecebido.nome,                // Nome
-                voluntarioRecebido.sobrenome,           // Sobrenome
-                voluntarioRecebido.dataNascimento = new Date(), // Define a data de nascimento como a data atual
-                voluntarioRecebido.endereco,            // Endereço
-                voluntarioRecebido.email,               // E-mail de contato
-                voluntarioRecebido.telefone             // Telefone de contato
-            );
+    try {
+        // Obtém os dados do corpo da requisição e os armazena em um objeto do tipo VoluntarioDTO
+        const voluntarioRecebido: VoluntarioDTO = {
+            cpf: req.body.cpf,
+            nome: req.body.nome,
+            sobrenome: req.body.sobrenome,
+            dataNascimento: new Date(req.body.dataNascimento),
+            endereco: req.body.endereco,
+            email: req.body.email,
+            telefone: req.body.telefone,
+            idVoluntario: 0 // se precisar, define um valor padrão aqui
+        };
 
+        // Cria uma nova instância da classe Voluntario com os dados recebidos
+        const novoVoluntario = new Voluntario(
+            voluntarioRecebido.cpf,                 // CPF do voluntário
+            voluntarioRecebido.nome,                // Nome
+            voluntarioRecebido.sobrenome,           // Sobrenome
+            voluntarioRecebido.dataNascimento,      // Data de nascimento (corrigido)
+            voluntarioRecebido.endereco,            // Endereço
+            voluntarioRecebido.email,               // E-mail de contato
+            voluntarioRecebido.telefone             // Telefone de contato
+        );
 
-            // Exibe no console os dados do novo voluntário para fins de depuração
-            console.log(novoVoluntario);
+        // Exibe no console os dados do novo voluntário para fins de depuração
+        console.log(novoVoluntario);
 
-            // Chama o método cadastroVoluntario() da classe Voluntario para salvar o novo voluntário no banco de dados
-            const resultado = await Voluntario.cadastroVoluntario(novoVoluntario);
+        // Chama o método cadastroVoluntario() da classe Voluntario para salvar o novo voluntário no banco de dados
+        const resultado = await Voluntario.cadastroVoluntario(novoVoluntario);
 
-            if (resultado) {
-                // Se o cadastro for bem-sucedido, retorna uma mensagem de sucesso com status 200 (OK)
-                return res.status(200).json({ mensagem: "Voluntário cadastrado com sucesso!" });
-            } else {
-                // Caso ocorra algum erro durante o cadastro, retorna um erro 400 com uma mensagem informativa
-                return res.status(400).json({ mensagem: "Erro ao cadastrar voluntário." });
-            }
-        } catch (error) {
-            // Em caso de erro inesperado, exibe uma mensagem no console e retorna um erro 500 (Erro interno do servidor)
-            console.error("Erro ao cadastrar voluntário:", error);
-            return res.status(500).json({ mensagem: "Erro interno do servidor." });
+        if (resultado) {
+            // Se o cadastro for bem-sucedido, retorna uma mensagem de sucesso com status 200 (OK)
+            return res.status(200).json({ mensagem: "Voluntário cadastrado com sucesso!" });
+        } else {
+            // Caso ocorra algum erro durante o cadastro, retorna um erro 400 com uma mensagem informativa
+            return res.status(400).json({ mensagem: "Erro ao cadastrar voluntário." });
         }
+    } catch (error) {
+        // Em caso de erro inesperado, exibe uma mensagem no console e retorna um erro 500 (Erro interno do servidor)
+        console.error("Erro ao cadastrar voluntário:", error);
+        return res.status(500).json({ mensagem: "Erro interno do servidor." });
     }
+}
 
    /**
      * Remove um voluntario.
