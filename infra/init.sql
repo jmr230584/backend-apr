@@ -85,16 +85,28 @@ INSERT INTO voluntario(cpf, nome, sobrenome, data_nascimento, endereco, email, t
 VALUES (12345678900, 'Neil Abram', 'Josten', '1987-03-31', 'Rua das Raposas, 103', 'NAJ.fox@gmail.com', 11987654321),
 (12345328900, 'Andrew Joseph', 'Minyard', '1986-11-04', 'Rua das Melancias, 130', 'andrew.minyard@gmail.com', 11997654321),
 (12345678765, 'Glinda', 'Butera', '2008-03-21', 'Terra de Oz, 189', 'popular123@gmail.com', 11987652222),
-(11334673512, 'Elphaba', 'Erivo', '1999-03-27', 'Emerald City, 345', 'defying.gravity@gmail.com', 119876789),
-(11334664759, 'Marinette', 'Dupeng', '2003-07-09', 'La vie en rose, 231', 'dupeng.cheng@gmail.com', 119871236);
+(11334673512, 'Elphaba', 'Erivo', '1999-03-27', 'Emerald City, 345', 'defying.gravity@gmail.com', 11987678912),
+(11334664759, 'Marinette', 'Dupeng', '2003-07-09', 'La vie en rose, 231', 'dupeng.cheng@gmail.com', 11987123655);
 
-INSERT INTO participacao(id_trabalho,id_voluntario,quantidade_vagas, duracao, atividade_trabalho)
+SELECT * FROM voluntario WHERE nome IN ('Elphaba', 'Marinette');
+
+UPDATE voluntario
+SET telefone = '11987678912'
+WHERE nome = 'Elphaba';
+
+UPDATE voluntario
+SET telefone = '11987123655'
+WHERE nome = 'Marinette';
+
+SELECT * FROM voluntario ORDER BY id_voluntario;
+
+INSERT INTO participacao(id_trabalho, id_voluntario, quantidade_vagas, duracao, atividade_trabalho)
 VALUES 
-(1,5,102, '3 meses', 'Em andamento'),
-(5,3,26, '2 anos', 'Concluído'),
-(4,2,50, '4 meses', 'Cancelado'),
-(2,1,24, '5 semanas', 'Agendado'),
-(3,4,12, '6 meses', 'Em andamento');
+(1, 15, 102, '3 meses', 'Em andamento'),  
+(5, 13, 26, '2 anos', 'Concluído'),       
+(4, 12, 50, '4 meses', 'Cancelado'),       
+(2, 11, 24, '5 semanas', 'Agendado'),     
+(3, 14, 12, '6 meses', 'Em andamento');    
 
 INSERT INTO trabalho (nome_trabalho, ong_responsavel, localizacao, data_inicio, data_termino) 
 VALUES 
