@@ -1,5 +1,7 @@
 import { DatabaseModel } from "./DatabaseModel";
 
+import bcrypt from 'bcrypt';
+
 // Recupera conexão com o banco de dados
 const database = new DatabaseModel().pool;
 
@@ -126,6 +128,8 @@ export class Usuario {
      */
     public setSenha(senha: string): void {
         this.senha = senha;
+           const salt = bcrypt.genSaltSync(10);
+    this.senha = bcrypt.hashSync(senha, salt);
     }
 
     /**

@@ -2,6 +2,7 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { DatabaseModel } from '../model/DatabaseModel';
+import bcrypt from 'bcrypt';
 
 // palavra secreta
 const SECRET = 'voluntariosBrasil';
@@ -30,43 +31,24 @@ export class Auth {
      * @param res Resposta enviada a quem requisitou o login
      * @returns Token de autenticação caso o usuário seja válido, mensagem de login não autorizado caso negativo
      */
-    static async validacaoUsuario(req: Request, res: Response): Promise<any> {      
-        // recupera informações do corpo da requisição
-        const { username, senha } = req.body;
+   static async validacaoUsuario(req: Request, res: Response): Promise<any> {
+        const { username, senha } = req.body; 
 
-				 // query para validar email e senha informados pelo cliente
-        const querySelectUser = `SELECT id_usuario, nome, username, senha FROM usuario WHERE username=$1 AND senha=$2;`;
+        const query = `SELECT id_usuario, nome, username, senha FROM usuario WHERE username = $1`; 
+        const resultado = await database.query(query, [username]);
         
-        try {
-	          // faz a requisição ao banco de dados
-            const queryResult = await database.query(querySelectUser, [username, senha]);
-
-						 // verifica se a quantidade de linhas retornada foi diferente de 0
-						 // se foi, quer dizer que o email e senha fornecidos são iguais aos do banco de dados
-            if (queryResult.rowCount != 0) {
-		            // cria um objeto chamado professor com o id, nome e email. Essas informações serão devolvidas ao cliente
-                const usuario = {
-                    id_usuario: queryResult.rows[0].id_usuario,
-                    nome: queryResult.rows[0].nome,
-                    username: queryResult.rows[0].username
-                }
-
-									// Gera o token do usuário, passando como parâmetro as informações do objeto professor
-                const tokenUsuario = Auth.generateToken(parseInt(usuario.id_usuario), usuario.nome, usuario.username);
-
-									// retorna ao cliente o status de autenticação (verdadeiro), o token e o objeto professor
-									// tudo isso encapsulado em um JSON
-                return res.status(200).json({ auth: true, token: tokenUsuario, usuario: usuario });
-            } else {
-		            // caso a autenticação não tenha sido bem sucedida, é retornado ao cliente o statu de autenticação (falso), um token nulo e a mensagem de falha
-                return res.status(401).json({ auth: false, token: null, message: "Usuário e/ou senha incorretos" });
-            }
-        // verifica possíveis erros durante a requisição
-        } catch (error) {
-            console.log(`Erro no modelo: ${error}`);
-            return res.status(500).json({ message: "Erro interno do servidor" });
-        }
-    }
+        (resultado.rowCount === 0); {
+    return res.status(401).json({ auth: false, message: 'Usuário não encontrado' });
+  } 
+        const usuario = resultado.rows[0];
+        const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+        
+        if (!senhaCorreta) {
+            return res.status(401).json({ auth: false, message: 'Senha incorreta' });
+  }
+  
+  return res.status(200).json({ auth: true, message: 'Login realizado com sucesso', usuario });
+}
 
     /**
      * Gera token de validação do usuário
