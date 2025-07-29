@@ -30,6 +30,7 @@ export class DatabaseModel {
      * Diferente do pool, o cliente é uma conexão única e direta ao banco.
      */
     private _client: pg.Client;
+    static query: any;
 
     /**
      * Construtor da classe DatabaseModel.

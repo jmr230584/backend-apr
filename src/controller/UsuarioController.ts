@@ -3,6 +3,8 @@ import { Request, Response } from "express"; // Request e Response do express
 import fs from 'fs'; // Importa o módulo fs para manipulação de arquivos (file system)
 import path from 'path';  // Importa o módulo path para lidar com caminhos de arquivos e diretórios
 import { upload } from "../config/multerConfig";
+import { DatabaseModel } from "../model/DatabaseModel";
+import bcrypt from 'bcrypt';
 
 
 /**
@@ -102,6 +104,45 @@ class UsuarioController extends Usuario {
             res.status(400).json({ erro: 'Erro ao cadastrar usuário', detalhes: error });
         }
     }
+
+    /**
+ * Autentica um usuário (login).
+ * Verifica se o email/username existe e se a senha está correta.
+ */
+static async login(req: Request, res: Response): Promise<any> {
+    try {
+        const { email, senha } = req.body;
+
+        const query = `SELECT * FROM usuario WHERE email = $1`;
+        const resultado = await DatabaseModel.query(query, [email]);
+
+        if (resultado.rows.length === 0) {
+            return res.status(404).json({ erro: 'Usuário não encontrado' });
+        }
+
+        const usuarioDB = resultado.rows[0];
+
+        const senhaCorreta = bcrypt.compareSync(senha, usuarioDB.senha);
+        if (!senhaCorreta) {
+            return res.status(401).json({ erro: 'Senha incorreta' });
+        }
+
+        // Autenticação OK
+        return res.status(200).json({
+            mensagem: 'Login realizado com sucesso',
+            usuario: {
+                nome: usuarioDB.nome,
+                username: usuarioDB.username,
+                email: usuarioDB.email,
+                uuid: usuarioDB.uuid
+            }
+        });
+    } catch (error) {
+        console.error('Erro no login:', error);
+        return res.status(500).json({ erro: 'Erro interno no login' });
+    }
+}
+
 }
 
 export default UsuarioController;

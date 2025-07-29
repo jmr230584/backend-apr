@@ -153,3 +153,6 @@ VALUES
 
 -- alterações na tabela muralTrabalhos
 ALTER TABLE muralTrabalhos ADD COLUMN status_mural_trabalho BOOLEAN DEFAULT TRUE;
+
+ALTER TABLE Usuario
+ALTER COLUMN senha TYPE VARCHAR(100);
