@@ -241,4 +241,43 @@ export class Usuario {
         // Executa a query passando o nome do arquivo e o uuid do usuário como parâmetros
         await database.query(query, [nomeArquivo, uuid]);
     }
+    /**
+ * Autentica um usuário com base no email e senha fornecidos.
+ * 
+ * @param email Email do usuário
+ * @param senha Senha fornecida para autenticação
+ * @returns O usuário autenticado ou null se falhar
+ */
+static async autenticar(email: string, senha: string): Promise<Usuario | null> {
+    try {
+        const query = `SELECT * FROM usuario WHERE email = $1`;
+        const resultado = await database.query(query, [email]);
+
+        if (resultado.rowCount === 0) {
+            return null; // Usuário não encontrado
+        }
+
+        const usuarioBanco = resultado.rows[0];
+
+        const senhaValida = await bcrypt.compare(senha, usuarioBanco.senha);
+        if (!senhaValida) {
+            return null; // Senha incorreta
+        }
+
+        const usuario = new Usuario(
+            usuarioBanco.nome,
+            usuarioBanco.username,
+            usuarioBanco.email
+        );
+        usuario.setIdUsuario(usuarioBanco.id_usuario);
+        usuario.setUuidUsuario(usuarioBanco.uuid);
+        usuario.setImagemPerfil(usuarioBanco.imagem_perfil);
+
+        return usuario;
+    } catch (error) {
+        console.error("Erro na autenticação:", error);
+        return null;
+    }
+}
+
 }

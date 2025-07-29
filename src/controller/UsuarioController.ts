@@ -5,7 +5,10 @@ import path from 'path';  // Importa o módulo path para lidar com caminhos de a
 import { upload } from "../config/multerConfig";
 import { DatabaseModel } from "../model/DatabaseModel";
 import bcrypt from 'bcrypt';
+import { Auth } from "../util/Auth";
 
+
+const database = new DatabaseModel().pool;
 
 /**
  * Interface UsuarioDTO
@@ -58,6 +61,8 @@ class UsuarioController extends Usuario {
      */
     static async cadastrar(req: Request, res: Response): Promise<any> {
         try {
+                console.log('req.body:', req.body);
+                console.log('req.file:', req.file);
             // Verifica/Cria o diretório de uploads 
             const uploadDir = path.resolve(__dirname, '..', '..', 'uploads');
             if (!fs.existsSync(uploadDir)) {
@@ -109,40 +114,91 @@ class UsuarioController extends Usuario {
  * Autentica um usuário (login).
  * Verifica se o email/username existe e se a senha está correta.
  */
-static async login(req: Request, res: Response): Promise<any> {
-    try {
-        const { email, senha } = req.body;
+   static async login(req: Request, res: Response) {
+  const { email, senha } = req.body;
 
-        const query = `SELECT * FROM usuario WHERE email = $1`;
-        const resultado = await DatabaseModel.query(query, [email]);
+  try {
+    const usuario = await Usuario.autenticar(email, senha);
 
-        if (resultado.rows.length === 0) {
-            return res.status(404).json({ erro: 'Usuário não encontrado' });
-        }
-
-        const usuarioDB = resultado.rows[0];
-
-        const senhaCorreta = bcrypt.compareSync(senha, usuarioDB.senha);
-        if (!senhaCorreta) {
-            return res.status(401).json({ erro: 'Senha incorreta' });
-        }
-
-        // Autenticação OK
-        return res.status(200).json({
-            mensagem: 'Login realizado com sucesso',
-            usuario: {
-                nome: usuarioDB.nome,
-                username: usuarioDB.username,
-                email: usuarioDB.email,
-                uuid: usuarioDB.uuid
-            }
-        });
-    } catch (error) {
-        console.error('Erro no login:', error);
-        return res.status(500).json({ erro: 'Erro interno no login' });
+    if (!usuario) {
+      return res.status(401).json({ erro: "Usuário ou senha inválidos" });
     }
+
+    return res.status(200).json({
+      uuid: usuario.getUuidUsuario(),
+      nome: usuario.getNome(),
+      username: usuario.getUsername(),
+      email: usuario.getEmail(),
+      imagemPerfil: usuario.getImagemPerfil()
+    });
+  } catch (error) {
+    console.error("Erro no login:", error);
+    return res.status(500).json({ erro: "Erro no login" });
+  }
 }
 
+static async validacaoUsuario(req: Request, res: Response): Promise<any> {
+  const { email, senha } = req.body;
+
+  try {
+    const query = `SELECT id_usuario, nome, username, senha FROM usuario WHERE email = $1`;
+const resultado = await database.query(query, [email]);
+
+
+    if (resultado.rowCount === 0) {
+      return res.status(401).json({ auth: false, message: 'Usuário não encontrado' });
+    }
+
+    const usuario = resultado.rows[0];
+    const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+
+    if (!senhaCorreta) {
+      return res.status(401).json({ auth: false, message: 'Senha incorreta' });
+    }
+
+    const token = Auth.generateToken(usuario.id_usuario, usuario.nome, usuario.username);
+
+    return res.status(200).json({
+      auth: true,
+      message: 'Login realizado com sucesso',
+      token,
+      usuario: {
+        id: usuario.id_usuario,
+        nome: usuario.nome,
+        username: usuario.username
+      }
+    });
+  } catch (error) {
+    console.error("Erro no login:", error);
+    return res.status(500).json({ auth: false, message: 'Erro interno no servidor' });
+  }
+}
+
+static async autenticar(email: string, senha: string): Promise<Usuario | null> {
+  const query = `SELECT * FROM usuario WHERE email = $1`;
+  const resultado = await database.query(query, [email]);
+
+  if (resultado.rowCount === 0) {
+    return null;
+  }
+
+  const usuarioData = resultado.rows[0];
+
+  // Verifica a senha com bcrypt
+  const senhaValida = await bcrypt.compare(senha, usuarioData.senha);
+
+  if (!senhaValida) {
+    return null;
+  }
+
+  // Cria um objeto Usuario com os dados retornados
+  const usuario = new Usuario(usuarioData.nome, usuarioData.username, usuarioData.email);
+  usuario.setUuidUsuario(usuarioData.uuid);
+  usuario.setSenha(usuarioData.senha); // Armazenar a hash da senha
+  usuario.setImagemPerfil(usuarioData.imagem_perfil);
+
+  return usuario;
+}
 }
 
 export default UsuarioController;

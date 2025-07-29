@@ -37,8 +37,8 @@ export class Auth {
         const query = `SELECT id_usuario, nome, username, senha FROM usuario WHERE username = $1`; 
         const resultado = await database.query(query, [username]);
         
-        (resultado.rowCount === 0); {
-    return res.status(401).json({ auth: false, message: 'Usuário não encontrado' });
+        if(resultado.rowCount === 0) {
+    return res.status(400).json({ auth: false, message: 'Usuário não encontrado' });
   } 
         const usuario = resultado.rows[0];
         const senhaCorreta = await bcrypt.compare(senha, usuario.senha);

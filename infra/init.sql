@@ -36,7 +36,8 @@ CREATE TABLE  Usuario (
     nome VARCHAR(70) NOT NULL,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(50) UNIQUE NOT NULL,
-    senha VARCHAR(50) NOT NULL
+    senha VARCHAR(50) NOT NULL,
+    imagem_perfil VARCHAR(255)
 );
 
 -- Criar a função gerar_senha_padrao apenas se não existir
@@ -156,3 +157,5 @@ ALTER TABLE muralTrabalhos ADD COLUMN status_mural_trabalho BOOLEAN DEFAULT TRUE
 
 ALTER TABLE Usuario
 ALTER COLUMN senha TYPE VARCHAR(100);
+
+ALTER TABLE usuario ADD COLUMN imagem_perfil VARCHAR(255);

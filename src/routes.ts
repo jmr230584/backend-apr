@@ -51,7 +51,9 @@ router.get("/lista/usuario", UsuarioController.todos); // Rota para listar todos
 router.post('/usuario/novo', upload.single('imagemPerfil'), UsuarioController.cadastrar); // Rota para cadastrar um novo usuario
 
 // Rota de login
-router.post('/login', Auth.validacaoUsuario); // Rota de validação de usuário para login
+router.post('/login', (req, res, next) => {
+  UsuarioController.login(req, res).catch(next);
+}); // Rota de validação de usuário para login
 
 // Exporta as rotas para serem usadas no servidor
 export { router };
