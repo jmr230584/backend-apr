@@ -45,34 +45,40 @@ export class TrabalhoController {
      */
     static async novo(req: Request, res: Response): Promise<any> {
         try {
-            // Obtém os dados do corpo da requisição e os armazena em um objeto do tipo TrabalhoDTO
-            const trabalhoRecebido: TrabalhoDTO = req.body;
-
-            // Cria uma nova instância da classe Trabalho com os dados recebidos
-            const novoTrabalho = new Trabalho(
-                trabalhoRecebido.nomeTrabalho,
-                trabalhoRecebido.ongResponsavel,
-                trabalhoRecebido.localizacao,
-                trabalhoRecebido.dataInicio = new Date(),
-                trabalhoRecebido.dataTermino = new Date()
-            );
-
-            // Chama o método cadastroTrabalho() da classe Trabalho para salvar o novo trabalho no banco de dados
-            const resultado = await Trabalho.cadastroTrabalho(novoTrabalho);
-
-            if (resultado) {
-                // Se o cadastro for bem-sucedido, retorna uma mensagem de sucesso com status 200 (OK)
-                return res.status(200).json({ mensagem: "Trabalho cadastrado com sucesso!" });
-            } else {
-                // Caso ocorra algum erro durante o cadastro, retorna um erro 400 com uma mensagem informativa
-                return res.status(400).json({ mensagem: "Erro ao cadastrar trabalho." });
-            }
+          // Converte os nomes do corpo para o formato esperado no DTO
+          const trabalhoRecebido: TrabalhoDTO = {
+            nomeTrabalho: req.body.nome_trabalho,
+            ongResponsavel: req.body.ong_responsavel,
+            localizacao: req.body.localizacao,
+            dataInicio: new Date(req.body.data_inicio),
+            dataTermino: new Date(req.body.data_termino),
+          };
+      
+          // Exibe o que foi recebido (opcional para depuração)
+          console.log("Trabalho recebido:", trabalhoRecebido);
+      
+          // Cria a instância da entidade Trabalho com os dados corretos
+          const novoTrabalho = new Trabalho(
+            trabalhoRecebido.nomeTrabalho,
+            trabalhoRecebido.ongResponsavel,
+            trabalhoRecebido.localizacao,
+            trabalhoRecebido.dataInicio,
+            trabalhoRecebido.dataTermino
+          );
+      
+          const resultado = await Trabalho.cadastroTrabalho(novoTrabalho);
+      
+          if (resultado) {
+            return res.status(200).json({ mensagem: "Trabalho cadastrado com sucesso!" });
+          } else {
+            return res.status(400).json({ mensagem: "Erro ao cadastrar trabalho." });
+          }
         } catch (error) {
-            // Em caso de erro inesperado, exibe uma mensagem no console e retorna um erro 500 (Erro interno do servidor)
-            console.error("Erro ao cadastrar trabalho:", error);
-            return res.status(500).json({ mensagem: "Erro interno do servidor." });
+          console.error("Erro ao cadastrar trabalho:", error);
+          return res.status(500).json({ mensagem: "Erro interno do servidor." });
         }
-    }
+      }
+      
       /**
      * Remove um trabalho.
      * @param req Objeto de requisição HTTP com o ID do trabalho a ser removido.
