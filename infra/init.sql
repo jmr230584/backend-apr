@@ -155,7 +155,9 @@ VALUES
 -- alterações na tabela muralTrabalhos
 ALTER TABLE muralTrabalhos ADD COLUMN status_mural_trabalho BOOLEAN DEFAULT TRUE;
 
-ALTER TABLE Usuario
-ALTER COLUMN senha TYPE VARCHAR(100);
-
 ALTER TABLE usuario ADD COLUMN imagem_perfil VARCHAR(255);
+
+ALTER TABLE usuario
+ALTER COLUMN senha TYPE VARCHAR(255),
+ALTER COLUMN email TYPE VARCHAR(100),
+ALTER COLUMN username TYPE VARCHAR(100);
