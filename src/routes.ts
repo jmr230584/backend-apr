@@ -7,7 +7,7 @@ import { VoluntarioController } from "./controller/VoluntarioController";
 import { ParticipacaoController } from "./controller/ParticipacaoController";
 import { TrabalhoController } from "./controller/TrabalhoController";
 import { MuralTrabalhosController } from "./controller/MuralTrabalhosController";
-import UsuarioController from "./controller/UsuarioController";
+import {UsuarioController} from "./controller/UsuarioController";
 import { Auth } from "./util/Auth";
 
 // Cria um roteador para gerenciar as rotas
@@ -48,7 +48,7 @@ router.put("/atualizar/muraltrabalho/:idMuralTrabalhos", MuralTrabalhosControlle
 
 // Rotas do Usuário
 router.get("/lista/usuario", UsuarioController.todos); // Rota para listar todos os usuários cadastrados
-router.post('/usuario/novo', upload.single('imagemPerfil'), UsuarioController.cadastrar); // Rota para cadastrar um novo usuario
+router.post('/usuario/novo', upload.single('imagemPerfil'), UsuarioController.criarUsuario);// Rota para cadastrar um novo usuario
 
 // Rota de login
 router.post('/login', (req, res, next) => {
