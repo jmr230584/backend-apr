@@ -4,6 +4,10 @@ import { Request, Response } from "express";
 // Importa a classe Voluntario do modelo correspondente, que contém a lógica de negócio para os voluntários
 import { Voluntario } from "../model/Voluntario";
 
+import path from "path";
+import * as fs from "fs";
+
+
 // Define uma interface (DTO - Data Transfer Object) para padronizar os dados esperados ao cadastrar um voluntário
 interface VoluntarioDTO {
     idVoluntario: number;
@@ -14,6 +18,8 @@ interface VoluntarioDTO {
     endereco: string;          // Endereço do voluntário
     email: string;             // E-mail para contato
     telefone: string;          // Telefone de contato
+    senha: string;             // senha para logar
+    imagemPerfil: string;    // foto de perfil do voluntário
 }
 
 /**
@@ -26,72 +32,67 @@ export class VoluntarioController {
      */
     static async todos(req: Request, res: Response): Promise<any> {
         try {
-            // Chama o método listarVoluntarios() da classe Voluntario para obter a lista de voluntários cadastrados
             const listaDeVoluntarios = await Voluntario.listarVoluntarios();
 
-            if (listaDeVoluntarios) {
-                // Retorna a lista de voluntários no formato JSON com status 200 (OK)
-                return res.status(200).json(listaDeVoluntarios);
-            } else {
-                // Caso não haja voluntários cadastrados ou ocorra um erro, retorna um erro 400
-                return res.status(400).json({ mensagem: "Erro ao buscar voluntários." });
-            }
+            res.status(200).json(listaDeVoluntarios);
         } catch (error) {
-            // Em caso de erro inesperado, exibe uma mensagem no console e retorna um erro 500 (Erro interno do servidor)
-            console.error("Erro ao acessar listagem de voluntários:", error);
-            return res.status(500).json({ mensagem: "Erro interno do servidor." });
+            console.log(`Erro ao acessar método herdado: ${error}`);
+
+            res.status(400).json("Erro ao recuperar as informações do voluntário");
         }
     }
+
     /**
- * Método assíncrono para cadastrar um novo voluntário.
- */
-static async novo(req: Request, res: Response): Promise<any> {
-    console.log("Recebido no backend:", req.body);
-    console.log("Arquivo recebido:", req.file); // para debug do arquivo enviado
+    * Método assíncrono para cadastrar um novo voluntário.
+    */
+    static async cadastrar(req: Request, res: Response): Promise<any> {
+        try {
+            // Extrai os dados do corpo da requisição
+            const dadosRecebidos: VoluntarioDTO = req.body;
 
-    try {
-        // Obtém os dados do corpo da requisição e os armazena em um objeto do tipo VoluntarioDTO
-        const voluntarioRecebido: VoluntarioDTO = {
-            cpf: req.body.cpf,
-            nome: req.body.nome,
-            sobrenome: req.body.sobrenome,
-            dataNascimento: new Date(req.body.dataNascimento),
-            endereco: req.body.endereco,
-            email: req.body.email,
-            telefone: req.body.telefone,
-            idVoluntario: 0 // se precisar, define um valor padrão aqui
-        };
+            // Instancia um novo objeto de voluntário com os dados recebidos
+            const novoVoluntario = new Voluntario(
+                dadosRecebidos.cpf,
+                dadosRecebidos.nome,
+                dadosRecebidos.sobrenome,
+                dadosRecebidos.dataNascimento,
+                dadosRecebidos.endereco,
+                dadosRecebidos.email,
+                dadosRecebidos.telefone,
+                dadosRecebidos.imagemPerfil
+            );
 
-        // Cria uma nova instância da classe Voluntario com os dados recebidos
-        const novoVoluntario = new Voluntario(
-            voluntarioRecebido.cpf,                 // CPF do voluntário
-            voluntarioRecebido.nome,                // Nome
-            voluntarioRecebido.sobrenome,           // Sobrenome
-            voluntarioRecebido.dataNascimento,      // Data de nascimento (corrigido)
-            voluntarioRecebido.endereco,            // Endereço
-            voluntarioRecebido.email,               // E-mail de contato
-            voluntarioRecebido.telefone             // Telefone de contato
-        );
+            // Define a senha do voluntário (armazenada de forma segura no modelo)
+            novoVoluntario.setSenha(dadosRecebidos.senha);
 
-        // Exibe no console os dados do novo voluntário para fins de depuração
-        console.log(novoVoluntario);
+            // Cadastra o voluntário no banco de dados e obtém seu UUID
+            const uuid = await Voluntario.cadastroVoluntario(novoVoluntario);
 
-        // Chama o método cadastroVoluntario() da classe Voluntario para salvar o novo voluntário no banco de dados
-        const resultado = await Voluntario.cadastroVoluntario(novoVoluntario);
+            // Se não foi possível cadastrar, retorna erro
+            if (!uuid) {
+                return res.status(500).json({ erro: 'Erro ao cadastrar voluntário' });
+            }
 
-        if (resultado) {
-            // Se o cadastro for bem-sucedido, retorna uma mensagem de sucesso com status 200 (OK)
-            return res.status(200).json({ mensagem: "Voluntário cadastrado com sucesso!" });
-        } else {
-            // Caso ocorra algum erro durante o cadastro, retorna um erro 400 com uma mensagem informativa
-            return res.status(400).json({ mensagem: "Erro ao cadastrar voluntário." });
+            // Se uma imagem de perfil foi enviada, renomeia e atualiza o nome no banco
+            if (req.file) {
+                const ext = path.extname(req.file.originalname); // Pega a extensão original do arquivo
+                const novoNome = `${uuid}${ext}`; // Define o novo nome do arquivo como o UUID do usuário
+                const antigoPath = req.file.path; // Caminho temporário do upload
+                const novoPath = path.resolve(req.file.destination, novoNome); // Caminho de destino final
+
+                fs.renameSync(antigoPath, novoPath); // Renomeia o arquivo no sistema de arquivos
+
+                await Voluntario.atualizarImagemPerfil(uuid, novoNome); // Atualiza o nome do arquivo no banco de dados
+            }
+
+            // Retorna sucesso
+            return res.status(201).json({ mensagem: 'Voluntário cadastrado com sucesso' });
+        } catch (error) {
+            // Em caso de erro, registra nos logs e retorna erro para o cliente
+            console.error('Erro ao cadastrar Voluntário:', error);
+            res.status(500).json({ erro: 'Erro ao cadastrar Voluntário', detalhes: error });
         }
-    } catch (error) {
-        // Em caso de erro inesperado, exibe uma mensagem no console e retorna um erro 500 (Erro interno do servidor)
-        console.error("Erro ao cadastrar voluntário:", error);
-        return res.status(500).json({ mensagem: "Erro interno do servidor." });
     }
-}
 
    /**
      * Remove um voluntario.
@@ -141,7 +142,8 @@ static async novo(req: Request, res: Response): Promise<any> {
                 VoluntarioRecebido.dataNascimento,
                 VoluntarioRecebido.endereco,
                 VoluntarioRecebido.email,
-                VoluntarioRecebido.telefone
+                VoluntarioRecebido.telefone,
+                VoluntarioRecebido.imagemPerfil
             );
 
             

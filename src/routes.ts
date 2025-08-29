@@ -7,8 +7,9 @@ import { VoluntarioController } from "./controller/VoluntarioController";
 import { ParticipacaoController } from "./controller/ParticipacaoController";
 import { TrabalhoController } from "./controller/TrabalhoController";
 import { MuralTrabalhosController } from "./controller/MuralTrabalhosController";
-import {UsuarioController} from "./controller/UsuarioController";
 import { Auth } from "./util/Auth";
+import { AuthController } from "./controller/AuthController";
+
 
 // Cria um roteador para gerenciar as rotas
 const router = Router();
@@ -21,9 +22,13 @@ router.get("/", (_req, res) => {
     res.json({ mensagem: "Bem-vindo ao sistema de voluntariado!" });
 });
 
+// login de voluntário
+router.post("/login", AuthController.login);
+
+
 // Rotas para voluntários
 router.get("/lista/voluntarios", VoluntarioController.todos); // Rota para listar todos os voluntários
-router.post("/voluntario/novo", upload.single('fotoPerfil'), VoluntarioController.novo); // Rota para cadastrar um novo voluntário
+router.post("/voluntario/novo", upload.single('imagemPerfil'), VoluntarioController.cadastrar);
 router.put("/remover/voluntario", VoluntarioController.remover); // Rota para exluir um voluntário
 router.put("/atualizar/voluntario/:idVoluntario", VoluntarioController.atualizar); // Rota para atualizar um novo voluntário
 
@@ -46,14 +51,6 @@ router.post("/trabalhoMural/novo", MuralTrabalhosController.novo); // Rota para 
 router.put("/remover/trabalhoMural", MuralTrabalhosController.remover); // Rota para excluir um trabalho
 router.put("/atualizar/muraltrabalho/:idMuralTrabalhos", MuralTrabalhosController.atualizar); // Rota para atualizar o mural de trabalhos finalizados
 
-// Rotas do Usuário
-router.get("/lista/usuario", UsuarioController.todos); // Rota para listar todos os usuários cadastrados
-router.post('/usuario/novo', upload.single('imagemPerfil'), UsuarioController.criarUsuario);// Rota para cadastrar um novo usuario
-
-// Rota de login
-router.post('/login', (req, res, next) => {
-  UsuarioController.login(req, res).catch(next);
-}); // Rota de validação de usuário para login
 
 // Exporta as rotas para serem usadas no servidor
 export { router };

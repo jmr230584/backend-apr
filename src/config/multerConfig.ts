@@ -1,60 +1,43 @@
-import multer from 'multer'; // Importa o Multer, responsável por lidar com uploads
-import path from 'path'; // Módulo para trabalhar com caminhos de arquivos
-import crypto from 'crypto'; // Módulo para gerar valores aleatórios
+import multer from 'multer';
+import path from 'path';
+import crypto from 'crypto';
 
-// Define a configuração de armazenamento dos arquivos
+// Função auxiliar para nome aleatório
+function gerarNomeAleatorio(tamanho: number = 16): string {
+  const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let resultado = '';
+  for (let i = 0; i < tamanho; i++) {
+    const indice = Math.floor(Math.random() * caracteres.length);
+    resultado += caracteres.charAt(indice);
+  }
+  return resultado;
+}
+
+// Upload genérico
 const storage = multer.diskStorage({
-  // Define o diretório onde os arquivos enviados serão salvos
   destination: (req, file, cb) => {
-    cb(null, path.resolve(__dirname, '..', '..', 'uploads')); // Caminho absoluto até a pasta "uploads"
+    cb(null, path.resolve(__dirname, '..', '..', 'uploads'));
   },
-
-  // Define o nome do arquivo que será salvo
   filename: (req, file, cb) => {
-    const hash = crypto.randomBytes(6).toString('hex'); // Gera um hash aleatório de 6 bytes
-    const ext = path.extname(file.originalname); // Extrai a extensão original do arquivo
-
-    // Tenta obter o UUID do usuário da requisição
+    const hash = crypto.randomBytes(6).toString('hex');
+    const ext = path.extname(file.originalname);
     const uuid = (req.body?.uuid || req.params?.uuid || req.query?.uuid || 'sem-uuid');
-
-    // Cria o nome final do arquivo: uuid-hash-nomeOriginal.ext
     const filename = `${uuid}-${hash}-${file.originalname}`;
-
-    cb(null, filename); // Retorna o nome para o multer salvar
+    cb(null, filename);
   }
 });
+export const upload = multer({ storage });
 
-// Cria o middleware de upload com a configuração de armazenamento definida
-export const upload = multer ({ storage} );
-
-//Define a configuração de armazenameno dos arquivos
+// Upload de capa com nome aleatório
 const storageCapa = multer.diskStorage({
-   // Define o diretório onde os arquivos enviados serão salvos
-   destination: (req, file, cb) => {
-    cb(null, path.resolve(__dirname, '..', '..', 'uploads/cover')); // Caminho absoluto até a pasta "uploads"
+  destination: (req, file, cb) => {
+    cb(null, path.resolve(__dirname, '..', '..', 'uploads/cover'));
   },
-
-//Define o nome do arquivo que será salvo 
-filename: (req, file, cb) => {
-  const ext = path.extname(file.originalname); // Extrai a extensão original do arquivo
-
-  //Tenta obter o UUID do usuário da requisição
-  const email = (req.body?.email);
-  const senha = (req.body?.senha);
-
-  const sanitize = (texto: string) => texto
-  .replace(/[^a-zA-Z0-9-_ ]/g, '') // remove caracteres especiais (exceto espaço, hífen e underscore)
-  .replace(/ /g, "_");             // troca espaços por underscores
-
-  const emailSanitizado = sanitize(email);
-  const senhaSanitizado = sanitize(senha);
-
-  //Cria o nome final do arquivo: uuid-hash-nomeOriginal.ext
-  const filename = `${emailSanitizado}-${senhaSanitizado}-${file.originalname}`;
-
-  cb(null, filename); // Retorna o nome para o multer salvar
-}
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const nomeImagem = `${gerarNomeAleatorio(16)}${ext}`;
+    req.body.nomeImagem = nomeImagem; // ainda disponível para o controller
+    cb(null, nomeImagem);
+  }
 });
-
-// Cria o middleware de upload com a configuração de armazenamento definida
 export const uploadCapa = multer({ storage: storageCapa });

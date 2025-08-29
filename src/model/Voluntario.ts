@@ -1,4 +1,6 @@
 import { DatabaseModel } from "./DatabaseModel";
+import bcrypt from 'bcrypt';
+
 
 // Armazena o pool de conexões com o banco de dados
 const database = new DatabaseModel().pool;
@@ -7,6 +9,8 @@ const database = new DatabaseModel().pool;
  * Classe que representa o Voluntário.
  */
 export class Voluntario {
+
+
     /* Atributos */
     private idVoluntario: number = 0; // Armazena o ID único do voluntário
     private cpf: string; // Armazena o CPF do voluntário
@@ -18,8 +22,9 @@ export class Voluntario {
     private telefone: string; // Armazena o telefone do voluntário
     private statusVoluntario: boolean = true; // controla o status do voluntário
 
-    private username: string = "";  // Nome de usuário para login
     private senha: string = "";     // Senha do voluntário
+    private imagemPerfil: string;
+     private uuidVoluntario: string = '';
 
     /**
      * Construtor da classe Voluntário.
@@ -31,7 +36,8 @@ export class Voluntario {
         dataNascimento: Date,
         endereco: string,
         email: string,
-        telefone: string
+        telefone: string,
+        imagemPerfil: string
     ) {
         this.cpf = cpf;
         this.nome = nome;
@@ -40,6 +46,7 @@ export class Voluntario {
         this.endereco = endereco;
         this.email = email;
         this.telefone = telefone;
+        this.imagemPerfil = imagemPerfil
     }
 
     /* Getters e Setters */
@@ -71,13 +78,48 @@ export class Voluntario {
     public getStatusVoluntario(): boolean { return this.statusVoluntario; }
     public setStatusVoluntario(status: boolean): void { this.statusVoluntario = status; }
 
-    public getUsername(): string { return this.username; }
-    public setUsername(username: string): void { this.username = username; }
-
     public getSenha(): string { return this.senha; }
     public setSenha(senha: string): void { this.senha = senha; }
 
+    public getImagemPerfil(): string {  return this.imagemPerfil;}
+    public setImagemPerfil(imagem: string): void { this.imagemPerfil = imagem;}
+
+    public getUuidVoluntario(): string { return this.uuidVoluntario; }
+    public setUuidVoluntario(uuidVoluntario: string): void {this.uuidVoluntario = uuidVoluntario; }
+
     /* Métodos estáticos para manipulação no banco */
+
+    static async buscarPorEmail(email: string): Promise<Voluntario | null> {
+        try {
+            const resultado = await database.query(
+              "SELECT * FROM voluntario WHERE email = $1",
+              [email]
+            );
+
+        if (resultado.rows.length === 0) return null;
+
+        const row = resultado.rows[0];
+        return new Voluntario(
+            row.cpf,
+            row.nome,
+            row.sobrenome,
+            row.data_nascimento,
+            row.endereco,
+            row.email,
+            row.telefone,
+            row.imagem_perfil
+        );
+        } catch (error) {
+            console.error("Erro ao buscar voluntário por email:", error);
+            return null;
+        }
+    }
+
+    // Exemplo de método para validar senha
+    validarSenha(senhaDigitada: string): boolean {
+        return bcrypt.compareSync(senhaDigitada, this.senha); // this.senha é o hash do DB
+    }
+
 
     /**
      * Busca e retorna uma lista de voluntários do banco de dados.
@@ -96,10 +138,12 @@ export class Voluntario {
                     voluntario.data_nascimento,
                     voluntario.endereco,
                     voluntario.email,
-                    voluntario.telefone
+                    voluntario.telefone,
+                    voluntario.imagemPerfil
                 );
                 novoVoluntario.setIdVoluntario(voluntario.id_voluntario);
                 novoVoluntario.setStatusVoluntario(voluntario.status_voluntario);
+                novoVoluntario.setUuidVoluntario(voluntario.uuid);
                 listaDeVoluntarios.push(novoVoluntario);
             });
 
@@ -113,38 +157,45 @@ export class Voluntario {
     /**
      * Cadastra um novo voluntário no banco de dados.
      */
-    static async cadastroVoluntario(voluntario: Voluntario): Promise<boolean> {
-        try {
+    static async cadastroVoluntario(voluntario: Voluntario): Promise<string | null> {
+try {
+            // Define a query SQL para inserir um novo voluntário com cpf, nome, sobrenome, data_nascimento, endereco, email, telefone, senha
+            // A cláusula RETURNING uuid retorna o identificador gerado automaticamente pelo banco
             const query = `
-                INSERT INTO voluntario 
-                (cpf, nome, sobrenome, data_nascimento, endereco, email, telefone) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7)
-                RETURNING id_voluntario;
-            `;
+          INSERT INTO voluntario (cpf, nome, sobrenome, data_nascimento, endereco, email, telefone, senha)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          RETURNING uuid
+        `;
 
-            const valores = [
-                voluntario.getCpf(),
-                voluntario.getNome(),
-                voluntario.getSobrenome(),
-                voluntario.getDataNascimento(),
-                voluntario.getEndereco(),
-                voluntario.getEmail(),
-                voluntario.getTelefone()
-            ];
+            // Define os valores que serão usados na query (evita SQL Injection)
+            const valores = [ voluntario.cpf, 
+                              voluntario.nome, 
+                              voluntario.sobrenome,
+                              voluntario.dataNascimento,
+                              voluntario.endereco,
+                              voluntario.email, 
+                              voluntario.telefone,
+                              voluntario.senha];
 
-            const respostaBD = await database.query(query, valores);
+            // Executa a query no banco de dados e aguarda a resposta
+            const resultado = await database.query(query, valores);
 
-            if (respostaBD.rowCount !== 0) {
-                console.log(`Voluntário cadastrado com sucesso. ID: ${respostaBD.rows[0].id_voluntario}`);
-                return true;
-            }
-            return false;
+            // Obtém o uuid gerado pelo banco de dados a partir do resultado da query
+            const uuid = resultado.rows[0].uuid;
+
+            // Atribui o uuid ao objeto do usuário, caso precise ser usado depois
+            voluntario.uuidVoluntario = uuid;
+
+            // Retorna o uuid como confirmação do cadastro
+            return uuid;
         } catch (error) {
-            console.error(`Erro ao cadastrar o voluntário: ${error}`);
-            return false;
+            // Em caso de erro, exibe no console para ajudar na identificação do problema
+            console.error('Erro ao salvar voluntário:', error);
+
+            // Retorna null para indicar que o cadastro não foi concluído
+            return null;
         }
     }
-
     /**
      * Remove um voluntário do banco de dados.
      */
@@ -199,5 +250,18 @@ export class Voluntario {
             console.error(`Erro na atualização: ${error}`);
             return false;
         }
+    }
+
+    /**
+     * Atualiza o caminho da imagem de perfil no cadastro do voluntário
+     * @param uuid UUID do voluntário, que representará o nome da imagem
+     * @param nomeArquivo O nome do arquivo a ser salvo
+     */
+    static async atualizarImagemPerfil(uuid: string, nomeArquivo: string): Promise<void> {
+        // Define a query SQL que atualiza o campo imagem_perfil do usuário com o nome do arquivo
+        const query = `UPDATE voluntario SET imagem_perfil = $1 WHERE uuid = $2`;
+
+        // Executa a query passando o nome do arquivo e o uuid do usuário como parâmetros
+        await database.query(query, [nomeArquivo, uuid]);
     }
 }

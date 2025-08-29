@@ -6,8 +6,18 @@ sobrenome VARCHAR(100) NOT NULL,
 data_nascimento DATE NOT NULL,
 endereco VARCHAR(200),
 email VARCHAR(100) UNIQUE NOT NULL,
-telefone VARCHAR(11) NOT NULL
+telefone VARCHAR(11) NOT NULL,
+senha VARCHAR(100) NOT NULL
 );
+
+ALTER TABLE voluntario
+ADD COLUMN imagem_perfil VARCHAR(200);
+
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+ALTER TABLE voluntario
+ADD COLUMN uuid UUID DEFAULT gen_random_uuid() NOT NULL;
+
 
 CREATE TABLE trabalho (
 id_trabalho SERIAL PRIMARY KEY,
@@ -29,22 +39,14 @@ FOREIGN KEY (id_trabalho) REFERENCES trabalho(id_trabalho),
 FOREIGN KEY (id_voluntario) REFERENCES voluntario(id_voluntario) 
 );
 
--- CREATE USUARIOS
-CREATE TABLE  Usuario (
-    id_usuario SERIAL PRIMARY KEY,
-    uuid UUID DEFAULT gen_random_uuid() NOT NULL,
-    nome VARCHAR(70) NOT NULL,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(50) UNIQUE NOT NULL,
-    senha VARCHAR(50) NOT NULL,
-    imagem_perfil VARCHAR(255)
-);
-
--- Criar a função gerar_senha_padrao apenas se não existir
+-- Criar a função gerar_senha_padrao (ou substituir caso já exista)
 CREATE OR REPLACE FUNCTION gerar_senha_padrao()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.senha := NEW.username || '1234';
+    -- Se a senha não for informada, gera a padrão
+    IF NEW.senha IS NULL OR NEW.senha = '' THEN
+        NEW.senha := NEW.nome || '1234';
+    END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -54,7 +56,7 @@ DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'trigger_gerar_senha') THEN
         CREATE TRIGGER trigger_gerar_senha
-        BEFORE INSERT ON Usuario
+        BEFORE INSERT ON voluntario
         FOR EACH ROW
         EXECUTE FUNCTION gerar_senha_padrao();
     END IF;
@@ -64,7 +66,6 @@ END $$;
 SELECT * FROM voluntario;
 SELECT * FROM participacao;
 SELECT * FROM trabalho;
-SELECT * FROM Usuario
 
 
 -- alterações das tabelas no banco
@@ -73,14 +74,6 @@ ALTER TABLE trabalho ADD COLUMN status_trabalho BOOLEAN DEFAULT TRUE;
 ALTER TABLE participacao ADD COLUMN status_trabalho BOOLEAN DEFAULT TRUE;
 ALTER TABLE participacao ADD COLUMN status_participacao_voluntario BOOLEAN DEFAULT TRUE;
 ALTER TABLE trabalho ADD COLUMN status_trabalho_registro BOOLEAN DEFAULT TRUE;
-
--- Inserção de 3 novos usuários
-INSERT INTO usuario (nome, username, email) 
-VALUES
-('Allison Reynolds', 'ally.reynolds', 'ally.fox7@email.com'),
-('Bryan Seth Gordon', 'gordon.seth', 'bryan.gordon06@email.com'),
-('Aaron Michael Minyard', 'aaron.minyard', 'aaron.michael05@email.com');
-
 
 INSERT INTO voluntario(cpf, nome, sobrenome, data_nascimento, endereco, email, telefone)
 VALUES (12345678900, 'Neil Abram', 'Josten', '1987-03-31', 'Rua das Raposas, 103', 'NAJ.fox@gmail.com', 11987654321),
@@ -101,13 +94,6 @@ WHERE nome = 'Marinette';
 
 SELECT * FROM voluntario ORDER BY id_voluntario;
 
-INSERT INTO participacao(id_trabalho, id_voluntario, quantidade_vagas, duracao, atividade_trabalho)
-VALUES 
-(1, 15, 102, '3 meses', 'Em andamento'),  
-(5, 13, 26, '2 anos', 'Concluído'),       
-(4, 12, 50, '4 meses', 'Cancelado'),       
-(2, 11, 24, '5 semanas', 'Agendado'),     
-(3, 14, 12, '6 meses', 'Em andamento');    
 
 INSERT INTO trabalho (nome_trabalho, ong_responsavel, localizacao, data_inicio, data_termino) 
 VALUES 
@@ -116,6 +102,17 @@ VALUES
 ('Unidade Hospitalar Móvel', 'Mãos que curam', 'Belo Horizonte -BH', '2025-03-21', '2025-11-19'),
 ('Saneamento Basico em Comunidades', 'H2Somos', 'Rio grande do Sul- RS', '2025-03-16', '2025-11-28'),
 ('Reflorestamento Urbano', 'Verde para o Futuro', 'Curitiba - PR', '2025-05-10', '2025-11-15'); 
+
+
+INSERT INTO participacao(id_trabalho, id_voluntario, quantidade_vagas, duracao, atividade_trabalho)
+VALUES 
+(1, 15, 102, '3 meses', 'Em andamento'),  
+(5, 13, 26, '2 anos', 'Concluído'),       
+(4, 12, 50, '4 meses', 'Cancelado'),       
+(2, 11, 24, '5 semanas', 'Agendado'),     
+(3, 14, 12, '6 meses', 'Em andamento');    
+
+
 
 -- SQL DE REQUSITO NÃO FUNCIONAL
 -- Criação da tabela muralTrabalhos
@@ -154,10 +151,3 @@ VALUES
 
 -- alterações na tabela muralTrabalhos
 ALTER TABLE muralTrabalhos ADD COLUMN status_mural_trabalho BOOLEAN DEFAULT TRUE;
-
-ALTER TABLE usuario ADD COLUMN imagem_perfil VARCHAR(255);
-
-ALTER TABLE usuario
-ALTER COLUMN senha TYPE VARCHAR(255),
-ALTER COLUMN email TYPE VARCHAR(100),
-ALTER COLUMN username TYPE VARCHAR(100);
