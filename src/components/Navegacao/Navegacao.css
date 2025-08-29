@@ -1,0 +1,28 @@
+.cabecalho {
+  background-color: #b3eac1; /* verde claro */
+  display: flex;
+  justify-content: space-between; /* separa os elementos nas pontas */
+  align-items: center;
+  padding: 0.5rem 2rem;
+  height: 100px;
+  font-family: 'Arial', sans-serif;
+}
+
+.imgLogo img {
+  height: 120px;
+  width: auto;
+}
+
+.cabecalho a {
+  text-decoration: none;
+  color: #4b1e00; /* marrom escuro */
+  font-weight: bold;
+  font-size: 1rem;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.cabecalho a:hover {
+  transform: scale(1.05);
+  color: #7a2d00;
+}

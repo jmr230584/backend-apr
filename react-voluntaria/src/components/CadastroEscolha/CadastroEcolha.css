@@ -1,0 +1,44 @@
+.cadastro-escolha-container {
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #f0f9f4;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(75, 30, 0, 0.1);
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  color: #4b1e00;
+}
+
+.cadastro-escolha-container h1 {
+  margin-bottom: 2rem;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.botoes-cadastro {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.botao-cadastro {
+  background-color: #b3eac1;
+  color: #4b1e00;
+  font-weight: bold;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  flex: 1 1 calc(33.33% - 1rem); /* Divide em 3 colunas com gap */
+  text-align: center;
+  min-width: 150px;
+}
+
+.botao-cadastro:hover {
+  background-color: #7ad086;
+  color: #fff;
+  cursor: pointer;
+}

@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
+
+:root {
+    --primaryColor: #703d00;
+    --secondaryColor: #fef4a6;
+    --lightBackground: #fff9e9;
+    --darkColor: #4b2600;
+}
+
+/* Container principal da tabela */
+.cardsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--lightBackground);
+    padding: 2rem;
+    min-height: 100vh;
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+.header-tabela-mural {
+    font-family: 'Kablammo', cursive;
+    font-size: 2.5rem;
+    color: var(--primaryColor);
+    text-align: center;
+    margin: 2rem 0;
+}
+
+/* Estilização da tabela PrimeReact */
+.data-table {
+    width: 100%;
+    max-width: 1000px;
+    border: 2px solid var(--primaryColor);
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: white;
+}
+
+/* Cabeçalho da tabela */
+.data-table .p-datatable-thead > tr > th {
+    background-color: var(--secondaryColor);
+    color: #000;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid var(--primaryColor);
+}
+
+/* Células da tabela */
+.data-table .p-datatable-tbody > tr > td {
+    text-align: center;
+    border: 1px solid var(--primaryColor);
+}
+
+/* Paginação customizada */
+.paginacao {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* Botões da paginação */
+.botao {
+    background-color: transparent !important;
+    border: none !important;
+    cursor: pointer;
+}
+
+.botao:hover {
+    background-color: transparent;
+}
+
+/* Ícones da paginação */
+.iconBotao {
+    color: var(--primaryColor);
+    font-size: 2rem;
+    transition: color 0.2s ease;
+}
+
+.iconBotao:hover {
+    color: var(--darkColor);
+}
+
+/* Responsividade */
+@media screen and (max-width: 768px) {
+    .header-tabela-mural {
+        font-size: 1.8rem;
+    }
+
+    .data-table {
+        font-size: 0.9rem;
+    }
+
+    .iconBotao {
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,12 @@
+.main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    min-height: 70vh;
+    font-family: Arial, sans-serif;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  

@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
+
+
+
+/* Ajuste para o container do formulário, considerando o cabeçalho fixo */
+.cadastro-trabalho-container {
+  background-color: #fdf5e6;
+  padding: 6rem 2rem 2rem; /* padding-top para não ficar atrás do cabeçalho */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center; /* centraliza horizontalmente o container */
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Título */
+.cadastro-trabalho-container h2 {
+  font-size: 2.4rem;
+  font-family: 'Kablammo', cursive;
+  color: #4b1e00;
+  margin: 1rem 0 2rem 0;
+  text-align: center;
+  letter-spacing: 1px;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Formulário */
+.cadastro-trabalho-container form {
+  background-color: #f3dfd3;
+  border: 2px solid #4b1e00;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 4px 10px rgb(75 30 0 / 0.2);
+  transition: transform 0.3s ease;
+  box-sizing: border-box;
+}
+
+.cadastro-trabalho-container form:hover {
+  transform: translateY(-5px);
+}
+
+/* Cada grupo de campo do formulário */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Labels */
+.form-group label {
+  color: #4b1e00;
+  font-weight: 700;
+  font-size: 1.1rem;
+  width: 100%;
+}
+
+/* Inputs e Selects */
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group select {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #4b1e00;
+  background-color: #fff8f2;
+  color: #333;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Foco em inputs e selects */
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #7a2d00;
+  outline: none;
+}
+
+/* Placeholder */
+.form-group input::placeholder {
+  color: #666;
+  font-style: italic;
+}
+
+/* Botão de envio */
+.cadastro-trabalho-container button {
+  background-color: #4b1e00;
+  color: aliceblue;
+  padding: 1rem 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 3px 8px rgb(75 30 0 / 0.4);
+  width: 100%;
+  max-width: 480px;
+}
+
+.cadastro-trabalho-container button:hover {
+  background-color: #7a2d00;
+  box-shadow: 0 6px 14px rgb(122 45 0 / 0.7);
+}
+
+/* Rodapé opcional */
+.footer {
+  margin-top: 2rem;
+  padding: 1rem 0;
+  color: #4b1e00;
+  font-weight: 700;
+  font-family: 'Kablammo', cursive;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+  max-width: 480px;
+  user-select: none;
+}

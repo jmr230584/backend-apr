@@ -1,0 +1,72 @@
+/* Fundo da seção do formulário */
+.form-section {
+    background-color: #fcf4e7;
+    padding: 40px 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+/* Caixa do formulário */
+.form-login {
+    background-color: #e5d0b9;
+    border: 2px solid #5f2311;
+    border-radius: 8px;
+    padding: 30px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+  
+/* Título do formulário */
+.form-section h3 {
+    position: absolute;
+    top: 60px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #5f2311;
+    text-align: center;
+}
+  
+/* Estilo geral para os labels */
+.form-login label {
+    display: flex;
+    flex-direction: column;
+    color: #5f2311;
+    font-weight: 500;
+    font-size: 15px;
+}
+  
+/* Estilo padrão para os inputs */
+.form-login input {
+    margin-top: 5px;
+    padding: 10px;
+    border: 1.5px solid #5f2311;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background-color: #fcf4e7;
+    color: #5f2311;
+}
+  
+/* Botão de cadastro */
+.form-login button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #5f2311;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+  
+.form-login button:hover {
+    background-color: #7a2d1a;
+}
+
+  

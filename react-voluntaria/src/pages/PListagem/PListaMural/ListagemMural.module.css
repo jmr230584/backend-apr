@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
+
+
+.h1 {
+    font-size: 2rem; 
+    font-family: 'Kablammo', cursive;
+    color: #4b1e00;
+    margin-bottom: 1.5rem;
+    flex-direction: center;
+
+}
+
+/* Fundo da página */
+body {
+    background-color: #FDF9E5;
+}
+
+.cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 2% 0;
+    color: #4b1e00;
+}
+
+.paginacao {
+    display: flex;
+    justify-content: center;
+}
+
+.botao {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.botao:hover {
+    background-color: transparent;
+}
+
+.iconBotao {
+    color: #4b1e00;
+    font-size: 2rem;
+}
+
+.iconBotao:hover {
+    color: #4b1e00;
+    font-size: 2rem;
+}
+
+/* Para o card em si */
+.cardMural {
+    width: 18rem;
+    height: 45vh;
+    margin: 1%;
+    background-color: #FBED9B; /* Cor solicitada para o card */
+}
+
+/* Alinhamento de linhas com título e valor */
+.cardMural-alinhamento {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Parágrafo com estilo de label */
+.cardMural-paragrafo {
+    font-size: 1rem;
+    font-weight: bold;
+    white-space: nowrap;
+    margin: 0;
+}
+
+/* Texto que pode cortar com "..." se for muito longo */
+.cardMural-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 8px;
+}

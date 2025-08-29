@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Kablammo&family=Creepster&display=swap');
+
+.titulo-secao {
+  font-family: 'Kablammo', sans-serif;
+  font-size: 24px;
+  color: #5A1300;
+  margin: 20px 0 10px 40px;
+  text-align: left;
+}
+
+.conteudo-flex {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto 30px;
+  padding: 0 40px;
+  gap: 30px;
+  box-sizing: border-box;
+}
+
+.lado-esquerdo {
+  display: flex;
+  gap: 20px;
+  width: 60%;
+  box-sizing: border-box;
+}
+
+.retangulo-imagem {
+  width: 60%;
+  min-height: 350px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.retangulo-imagem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.retangulo-info {
+  width: 40%;
+  background-color: #FFF9F5;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #5A1300;
+  box-sizing: border-box;
+}
+
+.lado-direito {
+  width: 40%;
+  background-color: #FFF9F5;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.titulo-projeto {
+  font-size: 18px;
+  color: #5A1300;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.imagem-projeto {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.texto-projeto {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #5A1300;
+}
+
+.botao-container {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  width: 100%;
+}
+
+.botao-mural {
+  background-color: #5A1300;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.botao-mural:hover {
+  background-color: #7a1c00;
+}
+
+.secao-projetos {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px 40px;
+  box-sizing: border-box;
+}
+
+.grade-projetos {
+  display: flex;
+  gap: 40px;
+  margin-top: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.card-projeto {
+  flex: 1 1 calc(33.33% - 40px);
+  background-color: #FFF9F5;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-width: 370px;
+  box-sizing: border-box;
+  min-width: 280px;
+}
+
+.imagem-card {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.conteudo-projeto {
+  padding: 20px;
+  color: #5A1300;
+  font-size: 14px;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.botao-inscrever {
+  width: 100%;
+  background-color: #5A1300;
+  color: white;
+  padding: 10px 0;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.botao-inscrever:hover {
+  background-color: #7a1c00;
+}
+
+@media (max-width: 1024px) {
+  .grade-projetos {
+    gap: 20px;
+  }
+  .card-projeto {
+    flex: 1 1 calc(50% - 20px);
+    max-width: none;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .conteudo-flex {
+    flex-direction: column;
+    padding: 0 20px;
+  }
+
+  .lado-esquerdo {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .retangulo-imagem {
+    width: 100%;
+    min-height: 250px;
+  }
+
+  .retangulo-info {
+    width: 100%;
+  }
+
+  .lado-direito {
+    width: 100%;
+  }
+
+  .grade-projetos {
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 20px;
+  }
+
+  .card-projeto {
+    width: 100%;
+    max-width: none;
+  }
+}

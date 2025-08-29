@@ -1,0 +1,37 @@
+.container-acesso {
+    text-align: center;
+    padding: 2rem;
+    background-color: #fff;
+  }
+  
+  h1 {
+    color: #4b1e00;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    color: #4b1e00;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+  
+  .botoes-acesso {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .botao {
+    background-color: #b3eac1;
+    color: #4b1e00;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .botao:hover {
+    background-color: #a0d9ae;
+  }
+  

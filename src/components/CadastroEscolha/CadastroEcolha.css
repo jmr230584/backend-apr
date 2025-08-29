@@ -1,0 +1,66 @@
+.cadastro-escolha-container {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #f0f9f4;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(75, 30, 0, 0.1);
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  color: #4b1e00;
+}
+
+.cadastro-escolha-container h1 {
+  margin-bottom: 2rem;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+/* Linha dos botões */
+.linha-botoes {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 3rem; /* Espaço entre botões e descrições */
+}
+
+.botao-cadastro {
+  background-color: #b3eac1;
+  color: #4b1e00;
+  font-weight: bold;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  text-transform: uppercase;
+  flex: 1; /* Ocupa espaço igual */
+  min-width: 150px;
+  transition: all 0.3s ease;
+}
+
+.botao-cadastro:hover {
+  background-color: #7ad086;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Linha das descrições */
+.linha-descricoes {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.bloco-descricao {
+  flex: 1;
+  background-color: #ffffff; /* Caixa branca para contraste */
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(75, 30, 0, 0.1);
+  color: #4b1e00;
+  text-align: center;
+  font-size: 0.95rem;
+  min-height: 80px; /* altura uniforme */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

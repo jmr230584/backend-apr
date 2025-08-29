@@ -1,0 +1,154 @@
+/* Container da tabela de Trabalhos */
+.table-trabalho-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 2rem auto; /* centraliza a tabela */
+    background-color: #fff9e6;
+    border: 2px solid #3c1900;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Cabeçalho da tabela */
+.header-tabela-trabalho {
+    font-size: 2rem;
+    color: #661800;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-family: 'Kablammo', cursive;
+}
+
+/* Botões principais de navegação entre tabelas */
+.botoes-tabelas {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.botoes-tabelas button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+}
+
+/* Paleta de cores da imagem */
+.botoes-tabelas button:nth-child(1) { background-color: #f0c27b; color: #3e1f00; }
+.botoes-tabelas button:nth-child(1):hover { background-color: #e0a85f; color: white; }
+
+.botoes-tabelas button:nth-child(2) { background-color: #a8e6a1; color: #3e1f00; }
+.botoes-tabelas button:nth-child(2):hover { background-color: #66bb6a; color: white; }
+
+.botoes-tabelas button:nth-child(3) { background-color: #80d6f0; color: #3e1f00; }
+.botoes-tabelas button:nth-child(3):hover { background-color: #4fc3f7; color: white; }
+
+/* DataTable estilizada */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff9e6;
+    margin: 0 auto;
+}
+
+/* Cabeçalho das colunas */
+.data-table thead th {
+    background-color: #FBED9B;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.8rem;
+    border: 1px solid #3c1900;
+    border-radius: 4px 4px 0 0;
+}
+
+/* Corpo da tabela */
+.data-table tbody td {
+    padding: 0.7rem;
+    text-align: center;
+    color: #3c1900;
+    border: 1px solid #3c1900;
+    background-color: #fff9e6;
+}
+
+/* Hover nas linhas */
+.data-table tbody tr:hover {
+    background-color: #f5eec5;
+}
+
+/* Botões dentro da tabela (Editar, Excluir) */
+.td-acoes button {
+    margin: 0 0.2rem;
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    font-size: 0.9rem;
+}
+
+/* Botão de editar verde água */
+.td-acoes .editar-btn {
+    background-color: #80d6f0;
+    color: #3e1f00;
+}
+
+.td-acoes .editar-btn:hover {
+    background-color: #4fc3f7;
+    color: white;
+}
+
+/* Botão de excluir vermelho amarelado */
+.td-acoes .excluir-btn {
+    background-color: #f4a261;
+    color: #3e1f00;
+}
+
+.td-acoes .excluir-btn:hover {
+    background-color: #e76f51;
+    color: white;
+}
+
+/* Botões de ação fora da tabela (Adicionar, Voltar) */
+.acoes-tabela {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.acoes-tabela button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+}
+
+.acoes-tabela .adicionar {
+    background-color: #80d6f0;
+    color: #3e1f00;
+}
+
+.acoes-tabela .adicionar:hover {
+    background-color: #4fc3f7;
+    color: white;
+}
+
+.acoes-tabela .voltar {
+    background-color: #f4a261;
+    color: #3e1f00;
+}
+
+.acoes-tabela .voltar:hover {
+    background-color: #e76f51;
+    color: white;
+}

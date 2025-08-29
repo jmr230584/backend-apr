@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
+
+/* Container da tabela de Participações */
+.table-participacao-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 2rem auto;
+    background-color: #fff9e6;
+    border: 2px solid #3c1900;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Cabeçalho da tabela */
+.header-tabela-participacao {
+    font-size: 2rem;
+    color: #661800;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-family: 'Kablammo', cursive;
+}
+
+/* Botões principais de navegação entre tabelas */
+.botoes-tabelas {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.botoes-tabelas button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+}
+
+/* Paleta de cores da imagem para os botões principais */
+.botoes-tabelas button:nth-child(1) { background-color: #f0c27b; color: #3e1f00; }
+.botoes-tabelas button:nth-child(1):hover { background-color: #e0a85f; color: white; }
+
+.botoes-tabelas button:nth-child(2) { background-color: #a8e6a1; color: #3e1f00; }
+.botoes-tabelas button:nth-child(2):hover { background-color: #66bb6a; color: white; }
+
+.botoes-tabelas button:nth-child(3) { background-color: #80d6f0; color: #3e1f00; }
+.botoes-tabelas button:nth-child(3):hover { background-color: #4fc3f7; color: white; }
+
+/* DataTable estilizada */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff9e6;
+    margin: 0 auto;
+}
+
+/* Cabeçalho das colunas */
+.data-table thead th {
+    background-color: #FBED9B;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.8rem;
+    border: 1px solid #3c1900;
+    border-radius: 4px 4px 0 0;
+}
+
+/* Corpo da tabela */
+.data-table tbody td {
+    padding: 0.7rem;
+    text-align: center;
+    color: #3c1900;
+    border: 1px solid #3c1900;
+    background-color: #fff9e6;
+}
+
+/* Hover nas linhas */
+.data-table tbody tr:hover {
+    background-color: #f5eec5;
+}
+/* Botões dentro da tabela (Editar, Excluir) */
+.td-acoes {
+    display: flex;             /* Alinha os botões horizontalmente */
+    justify-content: center;    /* Centraliza os botões na célula */
+    gap: 0.5rem;               /* Espaço entre os botões */
+    flex-wrap: nowrap;          /* Evita quebra de linha */
+    min-width: 120px;           /* Garante espaço mínimo */
+}
+
+.td-acoes button {
+    flex: 1;                    /* Faz os botões ocuparem espaço igual */
+    max-width: 100px;           /* Limita largura máxima */
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    font-size: 0.9rem;
+}
+
+/* Botão de editar azul água */
+.td-acoes .editar-btn {
+    background-color: #80d6f0;
+    color: #3e1f00;
+}
+
+.td-acoes .editar-btn:hover {
+    background-color: #4fc3f7;
+    color: white;
+}
+
+/* Botão de excluir laranja */
+.td-acoes .excluir-btn {
+    background-color: #f4a261;
+    color: #3e1f00;
+}
+
+.td-acoes .excluir-btn:hover {
+    background-color: #e76f51;
+    color: white;
+}
+
+
+/* Botões de ação fora da tabela (Adicionar, Voltar) */
+.acoes-tabela {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.acoes-tabela button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+}
+
+/* Botão de adicionar azul água */
+.acoes-tabela .adicionar {
+    background-color: #80d6f0;
+    color: #3e1f00;
+}
+
+.acoes-tabela .adicionar:hover {
+    background-color: #4fc3f7;
+    color: white;
+}
+
+/* Botão de voltar laranja */
+.acoes-tabela .voltar {
+    background-color: #f4a261;
+    color: #3e1f00;
+}
+
+.acoes-tabela .voltar:hover {
+    background-color: #e76f51;
+    color: white;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .data-table thead {
+        display: none;
+    }
+
+    .data-table tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+    }
+
+    .data-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+    }
+
+    .data-table tbody td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 1rem;
+        color: #3c1900;
+    }
+
+    .botoes-tabelas {
+        flex-direction: column;
+        padding: 0.5rem;
+        background-color: transparent;
+    }
+
+    .botoes-tabelas button {
+        width: 100%;
+    }
+}

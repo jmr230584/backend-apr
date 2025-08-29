@@ -1,0 +1,5 @@
+.pagina-grid {
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* Altura das linhas: header, main e footer */
+    height: 100vh; /* Usa 100% da altura da viewport */
+}

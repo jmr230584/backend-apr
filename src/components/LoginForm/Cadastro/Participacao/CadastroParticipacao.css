@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
+
+/* Área geral do formulário */
+.form-section {
+  background-color: #fdf5e6;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Título */
+.form-section h3 {
+  font-size: 2.4rem;
+  font-family: 'Kablammo', cursive;
+  color: #4b1e00;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Container do formulário */
+.form-login {
+  background-color: #f3dfd3;
+  border: 2px solid #4b1e00;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 4px 10px rgb(75 30 0 / 0.2);
+  transition: transform 0.3s ease;
+}
+
+.form-login:hover {
+  transform: translateY(-5px);
+}
+
+/* Labels */
+.form-login label {
+  color: #4b1e00;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Inputs */
+.form-login input[type="text"],
+.form-login input[type="number"] {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #4b1e00;
+  background-color: #fff8f2;
+  color: #333;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-login input[type="text"]:focus,
+.form-login input[type="number"]:focus {
+  border-color: #7a2d00;
+  outline: none;
+}
+
+/* Placeholder */
+.form-login input::placeholder {
+  color: #666;
+  font-style: italic;
+}
+
+/* Botão de envio */
+.form-login button {
+  background-color: #4b1e00;
+  color: aliceblue;
+  padding: 1rem 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  text-transform: uppercase;
+  box-shadow: 0 3px 8px rgb(75 30 0 / 0.4);
+}
+
+.form-login button:hover {
+  background-color: #7a2d00;
+  box-shadow: 0 6px 14px rgb(122 45 0 / 0.7);
+}
+
+/* Rodapé (se quiser adicionar no futuro) */
+.footer {
+  margin-top: auto;
+  padding: 1rem 0;
+  color: #4b1e00;
+  font-weight: 700;
+  font-family: 'Kablammo', cursive;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+  max-width: 480px;
+  user-select: none;
+}

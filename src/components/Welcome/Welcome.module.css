@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
+
+.principal {
+    position: relative;
+    overflow: visible;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #fdf5e6;
+
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-between;
+    padding: 3rem 5rem;
+    box-sizing: border-box;
+    gap: 2rem;
+    font-family: Arial, sans-serif;
+}
+
+.esquerda {
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.esquerda1 img {
+    width: 200px;
+}
+
+.esquerda2 {
+    color: #5b2a26;
+    font-size: 20px;
+    line-height: 1.6;
+    max-width: 90%;
+    font-weight: bold;
+}
+
+.bemVindo {
+    font-size: 20px;
+    margin-bottom: 1rem;
+    color: #5b2a26;
+    font-weight: bold;
+}
+
+.msgInicial {
+    font-size: 20px;
+    color: #5b2a26;
+    line-height: 1.6;
+}
+
+.esquerda3 {
+    background-color: #fff4dd;
+    border: 2px solid #5b2a26;
+    border-radius: 12px;
+    padding: 1.5rem;
+    color: #5b2a26;
+    width: 100%;
+    max-width: 500px;
+    font-size: 14px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+}
+
+.esquerda3 h3 {
+    font-family: 'Kablammo', cursive;
+    font-size: 28px;
+    margin-bottom: 1rem;
+    color: #5b2a26;
+}
+
+.direita {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 3rem;
+    position: relative; /* para posicionar a imagem do usuário */
+}
+
+.direita img:not(.userImage) {
+    width: 100%;
+    max-width: 350px;
+    border-radius: 10px;
+    border: 2px solid #5b2a26;
+    box-shadow: 10px 10px 0px #d9b9a6;
+    position: relative;
+}
+
+.userImage {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #5b2a26;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.userImage:hover {
+    transform: scale(1.1);
+}
+
+.imagem33 {
+    position: absolute;
+    top: 50%;
+    left: -100px;
+    width: 400px;
+    animation: fly 20s linear infinite;
+    z-index: 10;
+}
+
+@keyframes fly {
+    0% {
+      left: -150px;
+      top: 10%;
+      transform: translateY(0);
+    }
+    20% {
+      top: 30%;
+      transform: translateY(-50px);
+    }
+    40% {
+      top: 50%;
+      transform: translateY(50px);
+    }
+    60% {
+      top: 30%;
+      transform: translateY(-50px);
+    }
+    80% {
+      top: 60%;
+      transform: translateY(60px);
+    }
+    100% {
+      left: 100vw;
+      top: 40%;
+      transform: translateY(0);
+    }
+  }
+
+.botaoContainer {
+  position: absolute;
+  left: 50%;
+  top: 85%;
+  transform: translateX(-50%);
+}
+
+.botaoSaibaMais {
+  padding: 0.8rem 2.5rem;
+  background-color: #78C2AD;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.botaoSaibaMais:hover {
+  background-color: #5da996;
+}

@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
+
+/* Área da tela */
+.form-section {
+    background-color: #fdf5e6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    padding: 2rem;
+}
+
+/* Formulário */
+.form-login {
+    background-color: #e3ccb9;
+    padding: 2rem 3rem;
+    border-radius: 8px;
+    border: 2px solid #5b2a26;
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Título LOGIN */
+.form-login h2 {
+    font-family: 'Kablammo', cursive;
+    color: #5b2a26;
+    font-size: 26px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Campos de input (email e senha) */
+.input-email-login,
+.input-password {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 14px;
+    color: #5b2a26;
+}
+
+/* Estilo dos inputs */
+.input-email-login input,
+.input-password input {
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #5b2a26;
+    font-size: 14px;
+    outline: none;
+    background-color: #fff; 
+    color: #333;
+}
+
+/* Botão login */
+.login-button {
+    background-color: #5b2a26;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    align-self: center;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+    width: 40%;
+}
+
+.login-button:hover {
+    background-color: #3e1a15;
+}
+
+.texto-criar-conta {
+    margin-top: 1rem;
+    font-size: 14px;
+    color: #5b2a26;
+    text-align: center;
+  }
+  
+  .link-criar-conta {
+    color: #5b2a26;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .link-criar-conta:hover {
+    color: #3e1a15;
+  }
+  

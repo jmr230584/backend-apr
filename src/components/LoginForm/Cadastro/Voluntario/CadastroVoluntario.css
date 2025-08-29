@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
+
+/* Área geral do formulário */
+.form-section {
+  background-color: #fdf5e6; /* fundo suave */
+  padding: 2rem;
+  display: flex;
+  flex-direction: column; /* organiza verticalmente */
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* ocupa toda a altura da tela */
+  font-family: Arial, sans-serif;
+}
+
+/* Título do formulário */
+.form-section h3 {
+  font-size: 2.4rem; /* um pouco maior para destaque */
+  font-family: 'Kablammo', cursive;
+  color: #4b1e00;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 1px; /* leve espaçamento nas letras para estilo */
+}
+
+/* Container principal do formulário */
+.form-login {
+  background-color: #f3dfd3;
+  border: 2px solid #4b1e00;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 4px 10px rgb(75 30 0 / 0.2); /* sombra leve para destaque */
+  transition: transform 0.3s ease;
+}
+
+.form-login:hover {
+  transform: translateY(-5px); /* efeito sutil de elevação ao passar o mouse */
+}
+
+/* Labels */
+.form-login label {
+  color: #4b1e00;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Inputs padrão */
+.form-login input[type="text"],
+.form-login input[type="email"],
+.form-login input[type="tel"],
+.form-login input[type="date"] {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #4b1e00;
+  background-color: #fff8f2;
+  color: #333;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-login input[type="text"]:focus,
+.form-login input[type="email"]:focus,
+.form-login input[type="tel"]:focus,
+.form-login input[type="date"]:focus {
+  border-color: #7a2d00;
+  outline: none;
+}
+
+/* Placeholder */
+.form-login input::placeholder {
+  color: #666;
+  font-style: italic;
+}
+
+/* Upload de imagem escondido */
+.form-login input[type="file"] {
+  display: none;
+}
+
+/* Botão que substitui input file */
+.upload-label {
+  background-color: #4b1e00;
+  color: aliceblue;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  align-self: center;
+  width: fit-content;
+  user-select: none;
+  box-shadow: 0 3px 8px rgb(75 30 0 / 0.4);
+}
+
+.upload-label:hover {
+  background-color: #7a2d00;
+  box-shadow: 0 4px 12px rgb(122 45 0 / 0.5);
+}
+
+/* Botão de envio */
+.form-login button {
+  background-color: #4b1e00;
+  color:  0 3px 8px rgb(75 30 0 / 0.4);
+  padding: 1rem 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  text-transform: uppercase;
+  box-shadow: 0 3px 8px rgb(75 30 0 / 0.4);
+}
+
+.form-login button:hover {
+  background-color: #7a2d00;
+  box-shadow: 0 6px 14px rgb(122 45 0 / 0.7);
+}
+
+/* Rodapé fixo abaixo do formulário */
+.footer {
+  margin-top: auto;
+  padding: 1rem 0;
+  color: #4b1e00;
+  font-weight: 700;
+  font-family: 'Kablammo', cursive;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+  max-width: 480px;
+  user-select: none;
+}
+
+/* Campos de senha */
+.form-login input[type="password"] {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #4b1e00;
+  background-color: #fff8f2;
+  color: #333;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  letter-spacing: 1px; /* Espaçamento entre caracteres para melhor legibilidade */
+}
+
+.form-login input[type="password"]:focus {
+  border-color: #7a2d00;
+  outline: none;
+}
+
+/* Placeholder específico para senhas */
+.form-login input[type="password"]::placeholder {
+  color: #666;
+  font-style: italic;
+  letter-spacing: normal; /* Remove o espaçamento no placeholder */
+}
+
+/* Mensagem de erro para senha */
+.erro-senha {
+  color: #d32f2f;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  background-color: #ffebee;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border-left: 3px solid #d32f2f;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animação para aparecimento suave da mensagem de erro */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ícone visual para campos de senha (opcional) */
+.form-login label[for="senha"],
+.form-login label[for="confirmarSenha"] {
+  position: relative;
+}
+
+.form-login label[for="senha"]::after,
+.form-login label[for="confirmarSenha"]::after {
+  position: absolute;
+  right: 10px;
+  top: 35px;
+  font-size: 1rem;
+  opacity: 0.6;
+}

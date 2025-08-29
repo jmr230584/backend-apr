@@ -1,0 +1,49 @@
+/* Container geral das abas */
+.tabela-aba-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Barra de abas (botões) */
+  .tabela-aba-header {
+    display: flex;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 16px;
+  }
+  
+  /* Botão da aba */
+  .tabela-aba-button {
+    flex: 1;
+    padding: 12px 0;
+    text-align: center;
+    cursor: pointer;
+    background: #f9f9f9;
+    border: none;
+    border-color: #639c71;
+    font-weight: 600;
+    color: #e2c78d;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  
+  .tabela-aba-button:hover {
+    background: #eaeaea;
+  }
+  
+  /* Aba ativa */
+  .tabela-aba-button.active {
+    border-bottom-color: #b3eac1;
+    color: #639c71;
+    font-weight: 700;
+    background: #fff;
+  }
+  
+  /* Conteúdo da aba */
+  .tabela-aba-content {
+    padding: 16px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  

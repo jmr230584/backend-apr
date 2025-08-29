@@ -1,0 +1,98 @@
+/* TabelaTrabalho.module.css */
+
+table td{
+    color: white;
+}
+.header-tabela-trabalho {
+    text-align: center;
+    margin: 2% auto;
+}
+
+.data-table {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    margin: 5% auto 0 auto;
+    width: 90%;
+}
+
+.data-table :global(.p-datatable) {
+    border: none;
+}
+
+.data-table :global(.p-datatable-thead > tr > th) {
+    background-color: #f4f4f5;
+    color: #333;
+    font-weight: 600;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 2px solid #ddd;
+}
+
+.data-table :global(.p-datatable-tbody > tr > td) {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    color: #555;
+}
+
+.data-table :global(.p-datatable-tbody > tr:hover) {
+    background-color: #f9fafb;
+    cursor: pointer;
+}
+
+.data-table :global(.p-paginator) {
+    padding: 1rem;
+    border-top: 1px solid #ddd;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.data-table :global(.p-dropdown) {
+    min-width: 80px;
+    text-align: center; 
+    align-items: center;
+}
+
+.data-table :global(.p-paginator .p-paginator-pages .p-paginator-page.p-highlight) {
+    background-color: #2563eb;
+    color: white;
+    border-radius: 4px;
+}
+
+.data-table :global(.p-paginator .p-paginator-element) {
+    margin: 0 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .data-table :global(.p-datatable) {
+        font-size: 0.85rem;
+    }
+
+    .data-table :global(.p-datatable-thead),
+    .data-table :global(.p-datatable-tbody) {
+        display: block;
+    }
+
+    .data-table :global(.p-datatable-tbody > tr) {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .data-table :global(.p-datatable-tbody > tr > td) {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .data-table :global(.p-datatable-tbody > tr > td::before) {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 1rem;
+    }
+}

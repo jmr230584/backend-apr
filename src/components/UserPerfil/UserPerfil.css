@@ -1,0 +1,145 @@
+/* Container principal */
+.perfil-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Título da página */
+.perfil-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+/* Seção do avatar */
+.avatar-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4CAF50;
+}
+
+.change-avatar-btn {
+  display: block;
+  margin: 0.5rem auto;
+  padding: 0.5rem 1rem;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.change-avatar-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* Seção de informações */
+.info-section p {
+  margin: 1rem 0;
+  padding: 0.8rem;
+  background-color: white;
+  border-radius: 5px;
+  border-left: 4px solid #4CAF50;
+}
+
+/* Formulário de edição */
+.edit-form {
+  margin-top: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.form-group input:disabled {
+  background-color: #f5f5f5;
+}
+
+/* Mensagem de erro */
+.error-message {
+  color: #d32f2f;
+  background-color: #fde0e0;
+  padding: 0.8rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Grupo de botões */
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+/* Estilos dos botões */
+button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  font-size: 1rem;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.edit-btn, .save-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.edit-btn:hover:not(:disabled), 
+.save-btn:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background-color: #d32f2f;
+}
+
+.logout-btn {
+  background-color: #555;
+  color: white;
+}
+
+.logout-btn:hover:not(:disabled) {
+  background-color: #333;
+}
