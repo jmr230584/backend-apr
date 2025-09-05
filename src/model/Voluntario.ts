@@ -9,8 +9,7 @@ const database = new DatabaseModel().pool;
  * Classe que representa o Voluntário.
  */
 export class Voluntario {
-
-
+    
     /* Atributos */
     private idVoluntario: number = 0; // Armazena o ID único do voluntário
     private cpf: string; // Armazena o CPF do voluntário
@@ -23,8 +22,8 @@ export class Voluntario {
     private statusVoluntario: boolean = true; // controla o status do voluntário
 
     private senha: string = "";     // Senha do voluntário
-    private imagemPerfil: string;
-     private uuidVoluntario: string = '';
+    private imagemPerfil: string = '';
+    private uuidVoluntario: string = '';
 
     /**
      * Construtor da classe Voluntário.
@@ -89,11 +88,12 @@ export class Voluntario {
 
     /* Métodos estáticos para manipulação no banco */
 
-    static async buscarPorEmail(email: string): Promise<Voluntario | null> {
+    static async buscarPorEmailESenha(email: string, senha: string): Promise<Voluntario | null> {
+        
         try {
             const resultado = await database.query(
-              "SELECT * FROM voluntario WHERE email = $1",
-              [email]
+              `SELECT * FROM voluntario WHERE email = $1 AND senha = crypt($2, senha)`,
+              [email, senha]
             );
 
         if (resultado.rows.length === 0) return null;
@@ -113,11 +113,6 @@ export class Voluntario {
             console.error("Erro ao buscar voluntário por email:", error);
             return null;
         }
-    }
-
-    // Exemplo de método para validar senha
-    validarSenha(senhaDigitada: string): boolean {
-        return bcrypt.compareSync(senhaDigitada, this.senha); // this.senha é o hash do DB
     }
 
 
@@ -162,8 +157,8 @@ try {
             // Define a query SQL para inserir um novo voluntário com cpf, nome, sobrenome, data_nascimento, endereco, email, telefone, senha
             // A cláusula RETURNING uuid retorna o identificador gerado automaticamente pelo banco
             const query = `
-          INSERT INTO voluntario (cpf, nome, sobrenome, data_nascimento, endereco, email, telefone, senha)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          INSERT INTO voluntario (cpf, nome, sobrenome, data_nascimento, endereco, email, telefone, senha, imagem_perfil)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, crypt($8, gen_salt('bf')), $9)
           RETURNING uuid
         `;
 
@@ -175,7 +170,8 @@ try {
                               voluntario.endereco,
                               voluntario.email, 
                               voluntario.telefone,
-                              voluntario.senha];
+                              voluntario.senha,
+                             voluntario.imagemPerfil];
 
             // Executa a query no banco de dados e aguarda a resposta
             const resultado = await database.query(query, valores);

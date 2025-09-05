@@ -16,7 +16,7 @@ interface VoluntarioDTO {
     sobrenome: string;         // Sobrenome do voluntário
     dataNascimento: Date;     // Data de nascimento do voluntário
     endereco: string;          // Endereço do voluntário
-    email: string;             // E-mail para contato
+    email: string;             // E-mail para contato e usuário
     telefone: string;          // Telefone de contato
     senha: string;             // senha para logar
     imagemPerfil: string;    // foto de perfil do voluntário
