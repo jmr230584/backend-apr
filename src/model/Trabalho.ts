@@ -174,11 +174,11 @@ export class Trabalho {
             respostaBD.rows.forEach((trabalho) => {
                 // criando objeto trabalho
                 let novoTrabalho = new Trabalho(
-                    trabalho.nomeTrabalho,
-                    trabalho.ongResponsavel,
+                    trabalho.nome_trabalho,
+                    trabalho.ong_responsavel,
                     trabalho.localizacao,
-                    trabalho.dataInicio,
-                    trabalho.dataTermino
+                    new Date(trabalho.data_inicio),
+                    new Date(trabalho.data_termino)
                 );
                 // adicionando o ID ao objeto
                 novoTrabalho.setIdTrabalho(trabalho.id_trabalho);

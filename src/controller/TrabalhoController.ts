@@ -46,14 +46,14 @@ export class TrabalhoController {
     static async novo(req: Request, res: Response): Promise<any> {
         try {
           // Converte os nomes do corpo para o formato esperado no DTO
-          const trabalhoRecebido: TrabalhoDTO = {
-            nomeTrabalho: req.body.nome_trabalho,
-            ongResponsavel: req.body.ong_responsavel,
-            localizacao: req.body.localizacao,
-            dataInicio: new Date(req.body.data_inicio),
-            dataTermino: new Date(req.body.data_termino),
-          };
-      
+            const trabalhoRecebido: TrabalhoDTO = {
+                nomeTrabalho: req.body.nomeTrabalho,
+                ongResponsavel: req.body.ongResponsavel,
+                 localizacao: req.body.localizacao,
+                dataInicio: new Date(req.body.dataInicio),
+                dataTermino: new Date(req.body.dataTermino),
+            };
+
           // Exibe o que foi recebido (opcional para depuração)
           console.log("Trabalho recebido:", trabalhoRecebido);
       
