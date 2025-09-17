@@ -151,3 +151,26 @@ VALUES
 
 -- alterações na tabela muralTrabalhos
 ALTER TABLE muralTrabalhos ADD COLUMN status_mural_trabalho BOOLEAN DEFAULT TRUE;
+
+DROP TRIGGER IF EXISTS trigger_gerar_senha ON voluntario;
+DROP FUNCTION IF EXISTS gerar_senha_padrao();
+
+CREATE OR REPLACE FUNCTION gerar_senha_padrao()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.senha IS NULL OR NEW.senha = '' THEN
+        NEW.senha := NEW.nome || '1234';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_gerar_senha
+BEFORE INSERT ON voluntario
+FOR EACH ROW
+EXECUTE FUNCTION gerar_senha_padrao();
+
+INSERT INTO voluntario (cpf, nome, sobrenome, data_nascimento, endereco, email, telefone)
+VALUES ('55544433322', 'Teste', 'Urgente', '2000-01-01', 'Rua da Lety', 'teste@urgente.com', '11999998888');
+
+SELECT id_voluntario, nome, senha FROM voluntario WHERE nome = 'Teste';

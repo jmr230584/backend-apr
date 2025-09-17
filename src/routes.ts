@@ -2,14 +2,12 @@
 import { Router } from "express";
 //Importa o multer para carregar dados ao servidor
 import multer from "multer";
-// Importa os controladores para manipular as requisições relacionadas a voluntários, participações e trabalhos
+// Importa os controladores
 import { VoluntarioController } from "./controller/VoluntarioController";
 import { ParticipacaoController } from "./controller/ParticipacaoController";
 import { TrabalhoController } from "./controller/TrabalhoController";
 import { MuralTrabalhosController } from "./controller/MuralTrabalhosController";
-import { Auth } from "./util/Auth";
 import { AuthController } from "./controller/AuthController";
-
 
 // Cria um roteador para gerenciar as rotas
 const router = Router();
@@ -17,40 +15,36 @@ const router = Router();
 // Salvar os arquivos na pasta uploads
 const upload = multer({ dest: 'uploads/' }); 
 
-// Rota principal que retorna uma mensagem de boas-vindas
+// Rota principal
 router.get("/", (_req, res) => {
     res.json({ mensagem: "Bem-vindo ao sistema de voluntariado!" });
 });
 
-// login de voluntário
+// Login de voluntário
 router.post("/login", AuthController.login);
 
-
 // Rotas para voluntários
-router.get("/lista/voluntarios", VoluntarioController.todos); // Rota para listar todos os voluntários
+router.get("/lista/voluntarios", VoluntarioController.todos);
 router.post("/voluntario/novo", upload.single('imagemPerfil'), VoluntarioController.cadastrar);
-router.put("/remover/voluntario", VoluntarioController.remover); // Rota para exluir um voluntário
-router.put("/atualizar/voluntario/:idVoluntario", VoluntarioController.atualizar); // Rota para atualizar um novo voluntário
-
+router.put("/remover/voluntario", VoluntarioController.remover);
+router.put("/atualizar/voluntario/:idVoluntario", VoluntarioController.atualizar);
 
 // Rotas para participações
-router.get("/lista/participacao", ParticipacaoController.todos); // Rota para listar todas as participações
-router.post("/participacao/novo", ParticipacaoController.novo); // Rota para cadastrar uma nova participação
-router.put("/remover/participacao", ParticipacaoController.remover); // Rota para excluir uma participação
-router.put("/atualizar/participacao/:idParticipacao", ParticipacaoController.atualizar); // Rota para atualizar uma participação
+router.get("/lista/participacao", ParticipacaoController.todos);
+router.post("/participacao/novo", ParticipacaoController.novo);
+router.put("/remover/participacao", ParticipacaoController.remover);
+router.put("/atualizar/participacao/:idParticipacao", ParticipacaoController.atualizar);
 
 // Rotas para trabalhos
-router.get("/lista/trabalho", TrabalhoController.todos); // Rota para listar todos os trabalhos
-router.post("/trabalho/novo", TrabalhoController.novo); // Rota para cadastrar um novo trabalho
-router.put("/remover/trabalho", TrabalhoController.remover); // Rota para excluir um trabalho
-router.put("/atualizar/trabalho/:idTrabalho", TrabalhoController.atualizar); // Rota para atualizar um trabalho
+router.get("/lista/trabalho", TrabalhoController.todos);
+router.post("/trabalho/novo", TrabalhoController.novo);
+router.put("/remover/trabalho", TrabalhoController.remover);
+router.put("/atualizar/trabalho/:idTrabalho", TrabalhoController.atualizar);
 
 // Rotas para o Mural de Trabalhos
-router.get("/lista/trabalhos", MuralTrabalhosController.todos); // Rota para listar todos os trabalhos no mural
-router.post("/trabalhoMural/novo", MuralTrabalhosController.novo); // Rota para cadastrar um novo trabalho no mural
-router.put("/remover/trabalhoMural", MuralTrabalhosController.remover); // Rota para excluir um trabalho
-router.put("/atualizar/muraltrabalho/:idMuralTrabalhos", MuralTrabalhosController.atualizar); // Rota para atualizar o mural de trabalhos finalizados
+router.get("/lista/trabalhos", MuralTrabalhosController.todos);
+router.post("/trabalhoMural/novo", MuralTrabalhosController.novo);
+router.put("/remover/trabalhoMural", MuralTrabalhosController.remover);
+router.put("/atualizar/muraltrabalho/:idMuralTrabalhos", MuralTrabalhosController.atualizar);
 
-
-// Exporta as rotas para serem usadas no servidor
 export { router };
