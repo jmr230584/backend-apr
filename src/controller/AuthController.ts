@@ -1,3 +1,4 @@
+// AuthController.ts
 import { Request, Response } from "express";
 import { Voluntario } from "../model/Voluntario";
 import bcrypt from "bcrypt";
@@ -11,13 +12,18 @@ export class AuthController {
         return res.status(400).json({ erro: "Email e senha são obrigatórios" });
       }
 
-      // Busca o voluntário pelo email
-      const voluntario = await Voluntario.buscarPorEmailESenha(email, senha);
+      // busca voluntário só pelo email
+      const voluntario = await Voluntario.buscarPorEmail(email);
       if (!voluntario) {
         return res.status(401).json({ erro: "Usuário não encontrado" });
       }
 
-      // Se quiser, pode gerar um token JWT aqui (opcional)
+      // compara a senha digitada com a do banco
+      const senhaCorreta = await bcrypt.compare(senha, voluntario.senha);
+      if (!senhaCorreta) {
+        return res.status(401).json({ erro: "Senha inválida" });
+      }
+
       return res.status(200).json({ mensagem: "Login realizado com sucesso", voluntario });
     } catch (error) {
       console.error("Erro no login:", error);
