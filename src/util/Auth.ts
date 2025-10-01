@@ -31,12 +31,12 @@ export class Auth {
      * @param res Resposta enviada ao cliente
      */
     static async validacaoUsuario(req: Request, res: Response): Promise<any> {
-        const { username, senha } = req.body;
+        const { email, senha } = req.body;
 
         // busca usuário pelo username
-        const query = `SELECT id_usuario, nome, username, senha, imagem_perfil 
-                       FROM usuario WHERE username = $1`;
-        const resultado = await database.query(query, [username]);
+        const query = `SELECT id_usuario, nome, email, senha, imagem_perfil 
+                       FROM usuario WHERE email = $1`;
+        const resultado = await database.query(query, [email]);
 
         // se não encontrou usuário
         if (resultado.rowCount === 0) {
@@ -53,7 +53,7 @@ export class Auth {
         }
 
         // gera token JWT válido por 1 hora
-        const token = this.generateToken(usuario.id_usuario, usuario.nome, usuario.username);
+        const token = this.generateToken(usuario.id_usuario, usuario.nome, usuario.email);
 
         // retorna no formato que o frontend espera
         return res.status(200).json({
@@ -62,7 +62,7 @@ export class Auth {
             usuario: {
                 id_usuario: usuario.id_usuario,
                 nome: usuario.nome,
-                username: usuario.username,
+                email: usuario.email,
                 avatarUrl: usuario.imagem_perfil || '' // compatível com frontend
             }
         });
@@ -71,8 +71,8 @@ export class Auth {
     /**
      * Gera token de autenticação do usuário
      */
-    static generateToken(id: number, nome: string, username: string) {
-        return jwt.sign({ id, nome, username }, SECRET, { expiresIn: '1h' });
+    static generateToken(id: number, nome: string, email: string) {
+        return jwt.sign({ id, nome, email }, SECRET, { expiresIn: '1h' });
     }
 
     /**
