@@ -106,11 +106,11 @@ VALUES
 
 INSERT INTO participacao(id_trabalho, id_voluntario, quantidade_vagas, duracao, atividade_trabalho)
 VALUES 
-(1, 15, 102, '3 meses', 'Em andamento'),  
-(5, 13, 26, '2 anos', 'Concluído'),       
-(4, 12, 50, '4 meses', 'Cancelado'),       
-(2, 11, 24, '5 semanas', 'Agendado'),     
-(3, 14, 12, '6 meses', 'Em andamento');    
+(6, 1, 102, '3 meses', 'Em andamento'),  
+(7, 3, 26, '2 anos', 'Concluído'),       
+(8, 2, 50, '4 meses', 'Cancelado'),       
+(9, 4, 24, '5 semanas', 'Agendado'),     
+(10, 5, 12, '6 meses', 'Em andamento');    
 
 
 
