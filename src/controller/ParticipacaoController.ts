@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ParticipacaoTrabalho, Participacao} from '../model/Participacao';
 
 interface ParticipacaoDTO {
+    idParticipacao: number;
     idTrabalho: number;
     idVoluntario: number;
     quantidadeVagas: number;
