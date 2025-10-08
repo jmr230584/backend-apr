@@ -8,7 +8,6 @@ const database = new DatabaseModel().pool;
  * Classe que representa o Voluntário.
  */
 export class Voluntario {
-  /* Atributos */
   private idVoluntario: number = 0;
   private cpf: string;
   private nome: string;
@@ -71,7 +70,10 @@ export class Voluntario {
   public setStatusVoluntario(status: boolean): void { this.statusVoluntario = status; }
 
   public getSenha(): string { return this.senha; }
-  public setSenha(senha: string): void { this.senha = senha; }
+  // Aqui a senha é criptografada com bcrypt antes de salvar
+  public setSenha(senha: string): void {
+    this.senha = bcrypt.hashSync(senha, 10);
+  }
 
   public getImagemPerfil(): string { return this.imagemPerfil; }
   public setImagemPerfil(imagem: string): void { this.imagemPerfil = imagem; }
@@ -81,7 +83,6 @@ export class Voluntario {
 
   /* Métodos estáticos para manipulação no banco */
 
-  // Busca voluntário só pelo email (a senha é comparada no controller com bcrypt)
   static async buscarPorEmail(email: string): Promise<any | null> {
     try {
       const resultado = await database.query(
@@ -97,9 +98,6 @@ export class Voluntario {
     }
   }
 
-  /**
-   * Lista voluntários ativos
-   */
   static async listarVoluntarios(): Promise<Voluntario[] | null> {
     let listaDeVoluntarios: Voluntario[] = [];
     try {
@@ -130,9 +128,6 @@ export class Voluntario {
     }
   }
 
-  /**
-   * Cadastra novo voluntário no banco (com senha já criptografada pelo bcrypt no controller)
-   */
   static async cadastroVoluntario(voluntario: Voluntario): Promise<string | null> {
     try {
       const query = `
