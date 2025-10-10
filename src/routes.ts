@@ -1,8 +1,6 @@
-// Importa o módulo Router do Express para criar rotas
+// Imports
 import { Router } from "express";
-//Importa o multer para carregar dados ao servidor
 import multer from "multer";
-// Importa os controladores
 import { VoluntarioController } from "./controller/VoluntarioController";
 import { ParticipacaoController } from "./controller/ParticipacaoController";
 import { TrabalhoController } from "./controller/TrabalhoController";
