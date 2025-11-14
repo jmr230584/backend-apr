@@ -5,7 +5,7 @@ import { Voluntario } from "./Voluntario"
 // Pool de conexões com o banco de dados
 const database = new DatabaseModel().pool;
 
-// Exporta a interface (opcional, se você quiser usá-la no controller)
+// Exporta a interface (opcional)
 export interface Participacao {
     idParticipacao: number;
     idTrabalho: number;
@@ -14,6 +14,7 @@ export interface Participacao {
     duracao: string;
     atividadeTrabalho: string;
 }
+
 /**
  * Classe que representa uma Participação em Trabalho
  */
@@ -22,21 +23,11 @@ export class ParticipacaoTrabalho {
     public idVoluntario: number;
     public quantidadeVagas: number;
     public duracao: string;
-    public atividadeTrabalho: string
-    idParticipacao: number;
+    public atividadeTrabalho: string;
+    public idParticipacao: number;
 
-    /**
-     * Construtor da classe
-     * @param idParticipacao ID da paricipação 
-     * @param idTrabalho ID do trabalho
-     * @param idVoluntario ID do voluntário
-     * @param quantidadeVagas Quantidade de vagas
-     * @param duracao Duração da participação
-     * @param atividadeTrabalho Descrição da atividade
-     * @param idParticipacao ID da participação (opcional)
-     */
     constructor(
-        idParticipacao : number,
+        idParticipacao: number,
         idTrabalho: number,
         idVoluntario: number,
         quantidadeVagas: number,
@@ -49,21 +40,16 @@ export class ParticipacaoTrabalho {
         this.quantidadeVagas = quantidadeVagas;
         this.duracao = duracao;
         this.atividadeTrabalho = atividadeTrabalho;
-        
-        if (idParticipacao) {
-            this.idParticipacao = idParticipacao;
-        }
     }
 
-    // Getters e Setters
+    // ================== GETTERS E SETTERS =====================
 
-    public getIdParticipacao():number{
+    public getIdParticipacao(): number {
         return this.idParticipacao;
     }
 
-
-    public setIdParticipacao(_idParticipacao:number):void {
-         this.idParticipacao
+    public setIdParticipacao(_idParticipacao: number): void {
+        this.idParticipacao = _idParticipacao;
     }
 
     public getIdTrabalho(): number {
@@ -106,93 +92,64 @@ export class ParticipacaoTrabalho {
         this.atividadeTrabalho = atividadeTrabalho;
     }
 
-    // Métodos estáticos para operações no banco de dados
+    // ================== MÉTODOS ESTÁTICOS =====================
 
-   /**
-     * Retorna uma lista com todos os participação cadastrados no banco de dados
-     * 
-     * @returns Lista com todos os participação cadastrados no banco de dados
+    /**
+     * Lista todas as participações
      */
     static async listarParticipacao(): Promise<Array<any> | null> {
-        // Criando lista vazia para armazenar os participação
         let listaDeParticipacao: Array<any> = [];
 
         try {
-          // Query para consulta no banco de dados
-            const querySelectParticipação = `
-              SELECT * FROM participacao`;
+            const querySelect = `SELECT * FROM participacao`;
+            const respostaBD = await database.query(querySelect);
 
-          // Executa a query no banco de dados
-           const respostaBD = await database.query(querySelectParticipação);
+            if (respostaBD.rows.length === 0) {
+                return null;
+            }
 
-          // Verifica se há resultados
-          if (respostaBD.rows.length === 0) {
-            return null;
-          }
-
-          // Itera sobre as linhas retornadas
-          respostaBD.rows.forEach((linha: any) => {
-             // Monta o objeto de participação com os dados do voluntário e do trabalho
-              const ParticipacaoTrabalho = {
-                  idParticipacao: linha.id_participacao,
-                  idVoluntario: linha.id_voluntario,
-                  idTrabalho: linha.id_trabalho,
-                  quantidadeVagas: linha.quantidade_vagas,
-                  duracao: linha.duracao,
-                  atividadeTrabalho: linha.atividade_trabalho,
-                  statusParticipacaoVoluntario: linha.status_participacao_voluntario,
-                  Voluntario: {
-                    cpf: linha.cpf,
-                    nome: linha.nome,
-                    sobrenome: linha.sobrenome,
-                    telefone: linha.telefone
-                  },
-                  Trabalho: {
-                    nomeTrabalho: linha.nomeTrabalho,
-                    ongResponsavel: linha.ongResponsavel,
-                    localizacao: linha.localizacao
-                  }
+            respostaBD.rows.forEach((linha: any) => {
+                const participacao = {
+                    idParticipacao: linha.id_participacao,
+                    idVoluntario: linha.id_voluntario,
+                    idTrabalho: linha.id_trabalho,
+                    quantidadeVagas: linha.quantidade_vagas,
+                    duracao: linha.duracao,
+                    atividadeTrabalho: linha.atividade_trabalho,
+                    statusParticipacaoVoluntario: linha.status_participacao_voluntario
                 };
 
-                // Adiciona o objeto à lista de participação
-                listaDeParticipacao.push(ParticipacaoTrabalho);
+                listaDeParticipacao.push(participacao);
             });
 
-            // retorna a lista de participação
             return listaDeParticipacao;
-
-            // captura qualquer erro que possa acontecer
         } catch (error) {
-          // exibe o erro detalhado no console
             console.log(`Erro ao acessar o modelo: ${error}`);
-          // retorna um valor nulo
             return null;
         }
-    } 
-
+    }
 
     /**
-     * Busca uma participação por ID
-     * @param id ID da participação
-     * @returns Participação encontrada ou null
+     * Busca participação por ID
      */
     static async listar(id: number): Promise<ParticipacaoTrabalho | null> {
         try {
-            const query = `SELECT * FROM Participacao`;
+            const query = `SELECT * FROM participacao WHERE id_participacao = $1`;
             const resultado = await database.query(query, [id]);
-            
+
             if (resultado.rows.length === 0) {
                 return null;
             }
-            
+
             const row = resultado.rows[0];
+
             return new ParticipacaoTrabalho(
+                row.id_participacao,
                 row.id_trabalho,
                 row.id_voluntario,
                 row.quantidade_vagas,
                 row.duracao,
-                row.atividade_trabalho,
-                row.id_participacao
+                row.atividade_trabalho
             );
         } catch (error) {
             console.error("Erro ao buscar participação por ID:", error);
@@ -202,12 +159,6 @@ export class ParticipacaoTrabalho {
 
     /**
      * Cadastra uma nova participação
-     * @param idTrabalho ID do trabalho
-     * @param idVoluntario ID do voluntário
-     * @param quantidadeVagas Quantidade de vagas
-     * @param duracao Duração da participação
-     * @param atividadeTrabalho Descrição da atividade
-     * @returns true se cadastrou com sucesso, false caso contrário
      */
     static async cadastrarParticipacao(
         idTrabalho: number,
@@ -216,13 +167,15 @@ export class ParticipacaoTrabalho {
         duracao: string,
         atividadeTrabalho: string
     ): Promise<boolean> {
+
         try {
             const query = `
-                INSERT INTO Participacao 
+                INSERT INTO participacao
                 (id_trabalho, id_voluntario, quantidade_vagas, duracao, atividade_trabalho)
                 VALUES ($1, $2, $3, $4, $5)
-                RETURNING id_participacao`;
-                
+                RETURNING id_participacao
+            `;
+
             const respostaBD = await database.query(query, [
                 idTrabalho,
                 idVoluntario,
@@ -230,87 +183,68 @@ export class ParticipacaoTrabalho {
                 duracao,
                 atividadeTrabalho
             ]);
-            
-             if(respostaBD.rowCount != 0) {
-                console.log(`Participação atualizada com sucesso`);
-                return true;
-            }
-            return false;
+
+            return respostaBD.rowCount > 0;
 
         } catch (error) {
             console.error("Erro ao cadastrar participação:", error);
             throw error;
         }
     }
-  /**
-      * Atualiza as informações de uma participação no banco de dados.
-      *
-      * @param participacao- O objeto participação contendo as informações atualizadas.
-      * @returns Uma Promise que resolve para `true` se a participação foi atualizada com sucesso, ou `false` caso contrário.
-      *
-      * @throws Lança um erro se ocorrer um problema durante a atualização do participação.
-      */
-  static async atualizarParticipacao(Participacao: ParticipacaoTrabalho): Promise<boolean> {{
-         let queryResult = false; // Variável para armazenar o resultado da operação.
-         try {
-             // Construção da query SQL para atualizar os dados do voluntário no banco de dados.
-             const queryAtualizarParticpacao = `UPDATE participacao SET 
-                                                      id_trabalho = ${Participacao.idTrabalho},
-                                                      id_voluntario = ${Participacao.idVoluntario},
-                                                      quantidade_vagas = ${Participacao.quantidadeVagas},
-                                                      duracao = '${Participacao.duracao}',
-                                                      atividade_trabalho = '${Participacao.atividadeTrabalho}'
-                                               WHERE id_participacao = ${Participacao.idParticipacao}`;
-             // Executa a query de atualização e verifica se a operação foi bem-sucedida.
-             await database.query(queryAtualizarParticpacao)
-             .then((result) => {
-                 if (result.rowCount != 0) {
-                     queryResult = true; // Se a operação foi bem-sucedida, define queryResult como true.
-                 }
-             });
- 
-             // Retorna o resultado da operação para quem chamou a função.
-             return queryResult;
-         } catch (error) {
-             // Em caso de erro na consulta, exibe o erro no console e retorna false.
-             console.log(`Erro na consulta: ${error}`);
-             return queryResult;
-         }
-     }
+
+    /**
+     * Atualiza uma participação
+     */
+    static async atualizarParticipacao(participacao: ParticipacaoTrabalho): Promise<boolean> {
+
+        try {
+            const queryAtualizar = `
+                UPDATE participacao SET
+                    id_trabalho = $1,
+                    id_voluntario = $2,
+                    quantidade_vagas = $3,
+                    duracao = $4,
+                    atividade_trabalho = $5
+                WHERE id_participacao = $6
+            `;
+
+            const result = await database.query(queryAtualizar, [
+                participacao.idTrabalho,
+                participacao.idVoluntario,
+                participacao.quantidadeVagas,
+                participacao.duracao,
+                participacao.atividadeTrabalho,
+                participacao.idParticipacao
+            ]);
+
+            return respostaBD.rowCount > 0;
+
+
+        } catch (error) {
+            console.error("Erro ao atualizar participação:", error);
+            return false;
+        }
     }
 
     /**
-     * Remove uma participação
+     * Remove (desativa) participação
      */
     static async removerParticipacao(idParticipacao: number): Promise<boolean> {
-        let queryResult = false;
-    
         try {
-            console.log("ID recebido:", idParticipacao);
-    
-            // Query com placeholder correto
-            const queryUpdateParticipacao = `UPDATE participacao 
-                                              SET status_participacao_voluntario = FALSE
-                                              WHERE id_participacao  = $1',
-  [id]`;
-    
-            console.log("Query a ser executada:", queryUpdateParticipacao);
-            console.log("Parâmetros:", [idParticipacao]);
-    
-            // Executa a query para "remover" a participação sem deletá-la
-            const resultado = await database.query(queryUpdateParticipacao, [idParticipacao]);
-    
-            // Verifica se a operação foi bem-sucedida
-            if (resultado.rowCount && resultado.rowCount > 0) {
-                console.log(`Participação ocultada com sucesso: ID: ${idParticipacao}`);
-                queryResult = true;
-            }
-    
-            return queryResult;
+            const queryUpdate = `
+                UPDATE participacao
+                SET status_participacao_voluntario = FALSE
+                WHERE id_participacao = $1
+            `;
+
+            const resultado = await database.query(queryUpdate, [idParticipacao]);
+
+            return respostaBD.rowCount > 0;
+
+
         } catch (error) {
             console.error("Erro ao ocultar participação:", error);
-            return queryResult;
+            return false;
         }
-    }    
+    }
 }
-
