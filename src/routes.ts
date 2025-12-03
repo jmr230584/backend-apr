@@ -26,6 +26,7 @@ router.get("/lista/voluntarios", VoluntarioController.todos);
 router.post("/voluntario/novo", upload.single('imagemPerfil'), VoluntarioController.cadastrar);
 router.put("/remover/voluntario", VoluntarioController.remover);
 router.put("/atualizar/voluntario/:idVoluntario", VoluntarioController.atualizar);
+router.get("/voluntario/:idVoluntario", VoluntarioController.umVoluntario);
 
 // Rotas para participações
 router.get("/lista/participacao", ParticipacaoController.todos);
