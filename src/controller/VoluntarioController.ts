@@ -119,6 +119,27 @@ export class VoluntarioController {
             return res.status(400).json({ mensagem: "Não foi possível atualizar o voluntário." });
         }
     }
+
+    // Busca um único voluntário pelo ID
+static async umVoluntario(req: Request, res: Response): Promise<any> {
+    try {
+        const idVoluntario = parseInt(req.params.idVoluntario as string);
+
+        const voluntario = await Voluntario.buscarVoluntarioPorId(idVoluntario);
+
+        if (!voluntario) {
+            return res.status(404).json({ mensagem: "Voluntário não encontrado" });
+        }
+
+        return res.status(200).json(voluntario);
+
+    } catch (error) {
+        console.error("Erro ao buscar voluntário:", error);
+        return res.status(500).json({ mensagem: "Erro interno ao buscar voluntário" });
+    }
+}
+
+
 }
 
 export default VoluntarioController;

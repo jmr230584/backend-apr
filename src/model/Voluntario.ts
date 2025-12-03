@@ -214,4 +214,37 @@ export class Voluntario {
     const query = `UPDATE voluntario SET imagem_perfil = $1 WHERE uuid = $2`;
     await database.query(query, [nomeArquivo, uuid]);
   }
+
+  static async buscarVoluntarioPorId(idVoluntario: number): Promise<Voluntario | null> {
+  try {
+    const query = `SELECT * FROM voluntario WHERE id_voluntario = $1 AND status_voluntario = TRUE;`;
+    const resultado = await database.query(query, [idVoluntario]);
+
+    if (resultado.rows.length === 0) return null;
+
+    const voluntario = resultado.rows[0];
+
+    const voluntarioEncontrado = new Voluntario(
+      voluntario.cpf,
+      voluntario.nome,
+      voluntario.sobrenome,
+      voluntario.data_nascimento,
+      voluntario.endereco,
+      voluntario.email,
+      voluntario.telefone,
+      voluntario.imagem_perfil
+    );
+
+    voluntarioEncontrado.setIdVoluntario(voluntario.id_voluntario);
+    voluntarioEncontrado.setStatusVoluntario(voluntario.status_voluntario);
+    voluntarioEncontrado.setUuidVoluntario(voluntario.uuid);
+
+    return voluntarioEncontrado;
+
+  } catch (error) {
+    console.error("Erro ao buscar voluntário por ID:", error);
+    return null;
+  }
+}
+
 }
