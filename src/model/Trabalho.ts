@@ -319,4 +319,38 @@ export class Trabalho {
             return queryResult;
         }
     }
+
+    static async buscarTrabalhoPorId(idTrabalho: number): Promise<Trabalho | null> {
+  try {
+    const query = `
+      SELECT * 
+      FROM trabalho 
+      WHERE id_trabalho = $1 AND status_trabalho = TRUE;
+    `;
+
+    const resultado = await database.query(query, [idTrabalho]);
+
+    if (resultado.rows.length === 0) return null;
+
+    const trabalho = resultado.rows[0];
+
+    const trabalhoEncontrado = new Trabalho(
+      trabalho.nome_trabalho,
+      trabalho.ong_responsavel,
+      trabalho.localizacao,
+      trabalho.data_inicio,
+      trabalho.data_termino
+    );
+
+    trabalhoEncontrado.setIdTrabalho(trabalho.id_trabalho);
+    trabalhoEncontrado.setStatusTrabalho(trabalho.status_trabalho);
+
+    return trabalhoEncontrado;
+
+  } catch (error) {
+    console.error("Erro ao buscar trabalho por ID:", error);
+    return null;
+  }
+}
+
 }

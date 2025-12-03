@@ -144,5 +144,25 @@ export class TrabalhoController {
             return res.status(400).json({ mensagem: "Não foi possível atualizar o trabalho. Entre em contato com o administrador do sistema." });
         }
     }
+
+
+    // Busca um único trabalho pelo ID
+static async umTrabalho(req: Request, res: Response): Promise<any> {
+    try {
+        const idTrabalho = parseInt(req.params.idTrabalho as string);
+
+        const trabalho = await Trabalho.buscarTrabalhoPorId(idTrabalho);
+
+        if (!trabalho) {
+            return res.status(404).json({ mensagem: "Trabalho não encontrado" });
+        }
+
+        return res.status(200).json(trabalho);
+
+    } catch (error) {
+        console.error("Erro ao buscar trabalho:", error);
+        return res.status(500).json({ mensagem: "Erro interno ao buscar trabalho" });
+    }
+}
 }
 export default TrabalhoController;

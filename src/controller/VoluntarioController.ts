@@ -139,7 +139,6 @@ static async umVoluntario(req: Request, res: Response): Promise<any> {
     }
 }
 
-
 }
 
 export default VoluntarioController;
