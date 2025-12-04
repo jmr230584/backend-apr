@@ -39,6 +39,7 @@ router.get("/lista/trabalho", TrabalhoController.todos);
 router.post("/trabalho/novo", TrabalhoController.novo);
 router.put("/remover/trabalho", TrabalhoController.remover);
 router.put("/atualizar/trabalho/:idTrabalho", TrabalhoController.atualizar);
+router.get("/trabalho/:idTrabalho", TrabalhoController.umTrabalho);
 
 // Rotas para o Mural de Trabalhos
 router.get("/lista/trabalhos", MuralTrabalhosController.todos);
