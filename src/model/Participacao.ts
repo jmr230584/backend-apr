@@ -1,26 +1,14 @@
 import { DatabaseModel } from "./DatabaseModel";
-import { Trabalho } from "./Trabalho";
-import { Voluntario } from "./Voluntario"
 
-// Pool de conexões
 const database = new DatabaseModel().pool;
 
-export interface Participacao {
-    idParticipacao: number;
-    idTrabalho: number;
-    idVoluntario: number;
-    quantidadeVagas: number;
-    duracao: string;
-    atividadeTrabalho: string;
-}
-
 export class ParticipacaoTrabalho {
-    public idTrabalho: number;
-    public idVoluntario: number;
-    public quantidadeVagas: number;
-    public duracao: string;
-    public atividadeTrabalho: string;
-    public idParticipacao: number;
+    private idParticipacao: number = 0;
+    private idTrabalho: number;
+    private idVoluntario: number;
+    private quantidadeVagas: number;
+    private duracao: string;
+    private atividadeTrabalho: string;
 
     constructor(
         idParticipacao: number,
@@ -37,6 +25,10 @@ export class ParticipacaoTrabalho {
         this.duracao = duracao;
         this.atividadeTrabalho = atividadeTrabalho;
     }
+
+    // =====================
+    // GETTERS E SETTERS
+    // =====================
 
     public getIdParticipacao(): number { return this.idParticipacao; }
     public setIdParticipacao(v: number): void { this.idParticipacao = v; }
@@ -56,45 +48,36 @@ export class ParticipacaoTrabalho {
     public getAtividadeTrabalho(): string { return this.atividadeTrabalho; }
     public setAtividadeTrabalho(v: string): void { this.atividadeTrabalho = v; }
 
-    // =========================================
-    // LISTAR TODAS PARTICIPAÇÕES
-    // =========================================
-
-    static async listarParticipacao(): Promise<Array<any> | null> {
+    static async listarParticipacao(): Promise<any[] | null> {
         try {
-            const querySelect = `SELECT * FROM participacao`;
-            const respostaBD = await database.query(querySelect);
+            const query = `SELECT * FROM participacao`;
+            const resposta = await database.query(query);
 
-            if (!respostaBD || respostaBD.rows.length === 0) return null;
+            if (!resposta || resposta.rows.length === 0) return null;
 
-            return respostaBD.rows.map((row: any) => ({
+            return resposta.rows.map((row: any) => ({
                 idParticipacao: row.id_participacao,
-                idVoluntario: row.id_voluntario,
                 idTrabalho: row.id_trabalho,
+                idVoluntario: row.id_voluntario,
                 quantidadeVagas: row.quantidade_vagas,
                 duracao: row.duracao,
                 atividadeTrabalho: row.atividade_trabalho,
                 statusParticipacaoVoluntario: row.status_participacao_voluntario
             }));
-
         } catch (error) {
-            console.log("Erro ao acessar Participacao:", error);
+            console.error("Erro ao listar participações:", error);
             return null;
         }
     }
 
-    // =========================================
-    // BUSCAR POR ID
-    // =========================================
-
     static async listar(id: number): Promise<ParticipacaoTrabalho | null> {
         try {
             const query = `SELECT * FROM participacao WHERE id_participacao = $1`;
-            const respostaBD = await database.query(query, [id]);
+            const resposta = await database.query(query, [id]);
 
-            if (!respostaBD || respostaBD.rows.length === 0) return null;
+            if (!resposta || resposta.rows.length === 0) return null;
 
-            const row = respostaBD.rows[0];
+            const row = resposta.rows[0];
 
             return new ParticipacaoTrabalho(
                 row.id_participacao,
@@ -106,13 +89,9 @@ export class ParticipacaoTrabalho {
             );
         } catch (error) {
             console.error("Erro ao buscar participação:", error);
-            throw error;
+            return null;
         }
     }
-
-    // =========================================
-    // CADASTRAR PARTICIPAÇÃO
-    // =========================================
 
     static async cadastrarParticipacao(
         idTrabalho: number,
@@ -125,48 +104,43 @@ export class ParticipacaoTrabalho {
             const query = `
                 INSERT INTO participacao
                 (id_trabalho, id_voluntario, quantidade_vagas, duracao, atividade_trabalho)
-                VALUES ($1,$2,$3,$4,$5)
-                RETURNING id_participacao
+                VALUES ($1, $2, $3, $4, $5)
             `;
 
-            const respostaBD = await database.query(query, [
-                idTrabalho,
-                idVoluntario,
-                quantidadeVagas,
-                duracao,
-                atividadeTrabalho
+            const resultado = await database.query(query, [
+                idTrabalho, idVoluntario, quantidadeVagas, duracao, atividadeTrabalho
             ]);
 
-            return (respostaBD?.rowCount ?? 0) > 0;
+            return (resultado?.rowCount ?? 0) > 0;
 
         } catch (error) {
             console.error("Erro ao cadastrar participação:", error);
-            throw error;
+            return false;
         }
     }
 
-    // =========================================
-    // ATUALIZAR PARTICIPAÇÃO
-    // =========================================
-
     static async atualizarParticipacao(participacao: ParticipacaoTrabalho): Promise<boolean> {
         try {
-            const queryAtualizar = `
+            const query = `
                 UPDATE participacao SET
-                    id_trabalho=$1, id_voluntario=$2,
-                    quantidade_vagas=$3, duracao=$4,
-                    atividade_trabalho=$5
-                WHERE id_participacao=$6
+                    id_trabalho = $1,
+                    id_voluntario = $2,
+                    quantidade_vagas = $3,
+                    duracao = $4,
+                    atividade_trabalho = $5
+                WHERE id_participacao = $6
             `;
 
-            const resultado = await database.query(queryAtualizar, [
-                participacao.idTrabalho,
-                participacao.idVoluntario,
-                participacao.quantidadeVagas,
-                participacao.duracao,
-                participacao.atividadeTrabalho,
-                participacao.idParticipacao
-            ]);
+            const valores = [
+                participacao.getIdTrabalho(),
+                participacao.getIdVoluntario(),
+                participacao.getQuantidadeVagas(),
+                participacao.getDuracao(),
+                participacao.getAtividadeTrabalho(),
+                participacao.getIdParticipacao()
+            ];
+
+            const resultado = await database.query(query, valores);
 
             return (resultado?.rowCount ?? 0) > 0;
 
@@ -176,19 +150,15 @@ export class ParticipacaoTrabalho {
         }
     }
 
-    // =========================================
-    // REMOVER/DESATIVAR PARTICIPAÇÃO
-    // =========================================
-
     static async removerParticipacao(idParticipacao: number): Promise<boolean> {
         try {
-            const queryUpdate = `
+            const query = `
                 UPDATE participacao
                 SET status_participacao_voluntario = FALSE
                 WHERE id_participacao = $1
             `;
 
-            const resultado = await database.query(queryUpdate, [idParticipacao]);
+            const resultado = await database.query(query, [idParticipacao]);
 
             return (resultado?.rowCount ?? 0) > 0;
 

@@ -1,109 +1,120 @@
 import { Request, Response } from "express";
-import { ParticipacaoTrabalho, Participacao} from '../model/Participacao';
-
-interface ParticipacaoDTO {
-    idParticipacao: number;
-    idTrabalho: number;
-    idVoluntario: number;
-    quantidadeVagas: number;
-    duracao: string;
-    atividadeTrabalho: string;
-}
+import { ParticipacaoTrabalho } from "../model/Participacao";
 
 export class ParticipacaoController {
-    
+
     static async todos(_req: Request, res: Response): Promise<any> {
         try {
-            const participacoes = await ParticipacaoTrabalho.listarParticipacao();
-            return res.status(200).json(participacoes);
+            const lista = await ParticipacaoTrabalho.listarParticipacao();
+            return res.status(200).json(lista);
         } catch (error) {
             console.error("Erro ao listar participações:", error);
-            return res.status(500).json({ mensagem: "Erro interno ao listar participações" });
+            return res.status(500).json({ erro: "Erro ao listar participações" });
+        }
+    }
+
+
+    static async umParticipacao(req: Request, res: Response): Promise<any> {
+        try {
+            const id = Number(req.params.idParticipacao);
+
+            if (isNaN(id)) {
+                return res.status(400).json({ erro: "ID inválido" });
+            }
+
+            const participacao = await ParticipacaoTrabalho.listar(id);
+            if (!participacao) {
+                return res.status(404).json({ erro: "Participação não encontrada" });
+            }
+
+            return res.status(200).json(participacao);
+
+        } catch (error) {
+            console.error("Erro ao buscar participação:", error);
+            return res.status(500).json({ erro: "Erro ao buscar participação" });
         }
     }
 
     static async novo(req: Request, res: Response): Promise<any> {
         try {
-            const novo: ParticipacaoDTO = req.body;
-            
-            if (!novo.idTrabalho || !novo.idVoluntario || !novo.quantidadeVagas || 
-                !novo.duracao || !novo.atividadeTrabalho) {
-                return res.status(400).json({ mensagem: "Todos os campos são obrigatórios" });
-            }
+            const { idTrabalho, idVoluntario, quantidadeVagas, duracao, atividadeTrabalho } = req.body;
 
-            const sucesso = await ParticipacaoTrabalho.cadastrarParticipacao(
-                novo.idTrabalho,
-                novo.idVoluntario,
-                novo.quantidadeVagas,
-                novo.duracao,
-                novo.atividadeTrabalho
+            const criada = await ParticipacaoTrabalho.cadastrarParticipacao(
+                idTrabalho,
+                idVoluntario,
+                quantidadeVagas,
+                duracao,
+                atividadeTrabalho
             );
 
-            if (sucesso) {
-                return res.status(201).json({ mensagem: "Participação cadastrada com sucesso" });
-            } else {
-                return res.status(400).json({ mensagem: "Falha ao cadastrar participação" });
+            if (!criada) {
+                return res.status(500).json({ erro: "Erro ao cadastrar participação" });
             }
+
+            return res.status(201).json({ mensagem: "Participação cadastrada com sucesso" });
+
         } catch (error) {
             console.error("Erro ao cadastrar participação:", error);
-            return res.status(500).json({ mensagem: "Erro interno ao cadastrar participação" });
+            return res.status(500).json({ erro: "Erro ao cadastrar participação" });
         }
     }
-    
- /**
-      * Atualiza as informações de uma participação existente.
-      *
-      * @param req - Objeto de solicitação HTTP, contendo os dados do voluntário no corpo da solicitação e o ID da participação nos parâmetros.
-      * @param res - Objeto de resposta HTTP.
-      * @returns Uma promessa que resolve com uma resposta HTTP indicando o sucesso ou falha da operação.
-      *
-      * @throws Retorna uma resposta HTTP com status 400 e uma mensagem de erro se ocorrer um problema durante a atualização da participação.
-      */
- static async atualizar(req: Request, res: Response): Promise<any> {
-    try {
-        const ParticipacaoRecebido: ParticipacaoDTO = req.body;
-        const idParticipacaoRecebido = parseInt(req.params.idParticipacao as string);
 
-        const ParticipacaoAtualizado = new ParticipacaoTrabalho(
-            idParticipacaoRecebido, 
-            ParticipacaoRecebido.idTrabalho,
-            ParticipacaoRecebido.idVoluntario,
-            ParticipacaoRecebido.quantidadeVagas,
-            ParticipacaoRecebido.duracao,
-            ParticipacaoRecebido.atividadeTrabalho
-        );
+    static async atualizar(req: Request, res: Response): Promise<any> {
+        try {
+            const id = Number(req.params.idParticipacao);
 
-        const respostaModelo = await ParticipacaoTrabalho.atualizarParticipacao(ParticipacaoAtualizado);
+            if (isNaN(id)) {
+                return res.status(400).json({ erro: "ID inválido" });
+            }
 
-        if(respostaModelo) {
-            return res.status(200).json({ mensagem: "Participação atualizada com sucesso!" });
-        } else {
-            return res.status(400).json({ mensagem: "Não foi possível atualizar a participação." });
+            const dados = req.body;
+
+            // Buscar antes de atualizar
+            const existente = await ParticipacaoTrabalho.listar(id);
+            if (!existente) {
+                return res.status(404).json({ erro: "Participação não encontrada" });
+            }
+
+            // Atualizar via setters
+            existente.setIdTrabalho(dados.idTrabalho);
+            existente.setIdVoluntario(dados.idVoluntario);
+            existente.setQuantidadeVagas(dados.quantidadeVagas);
+            existente.setDuracao(dados.duracao);
+            existente.setAtividadeTrabalho(dados.atividadeTrabalho);
+
+            const ok = await ParticipacaoTrabalho.atualizarParticipacao(existente);
+
+            if (!ok) {
+                return res.status(500).json({ erro: "Erro ao atualizar participação" });
+            }
+
+            return res.status(200).json({ mensagem: "Participação atualizada com sucesso" });
+
+        } catch (error) {
+            console.error("Erro ao atualizar participação:", error);
+            return res.status(500).json({ erro: "Erro ao atualizar participação" });
         }
-    } catch (error) {
-        console.error(`Erro ao atualizar a participação: ${error}`);
-        return res.status(500).json({ mensagem: "Erro interno ao atualizar participação." });
     }
-}
 
-    /**
-     * Método para remover uma participação pelo ID.
-     */
     static async remover(req: Request, res: Response): Promise<any> {
         try {
-            const idParticipacao = parseInt(req.query.idParticipacao as string);
-            const result = await ParticipacaoTrabalho.removerParticipacao(idParticipacao);
-            
-            if (result) {
-                return res.status(200).json({ mensagem: "Participação removida com sucesso!" });
-            } else {
-                return res.status(400).json({ mensagem: "Erro ao remover participação." });
+            const { idParticipacao } = req.body;
+
+            if (!idParticipacao) {
+                return res.status(400).json({ erro: "Informe o idParticipacao" });
             }
+
+            const removido = await ParticipacaoTrabalho.removerParticipacao(idParticipacao);
+
+            if (!removido) {
+                return res.status(404).json({ erro: "Participação não encontrada" });
+            }
+
+            return res.status(200).json({ mensagem: "Participação removida com sucesso" });
+
         } catch (error) {
             console.error("Erro ao remover participação:", error);
-            return res.status(500).json({ mensagem: "Erro interno do servidor." });
+            return res.status(500).json({ erro: "Erro ao remover participação" });
         }
     }
 }
-
-export default ParticipacaoController;

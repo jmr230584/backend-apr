@@ -33,6 +33,7 @@ router.get("/lista/participacao", ParticipacaoController.todos);
 router.post("/participacao/novo", ParticipacaoController.novo);
 router.put("/remover/participacao", ParticipacaoController.remover);
 router.put("/atualizar/participacao/:idParticipacao", ParticipacaoController.atualizar);
+router.get("/participacao/:idParticipacao", ParticipacaoController.umParticipacao);
 
 // Rotas para trabalhos
 router.get("/lista/trabalho", TrabalhoController.todos);
